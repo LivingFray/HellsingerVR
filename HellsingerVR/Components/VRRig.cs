@@ -35,6 +35,7 @@ namespace HellsingerVR.Components
         bool _InLevel = false;
 
         public UI.RhythmIndicator rhythmIndicator;
+        public UI.Health health;
 
         public bool InLevel
         {
@@ -54,6 +55,7 @@ namespace HellsingerVR.Components
         public void EnterTitleScreen()
         {
             rhythmIndicator = null;
+            health = null;
 
             _InLevel = false;
 
@@ -118,7 +120,13 @@ namespace HellsingerVR.Components
                 rhythmIndicator = new UI.RhythmIndicator();
             }
 
+            if (health == null)
+            {
+                health = new UI.Health();
+            }
+
 			rhythmIndicator.Init();
+            health.Init();
 
 			if (Camera.main)
 			{
@@ -188,9 +196,9 @@ namespace HellsingerVR.Components
             if (!InCutscene)
             {
                 UpdateTransform();
-                HellsingerVR.MoveReticleToWorld();
 
                 if (rhythmIndicator != null) rhythmIndicator.Update();
+                if (health != null) health.Update();
             }
         }
 

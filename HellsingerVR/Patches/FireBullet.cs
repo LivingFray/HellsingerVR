@@ -30,13 +30,9 @@ namespace HellsingerVR.Patches
 			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 
-			// nb: get this from skele somehow
-			rotation *= HellsingerVR.HandOffset;
-
-			Debug.Log($"{location} {rotation}");
-
 			location = HellsingerVR.rig.transform.TransformPoint(location);
-			rotation = HellsingerVR.rig.transform.rotation * rotation;
+
+			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
 
 			// Calculate what original spread must have been and apply to repositioned bullets
 

@@ -31,11 +31,10 @@ namespace HellsingerVR
 		public static Vector3 TitleScreenPosition = new Vector3(-227.62f, 9.64f, 48.17f + 3.0f);
 
 		public static Canvas overlay;
-		static Canvas reticle;
 
 		static Transform overlayTrans;
 
-		public static Quaternion HandOffset = Quaternion.Euler(25.0f, 0.0f, 0.0f);
+		public static Quaternion HandOffset = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
 		public override void Load()
 		{
@@ -148,7 +147,6 @@ namespace HellsingerVR
 				if (d.active)
 				{
 					d.active = false;
-					Debug.Log("Disabled DOF");
 				}
 			}
 		}
@@ -247,32 +245,6 @@ namespace HellsingerVR
 				overlay.transform.rotation = overlayTrans.rotation;
 				overlay.transform.localScale = overlayTrans.localScale;
 			}
-		}
-
-		public static void MoveReticleToWorld()
-		{
-			// TODO: Do better, try reticle in different places (hitscan location, on weapons, floating)
-			if (reticle == null)
-			{
-				GameObject reticleGO = GameObject.Find("Reticle");
-
-				if (reticleGO != null)
-				{
-					reticle = reticleGO.GetComponent<Canvas>();
-				}
-
-				if (reticle == null)
-				{
-					return;
-				}
-			}
-
-			reticle.renderMode = RenderMode.WorldSpace;
-			reticle.transform.position = rig.head.transform.position + rig.head.transform.forward * 3.5f;
-			reticle.transform.LookAt(rig.head);
-			reticle.transform.rotation = Quaternion.Euler(0.0f, reticle.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
-			RectTransform rect = reticle.GetComponent<RectTransform>();
-			reticle.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
 		}
 	}
 }

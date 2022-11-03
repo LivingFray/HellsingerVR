@@ -16,7 +16,7 @@ namespace HellsingerVR
 
 		static bool HasFocused = false;
 
-		static bool InTitleCards = true;
+		static bool IsPrePreLogin = true;
 
 		static uint KEYDOWN = 0x0100;
 		static uint KEYUP = 0x0101;
@@ -36,9 +36,13 @@ namespace HellsingerVR
 			if (titleScreenAnimation)
 			{
 				HellsingerVR.IsPreLogin = titleScreenAnimation.IsOnPressAnyKeyScreen();
+				if (HellsingerVR.IsPreLogin)
+				{
+					IsPrePreLogin = false;
+				}
 			}
 
-			if (InTitleCards || HellsingerVR.IsPreLogin)
+			if (IsPrePreLogin || HellsingerVR.IsPreLogin)
 			{
 				Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
 				if (keyboard == null)
@@ -68,6 +72,7 @@ namespace HellsingerVR
 					Process thisProcess = Process.GetCurrentProcess();
 					PostMessage(thisProcess.MainWindowHandle, Pressed ? KEYDOWN : KEYUP, VK_ESC, 0);
 					WasKeyPressed = Pressed;
+					UnityEngine.Debug.Log("Faking keypress for login");
 				}
 
 				keyboard.spaceKey.WriteValueIntoEvent(Pressed ? 1.0f : 0.0f, keyboardPtr);
@@ -81,6 +86,7 @@ namespace HellsingerVR
 				Process thisProcess = Process.GetCurrentProcess();
 				PostMessage(thisProcess.MainWindowHandle, KEYUP, VK_ESC, 0);
 				WasKeyPressed = false;
+				UnityEngine.Debug.Log("Releasing held fake keypress for login");
 			}
 		}
 	}
