@@ -31,7 +31,7 @@ namespace HellsingerVR.Components
         public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
         {
 			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
+			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("PoseTip").GetLocalRotation(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 
 			location = HellsingerVR.rig.transform.TransformPoint(location);
 

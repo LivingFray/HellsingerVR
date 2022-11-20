@@ -15,5 +15,6 @@
 		public virtual SteamVR_Action_Boolean WeaponSwitchPaz { get { return SteamVR_Actions.default_WeaponSwitchPaz; } }
 		public virtual SteamVR_Action_Boolean OpenMenu { get { return SteamVR_Actions.default_OpenMenu; } }
 		public virtual SteamVR_Action_Pose Pose { get { return SteamVR_Actions.default_Pose; } }
+		public virtual SteamVR_Action_Pose PoseTip { get { return SteamVR_Actions.default_PoseTip; } }
 	}
 }

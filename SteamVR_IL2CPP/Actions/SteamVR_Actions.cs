@@ -22,6 +22,7 @@
 		// Misc
 		private static SteamVR_Action_Boolean p_default_OpenMenu;
 		private static SteamVR_Action_Pose p_default_Pose;
+		private static SteamVR_Action_Pose p_default_PoseTip;
 
 
 		public static SteamVR_Action_Vector2 default_Movement
@@ -128,6 +129,14 @@
 			}
 		}
 
+		public static SteamVR_Action_Pose default_PoseTip
+		{
+			get
+			{
+				return SteamVR_Actions.p_default_PoseTip.GetCopy<SteamVR_Action_Pose>();
+			}
+		}
+
 		private static void InitializeActionArrays()
 		{
 			Valve.VR.SteamVR_Input.actions = new Valve.VR.SteamVR_Action[] {
@@ -143,7 +152,8 @@
 					default_WeaponSwitchRight,
 					default_WeaponSwitchPaz,
 					default_OpenMenu,
-					default_Pose
+					default_Pose,
+					default_PoseTip
 			};
 			Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
 					default_Movement,
@@ -158,12 +168,14 @@
 					default_WeaponSwitchRight,
 					default_WeaponSwitchPaz,
 					default_OpenMenu,
-					default_Pose
+					default_Pose,
+					default_PoseTip
 			};
 			Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[0];
 			Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[0];
 			Valve.VR.SteamVR_Input.actionsPose = new Valve.VR.SteamVR_Action_Pose[] {
-					default_Pose
+					default_Pose,
+					default_PoseTip
 			};
 			Valve.VR.SteamVR_Input.actionsBoolean = new Valve.VR.SteamVR_Action_Boolean[] {
 					default_Dash,
@@ -215,6 +227,7 @@
 			p_default_WeaponSwitchPaz = SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/WeaponSwitchPaz");
 			p_default_OpenMenu = SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/OpenMenu");
 			p_default_Pose = SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/default/in/Pose");
+			p_default_PoseTip = SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/default/in/PoseTip");
 		}
 
 		public static SteamVR_Input_ActionSet_default _default
