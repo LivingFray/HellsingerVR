@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using Valve.VR;
 using System.Diagnostics;
 using Il2CppMicrosoft.Win32;
+using Outsiders.GUI;
 
 namespace HellsingerVR.Components
 {
@@ -21,6 +22,11 @@ namespace HellsingerVR.Components
         float TimeOffset = 0.0f;
 
         Gamepad VRInput;
+
+        FirstPersonController fpController;
+
+		bool WasPrevWeaponPressed = false;
+        bool WasNextWeaponPressed = false;
 
         public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
         {
@@ -42,9 +48,6 @@ namespace HellsingerVR.Components
         public void Awake()
         {
             TimeOffset = Time.realtimeSinceStartup;
-
-            // Cache this?
-            InputSystemWrapper isw = Main.GetInstance().m_inputReader.InputWrapper;
         }
 
         // Can't do the update early, so do it at the end of the frame ready for the next frame
@@ -97,8 +100,76 @@ namespace HellsingerVR.Components
 
                 // Weapon switching here...
 
-                // TEMP
-                VRInput.bButton.WriteValueIntoEvent(SteamVR_Input.GetBooleanAction("WeaponSwitchPaz").state ? 1.0f : 0.0f, ptr);
+                float rightShoulder = 0.0f;
+                float dpadUp = 0.0f;
+                float dpadDown = 0.0f;
+                float dpadLeft = 0.0f;
+                float dpadRight = 0.0f;
+
+                if (IsInGame())
+                {
+                    if (fpController == null)
+                    {
+                        fpController = FindObjectOfType<FirstPersonController>();
+                    }
+
+                    if (fpController != null)
+                    {
+                        Player player = fpController.m_player;
+                        if (player != null)
+                        {
+                            WeaponAbilityController weaponAbilityController = player.m_weaponAbilityController;
+                            if (weaponAbilityController != null)
+                            {
+                                bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("WeaponSwitchLeft").state;
+                                bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("WeaponSwitchRight").state;
+
+                                bool SwitchToPrev = !WasPrevWeaponPressed && WeaponSwitchLeft;
+                                bool SwitchToNext = !WasNextWeaponPressed && WeaponSwitchRight;
+                                bool SwitchToPaz = SteamVR_Input.GetBooleanAction("WeaponSwitchPaz").state;
+
+                                WasPrevWeaponPressed = WeaponSwitchLeft;
+                                WasNextWeaponPressed = WeaponSwitchRight;
+
+                                if (SwitchToPaz)
+                                {
+                                    rightShoulder = 1.0f;
+                                }
+                                else
+                                {
+                                    int MoveIndex = 0;
+                                    if (SwitchToNext)
+                                    {
+                                        MoveIndex = 1;
+                                    }
+                                    else if (SwitchToPrev)
+                                    {
+                                        MoveIndex = -1;
+                                    }
+
+                                    if (MoveIndex != 0)
+                                    {
+                                        int NewIndex = weaponAbilityController.m_carriedWeapons.IndexOf(weaponAbilityController.m_activeWeaponType) + MoveIndex;
+                                        
+                                        if (NewIndex < 0) NewIndex += weaponAbilityController.m_carriedWeapons.Count;
+										NewIndex %= weaponAbilityController.m_carriedWeapons.Count;
+
+                                        dpadUp = NewIndex == 0 ? 1.0f : 0.0f;
+                                        dpadDown = NewIndex == 1 ? 1.0f : 0.0f;
+                                        dpadLeft = NewIndex == 2 ? 1.0f : 0.0f;
+                                        dpadRight = NewIndex == 3 ? 1.0f : 0.0f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+				VRInput.rightShoulder.WriteValueIntoEvent(rightShoulder, ptr);
+				VRInput.dpad.up.WriteValueIntoEvent(dpadUp, ptr);
+				VRInput.dpad.down.WriteValueIntoEvent(dpadDown, ptr);
+				VRInput.dpad.left.WriteValueIntoEvent(dpadLeft, ptr);
+				VRInput.dpad.right.WriteValueIntoEvent(dpadRight, ptr);
 
                 // OpenMenu
                 VRInput.startButton.WriteValueIntoEvent(GetPausing(), ptr);
