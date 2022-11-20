@@ -18,6 +18,6 @@ Reloading - DONE (bound to a key press, the game is too fast paced for proper vr
 
 Weapon switching - NOT DONE
 
-Viewmodels - NOT DONE
+Viewmodels - MOSTLY DONE (Offsets are wonky, some effects are placed incorrectly)
 
 View mirroring - PARTIALLY DONE (Works in menus + in game, but not in cutscenes)
