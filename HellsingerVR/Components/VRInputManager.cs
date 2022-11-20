@@ -22,6 +22,18 @@ namespace HellsingerVR.Components
 
         Gamepad VRInput;
 
+        public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
+        {
+			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
+			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
+
+			location = HellsingerVR.rig.transform.TransformPoint(location);
+
+			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
+
+            return (location, rotation);
+		}
+
         static bool IsInGame()
         {
             return !HellsingerVR.IsPaused && !HellsingerVR.IsLoading && HellsingerVR.rig && HellsingerVR.rig.InLevel;

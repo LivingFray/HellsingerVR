@@ -20,19 +20,13 @@ namespace HellsingerVR.Patches
 			// TODO: Account for settings
 			bool bFromLeftHand = false;
 
-			// Are crows two handers?
-			if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Pistols)
+			if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Pistols || fireData.WeaponConfig.WeaponType == PlayerWeaponType.Boomerang)
 			{
 				// Somehow get which gun? Just go fuck it and let the guns share ammo and be fired by either
 				bFromLeftHand = VRInputManager.LastHandToShootWasLeft;
 			}
 
-			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-
-			location = HellsingerVR.rig.transform.TransformPoint(location);
-
-			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
+			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 
 			// Calculate what original spread must have been and apply to repositioned bullets
 

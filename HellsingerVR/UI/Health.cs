@@ -70,8 +70,6 @@ namespace HellsingerVR.UI
 			HealthOffsetX *= HealthBar.lossyScale.x;
 			HealthOffsetY *= HealthBar.lossyScale.y;
 			BonusOffsetY *= BonusCounter.lossyScale.y;
-
-			Debug.Log($"Offsets: {HealthOffsetX} {HealthOffsetY} {BonusOffsetY} Scaled by: {HealthBar.lossyScale.x} {HealthBar.lossyScale.y} {BonusCounter.lossyScale.y}");
 		}
 
 		public void Update()

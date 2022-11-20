@@ -44,6 +44,7 @@ namespace HellsingerVR
 
 			ClassInjector.RegisterTypeInIl2Cpp<VRRig>();
 			ClassInjector.RegisterTypeInIl2Cpp<VRInputManager>();
+			ClassInjector.RegisterTypeInIl2Cpp<VRViewModelManager>();
 
 			SteamVR.Log = Log;
 
@@ -96,16 +97,19 @@ namespace HellsingerVR
 				eyes.AddComponent<SteamVR_Camera>();
 
 				eyes.GetComponent<Camera>().enabled = false;
+				eyes.GetComponent<Camera>().nearClipPlane = 0.1f;
 
 				//TODO: Do ears
 
 				vrRig.AddComponent<VRRig>();
 				vrRig.AddComponent<VRInputManager>();
+				vrRig.AddComponent<VRViewModelManager>();
 
 				rig = vrRig.GetComponent<VRRig>();
-
 				rig.head = head.transform;
-				// Watch out for scene changes straight up deleting the rig lol
+
+				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
+				rig.viewModelManager.enabled = false;
 
 				_instance.Log.LogInfo($"Finished creating VRRig");
 				Object.DontDestroyOnLoad(vrRig);

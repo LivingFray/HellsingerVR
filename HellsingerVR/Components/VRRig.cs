@@ -37,6 +37,8 @@ namespace HellsingerVR.Components
         public UI.RhythmIndicator rhythmIndicator;
         public UI.Health health;
 
+        public VRViewModelManager viewModelManager;
+
         public bool InLevel
         {
             get { return _InLevel; }
@@ -57,7 +59,9 @@ namespace HellsingerVR.Components
             rhythmIndicator = null;
             health = null;
 
-            _InLevel = false;
+			viewModelManager.enabled = false;
+
+			_InLevel = false;
 
             transform.position = HellsingerVR.TitleScreenPosition - Vector3.up * Height;
 
@@ -68,7 +72,10 @@ namespace HellsingerVR.Components
         {
             _InLevel = true;
             InCutscene = false;
-            Debug.Log("Entered Level");
+
+			viewModelManager.enabled = true;
+
+			Debug.Log("Entered Level");
         }
 
         public void EnterCutscene()
@@ -81,8 +88,8 @@ namespace HellsingerVR.Components
 
 			if (Camera.main)
 			{
+                Camera.main.enabled = true;
                 Camera.main.cullingMask = 0;
-                Camera.main.clearFlags = CameraClearFlags.Nothing;
 			}
 
 			Debug.Log("Entered cutscene");
@@ -93,7 +100,7 @@ namespace HellsingerVR.Components
             Debug.Log("Left cutscene");
             InCutscene = false;
             FirstPersonController fpController = FindObjectOfType<FirstPersonController>();
-
+            
             lastheadRot = head.localRotation.eulerAngles.y;
 
             if (fpController)
@@ -128,10 +135,11 @@ namespace HellsingerVR.Components
 			rhythmIndicator.Init();
             health.Init();
 
+            viewModelManager.HideArms();
+
 			if (Camera.main)
 			{
                 Camera.main.cullingMask = 0;
-				Camera.main.clearFlags = CameraClearFlags.Nothing;
 				Camera.main.enabled = false;
 			}
 

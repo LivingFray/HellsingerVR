@@ -110,12 +110,7 @@ namespace HellsingerVR.UI
 			// TODO: Handedness setting
 			bool bFromLeftHand = false;
 
-			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-
-			location = HellsingerVR.rig.transform.TransformPoint(location);
-
-			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
+			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 
 			// TODO: Per gun offset
 			// TODO: Scale
@@ -136,12 +131,7 @@ namespace HellsingerVR.UI
 			// TODO: Handedness setting
 			bool bFromLeftHand = false;
 
-			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalRotation(bFromLeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
-
-			location = HellsingerVR.rig.transform.TransformPoint(location);
-
-			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
+			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 
 			RaycastHit raycastHit;
 
