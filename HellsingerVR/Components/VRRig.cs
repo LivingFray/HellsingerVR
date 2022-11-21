@@ -21,6 +21,7 @@ namespace HellsingerVR.Components
         public Transform rightHand;
 
         public Transform PlayerTransform;
+        public Transform CameraTransform;
 
         float lastheadRot;
 
@@ -112,6 +113,7 @@ namespace HellsingerVR.Components
 				*/
 
                 PlayerTransform = fpController.m_player.PlayerTransform;
+                CameraTransform = fpController.m_cameraTransform;
 
                 transform.position = PlayerTransform.position;
                 transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -head.localRotation.eulerAngles.y, 0.0f);
@@ -220,7 +222,7 @@ namespace HellsingerVR.Components
             float rot = head.localRotation.eulerAngles.y - lastheadRot;
             lastheadRot = head.localRotation.eulerAngles.y;
 
-            PlayerTransform.rotation *= Quaternion.Euler(0.0f, rot, 0.0f);
+            CameraTransform.rotation *= Quaternion.Euler(0.0f, rot, 0.0f);
 
             transform.position = PlayerTransform.position;
             transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -rot, 0.0f);

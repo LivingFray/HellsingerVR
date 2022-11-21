@@ -97,7 +97,7 @@ namespace HellsingerVR
 				eyes.AddComponent<SteamVR_Camera>();
 
 				eyes.GetComponent<Camera>().enabled = false;
-				eyes.GetComponent<Camera>().nearClipPlane = 0.1f;
+				eyes.GetComponent<Camera>().nearClipPlane = 0.01f;
 
 				//TODO: Do ears
 
