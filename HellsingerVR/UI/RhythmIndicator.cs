@@ -9,7 +9,7 @@ namespace HellsingerVR.UI
 {
 	public class RhythmIndicator
 	{
-		GameObject gameObject;
+		Transform RhythmIndicatorTrans;
 
 		static int layermask = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -21,43 +21,36 @@ namespace HellsingerVR.UI
 		// TODO: put into a proper config
 		public float head_distance = 2.5f;
 
-		public float target_distance = 5.0f;
+		public float target_distance = 10.0f;
 		public float target_offset = 0.25f;
+
+		public float head_scale = 1.0f;
+		public float sights_scale = 0.5f;
+		public float target_scale = 2.0f;
 
 		Vector3 SightOffset = new Vector3(0.05f, 0.25f, 0.0f);
 
-		Transform LeftContainer;
-		Transform RightContainer;
 		Transform LowAmmoIndicator;
 		Transform NoAmmoIndicator;
 		Transform BeatGradingContainer;
+		Transform Reticle;
 
 		public void Init()
 		{
-			gameObject = GameObject.Find("RhythmIndicator");
-			if (gameObject == null)
-			{
-				Debug.LogError("Could not find rhythm indicator");
-				return;
-			}
+			Main main = Main.GetInstance();
+			Transform SharedHUD = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/Shared");
 
-			Transform reticle = gameObject.transform.parent.Find("Reticle");
-			if (reticle)
-			{
-				reticle.gameObject.SetActive(false);
-			}
+			RhythmIndicatorTrans = SharedHUD.Find("RhythmIndicator");
 
-			LeftContainer = gameObject.transform.Find("LeftContainer");
-			RightContainer = gameObject.transform.Find("RightContainer");
-			LowAmmoIndicator = gameObject.transform.parent.Find("LowAmmoIndicator");
-			NoAmmoIndicator = gameObject.transform.parent.Find("NoAmmoIndicator");
-			BeatGradingContainer = gameObject.transform.parent.Find("BeatGradingContainer");
+			Reticle = SharedHUD.Find("Reticle");
+
+			LowAmmoIndicator = SharedHUD.Find("LowAmmoIndicator");
+			NoAmmoIndicator = SharedHUD.Find("NoAmmoIndicator");
+			BeatGradingContainer = SharedHUD.Find("BeatGradingContainer");
 		}
 
 		public void Update()
 		{
-			if (!gameObject) return;
-
 			switch (position)
 			{
 				case Position.Head:
@@ -92,12 +85,11 @@ namespace HellsingerVR.UI
 				position = Position.Sights;
 			}
 
-			gameObject.transform.position = transform.position + transform.forward * head_distance;
-			gameObject.transform.LookAt(transform);
+			RhythmIndicatorTrans.position = transform.position + transform.forward * head_distance;
+			RhythmIndicatorTrans.LookAt(transform);
+			RhythmIndicatorTrans.rotation *= Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
-			gameObject.transform.rotation *= Quaternion.Euler(0.0f, 180.0f, 0.0f);
-
-			FixOtherUIElements();
+			FixOtherUIElements(head_scale);
 		}
 
 		void Update_Sights()
@@ -115,10 +107,10 @@ namespace HellsingerVR.UI
 			// TODO: Per gun offset
 			// TODO: Scale
 
-			gameObject.transform.position = location + (rotation * SightOffset);
-			gameObject.transform.rotation = rotation;
+			RhythmIndicatorTrans.position = location + (rotation * SightOffset);
+			RhythmIndicatorTrans.rotation = rotation;
 
-			FixOtherUIElements();
+			FixOtherUIElements(sights_scale);
 		}
 
 		void Update_Target()
@@ -148,43 +140,32 @@ namespace HellsingerVR.UI
 
 			Vector3 direction = (OutPoint - location).normalized;
 
-			gameObject.transform.position = OutPoint - direction * target_offset;
+			RhythmIndicatorTrans.position = OutPoint - direction * target_offset;
 
-			gameObject.transform.LookAt(OutPoint - OutNormal);
+			RhythmIndicatorTrans.LookAt(OutPoint - OutNormal);
 
-			FixOtherUIElements();
+			FixOtherUIElements(target_scale);
 		}
 
-		void FixOtherUIElements()
+		void FixOtherUIElements(float scale)
 		{
-			Quaternion rot = Quaternion.Inverse(gameObject.transform.localRotation);
+			RhythmIndicatorTrans.localScale = Vector3.one * scale;
+			LowAmmoIndicator.localScale = RhythmIndicatorTrans.localScale;
+			NoAmmoIndicator.localScale = RhythmIndicatorTrans.localScale;
+			BeatGradingContainer.localScale = RhythmIndicatorTrans.localScale;
+			Reticle.localScale = RhythmIndicatorTrans.localScale;
 
-			if (!LeftContainer || !RightContainer)
-			{
-				LeftContainer = gameObject.transform.Find("LeftContainer");
-				RightContainer = gameObject.transform.Find("RightContainer");
-			}
+			Reticle.position = RhythmIndicatorTrans.position;
+			Reticle.rotation = RhythmIndicatorTrans.rotation;
 
-			if (!LeftContainer || !RightContainer)
-			{
-				return;
-			}
-
-			LeftContainer.localRotation = rot;
-			RightContainer.localRotation = rot;
-
-			// This better not backfire, but overlay needs same rotation as beats for tween to work
-			// (Could probably fix it by creating a separate overlay for it)
-			HellsingerVR.overlay.transform.rotation = gameObject.transform.rotation;
-
-			LowAmmoIndicator.position = gameObject.transform.position + gameObject.transform.up * 0.25f;
-			LowAmmoIndicator.rotation = gameObject.transform.rotation;
+			LowAmmoIndicator.position = RhythmIndicatorTrans.position + RhythmIndicatorTrans.up * 0.25f * scale;
+			LowAmmoIndicator.rotation = RhythmIndicatorTrans.rotation;
 
 			NoAmmoIndicator.position = LowAmmoIndicator.position;
 			NoAmmoIndicator.rotation = LowAmmoIndicator.rotation;
 
-			BeatGradingContainer.position = gameObject.transform.position - gameObject.transform.up * 0.25f;
-			BeatGradingContainer.rotation = gameObject.transform.rotation;
+			BeatGradingContainer.position = RhythmIndicatorTrans.position - RhythmIndicatorTrans.up * 0.25f * scale;
+			BeatGradingContainer.rotation = RhythmIndicatorTrans.rotation;
 		}
 	}
 }

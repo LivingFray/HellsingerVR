@@ -30,7 +30,7 @@ namespace HellsingerVR.Patches
 
 			// Calculate what original spread must have been and apply to repositioned bullets
 
-			Quaternion initialRotation = HellsingerVR.rig.PlayerTransform.rotation;
+			Quaternion initialRotation = HellsingerVR.rig.CameraTransform.rotation;
 			Quaternion vrRotation = rotation;
 
 			fireData.Direction = vrRotation * Quaternion.Inverse(initialRotation) * fireData.Direction;
