@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Actions\SteamVR_Actions.cs" />
+    <Compile Include="Actions\SteamVR_Input_ActionSet_menu.cs" />
     <Compile Include="Actions\SteamVR_Input_ActionSet_default.cs" />
     <Compile Include="Input\BehaviourUnityEvents\SteamVR_Behaviour_BooleanEvent.cs" />
     <Compile Include="Input\BehaviourUnityEvents\SteamVR_Behaviour_PoseEvent.cs" />

@@ -62,10 +62,9 @@ namespace HellsingerVR
 
 				ModifiedCode.StateEvent_From(keyboard, new InputEventPtr(), out keyboardPtr);
 
-				SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("Shoot");
-				SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("ShootAlt");
+				SteamVR_Action_Boolean select = SteamVR_Input.GetBooleanAction("menu", "Select", true);
 
-				bool Pressed = fireAction.state || altFireAction.state;
+				bool Pressed = select.state;
 
 				if (Pressed != WasKeyPressed)
 				{

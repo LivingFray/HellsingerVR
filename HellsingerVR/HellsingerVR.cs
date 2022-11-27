@@ -67,6 +67,9 @@ namespace HellsingerVR
 		{
 			_instance.Log.LogInfo($"InstantiateVRRig");
 
+			SteamVR_Actions._default.Activate(SteamVR_Input_Sources.Any, 0, false);
+			SteamVR_Actions._menu.Activate(SteamVR_Input_Sources.Any, 0, false);
+
 			if (vrRig == null)
 			{
 				/* The slightly confusing hierarchy:

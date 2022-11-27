@@ -72,107 +72,17 @@ namespace HellsingerVR.Components
 
             ModifiedCode.StateEvent_From(VRInput, new InputEventPtr(), out ptr);
 
-
-
-            // Do various input mapping here (preferably in an intelligent way)
-
             // Currently assumes default controller binding!
             try
             {
-                // Movement
-                Vector2 movement = GetMovementVector();
-                VRInput.leftStick.x.WriteValueIntoEvent(movement.x, ptr);
-                VRInput.leftStick.y.WriteValueIntoEvent(movement.y, ptr);
-                // Look
-                VRInput.rightStick.x.WriteValueIntoEvent(GetLookValue(), ptr);
-                // Dash
-                VRInput.leftShoulder.WriteValueIntoEvent(GetDashing(), ptr);
-                // Jump
-                VRInput.aButton.WriteValueIntoEvent(GetJumping(), ptr);
-                // Shoot/ShootAlt
-                VRInput.rightTrigger.WriteValueIntoEvent(GetShooting(), ptr);
-                // Ultimate
-                VRInput.leftTrigger.WriteValueIntoEvent(GetUltimate(), ptr);
-                // Slaughter
-                VRInput.rightStickButton.WriteValueIntoEvent(GetSlaughtering(), ptr);
-                // Reload
-                VRInput.xButton.WriteValueIntoEvent(GetReloading(), ptr);
-
-                // Weapon switching here...
-
-                float rightShoulder = 0.0f;
-                float dpadUp = 0.0f;
-                float dpadDown = 0.0f;
-                float dpadLeft = 0.0f;
-                float dpadRight = 0.0f;
-
                 if (IsInGame())
                 {
-                    if (fpController == null)
-                    {
-                        fpController = FindObjectOfType<FirstPersonController>();
-                    }
-
-                    if (fpController != null)
-                    {
-                        Player player = fpController.m_player;
-                        if (player != null)
-                        {
-                            WeaponAbilityController weaponAbilityController = player.m_weaponAbilityController;
-                            if (weaponAbilityController != null)
-                            {
-                                bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("WeaponSwitchLeft").state;
-                                bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("WeaponSwitchRight").state;
-
-                                bool SwitchToPrev = !WasPrevWeaponPressed && WeaponSwitchLeft;
-                                bool SwitchToNext = !WasNextWeaponPressed && WeaponSwitchRight;
-                                bool SwitchToPaz = SteamVR_Input.GetBooleanAction("WeaponSwitchPaz").state;
-
-                                WasPrevWeaponPressed = WeaponSwitchLeft;
-                                WasNextWeaponPressed = WeaponSwitchRight;
-
-                                if (SwitchToPaz)
-                                {
-                                    rightShoulder = 1.0f;
-                                }
-                                else
-                                {
-                                    int MoveIndex = 0;
-                                    if (SwitchToNext)
-                                    {
-                                        MoveIndex = 1;
-                                    }
-                                    else if (SwitchToPrev)
-                                    {
-                                        MoveIndex = -1;
-                                    }
-
-                                    if (MoveIndex != 0)
-                                    {
-                                        int NewIndex = weaponAbilityController.m_carriedWeapons.IndexOf(weaponAbilityController.m_activeWeaponType) + MoveIndex;
-                                        
-                                        if (NewIndex < 0) NewIndex += weaponAbilityController.m_carriedWeapons.Count;
-										NewIndex %= weaponAbilityController.m_carriedWeapons.Count;
-
-                                        dpadUp = NewIndex == 0 ? 1.0f : 0.0f;
-                                        dpadDown = NewIndex == 1 ? 1.0f : 0.0f;
-                                        dpadLeft = NewIndex == 2 ? 1.0f : 0.0f;
-                                        dpadRight = NewIndex == 3 ? 1.0f : 0.0f;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    UpdateGameInputs(ptr);
                 }
-
-				VRInput.rightShoulder.WriteValueIntoEvent(rightShoulder, ptr);
-				VRInput.dpad.up.WriteValueIntoEvent(dpadUp, ptr);
-				VRInput.dpad.down.WriteValueIntoEvent(dpadDown, ptr);
-				VRInput.dpad.left.WriteValueIntoEvent(dpadLeft, ptr);
-				VRInput.dpad.right.WriteValueIntoEvent(dpadRight, ptr);
-
-                // OpenMenu
-                VRInput.startButton.WriteValueIntoEvent(GetPausing(), ptr);
+                else
+                {
+                    UpdateMenuInputs(ptr);
+                }
             }
             catch (Exception e)
             {
@@ -183,23 +93,166 @@ namespace HellsingerVR.Components
             LoginHack.PressAnyKey();
         }
 
-        #region Input Converter functions
-        // Convert movement taking into account hmd/hand based movement config
-        Vector2 GetMovementVector()
+        void UpdateMenuInputs(InputEventPtr ptr)
+		{
+            // Navigation
+			Vector2 nav = GetMenuVector();
+			VRInput.leftStick.x.WriteValueIntoEvent(nav.x, ptr);
+			VRInput.leftStick.y.WriteValueIntoEvent(nav.y, ptr);
+
+			UnityEngine.Debug.Log(nav.x + ", " + nav.y);
+			// Select
+			VRInput.aButton.WriteValueIntoEvent(GetMenuSelect(), ptr);
+			// Back
+			VRInput.bButton.WriteValueIntoEvent(GetMenuBack(), ptr);
+			// PrevTab
+			VRInput.leftShoulder.WriteValueIntoEvent(GetMenuPrevTab(), ptr);
+			// NextTab
+			VRInput.rightShoulder.WriteValueIntoEvent(GetMenuNextTab(), ptr);
+			// CloseMenu
+			VRInput.startButton.WriteValueIntoEvent(GetMenuClose(), ptr);
+		}
+
+        void UpdateGameInputs(InputEventPtr ptr)
         {
-            SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("Movement");
+			// Movement
+			Vector2 movement = GetMovementVector();
+			VRInput.leftStick.x.WriteValueIntoEvent(movement.x, ptr);
+			VRInput.leftStick.y.WriteValueIntoEvent(movement.y, ptr);
+			// Look
+			VRInput.rightStick.x.WriteValueIntoEvent(GetLookValue(), ptr);
+			// Dash
+			VRInput.leftShoulder.WriteValueIntoEvent(GetDashing(), ptr);
+			// Jump
+			VRInput.aButton.WriteValueIntoEvent(GetJumping(), ptr);
+			// Shoot/ShootAlt
+			VRInput.rightTrigger.WriteValueIntoEvent(GetShooting(), ptr);
+			// Ultimate
+			VRInput.leftTrigger.WriteValueIntoEvent(GetUltimate(), ptr);
+			// Slaughter
+			VRInput.rightStickButton.WriteValueIntoEvent(GetSlaughtering(), ptr);
+			// Reload
+			VRInput.xButton.WriteValueIntoEvent(GetReloading(), ptr);
+
+			// Weapon switching
+
+			float rightShoulder = 0.0f;
+			float dpadUp = 0.0f;
+			float dpadDown = 0.0f;
+			float dpadLeft = 0.0f;
+			float dpadRight = 0.0f;
+
+			if (fpController == null)
+			{
+				fpController = FindObjectOfType<FirstPersonController>();
+			}
+
+			if (fpController != null)
+			{
+				Player player = fpController.m_player;
+				if (player != null)
+				{
+					WeaponAbilityController weaponAbilityController = player.m_weaponAbilityController;
+					if (weaponAbilityController != null)
+					{
+						bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchLeft", true).state;
+						bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchRight", true).state;
+
+						bool SwitchToPrev = !WasPrevWeaponPressed && WeaponSwitchLeft;
+						bool SwitchToNext = !WasNextWeaponPressed && WeaponSwitchRight;
+						bool SwitchToPaz = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchPaz", true).state;
+
+						WasPrevWeaponPressed = WeaponSwitchLeft;
+						WasNextWeaponPressed = WeaponSwitchRight;
+
+						if (SwitchToPaz)
+						{
+							rightShoulder = 1.0f;
+						}
+						else
+						{
+							int MoveIndex = 0;
+							if (SwitchToNext)
+							{
+								MoveIndex = 1;
+							}
+							else if (SwitchToPrev)
+							{
+								MoveIndex = -1;
+							}
+
+							if (MoveIndex != 0)
+							{
+								int NewIndex = weaponAbilityController.m_carriedWeapons.IndexOf(weaponAbilityController.m_activeWeaponType) + MoveIndex;
+
+								if (NewIndex < 0) NewIndex += weaponAbilityController.m_carriedWeapons.Count;
+								NewIndex %= weaponAbilityController.m_carriedWeapons.Count;
+
+								dpadUp = NewIndex == 0 ? 1.0f : 0.0f;
+								dpadDown = NewIndex == 1 ? 1.0f : 0.0f;
+								dpadLeft = NewIndex == 2 ? 1.0f : 0.0f;
+								dpadRight = NewIndex == 3 ? 1.0f : 0.0f;
+							}
+						}
+					}
+				}
+			}
+
+			VRInput.rightShoulder.WriteValueIntoEvent(rightShoulder, ptr);
+			VRInput.dpad.up.WriteValueIntoEvent(dpadUp, ptr);
+			VRInput.dpad.down.WriteValueIntoEvent(dpadDown, ptr);
+			VRInput.dpad.left.WriteValueIntoEvent(dpadLeft, ptr);
+			VRInput.dpad.right.WriteValueIntoEvent(dpadRight, ptr);
+
+			// OpenMenu
+			VRInput.startButton.WriteValueIntoEvent(GetPausing(), ptr);
+		}
+
+		#region Input Converter functions
+		Vector2 GetMenuVector()
+		{
+			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("menu", "Navigate", true);
+
+			SteamVR_Action_Vector2 input2 = SteamVR_Input.GetVector2Action("game", "Movement", true);
+
+            UnityEngine.Debug.Log(input2.GetAxis(SteamVR_Input_Sources.Any).x + "");
+
+			return input.GetAxis(SteamVR_Input_Sources.Any);
+		}
+
+        float GetMenuSelect()
+        {
+			return SteamVR_Input.GetBooleanAction("menu", "Select", true).state ? 1.0f : 0.0f;
+		}
+
+		float GetMenuBack()
+		{
+			return SteamVR_Input.GetBooleanAction("menu", "Back", true).state ? 1.0f : 0.0f;
+		}
+
+		float GetMenuPrevTab()
+		{
+			return SteamVR_Input.GetBooleanAction("menu", "PrevTab", true).state ? 1.0f : 0.0f;
+		}
+
+		float GetMenuNextTab()
+		{
+			return SteamVR_Input.GetBooleanAction("menu", "NextTab", true).state ? 1.0f : 0.0f;
+		}
+
+		float GetMenuClose()
+		{
+			return SteamVR_Input.GetBooleanAction("menu", "CloseMenu", true).state ? 1.0f : 0.0f;
+		}
+
+
+		// Convert movement taking into account hmd/hand based movement config
+		Vector2 GetMovementVector()
+        {
+            SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement", true);
             // TODO: Implement options
             bool bUseHMD = true;
 
-            // Don't do inputs in menus, n.b. need to account for pause
-            if (!IsInGame())
-            {
-                //return Vector2.zero;
-                // Temp? Either way should replace it really once proper UI interaction is in
-                return input.GetAxis(SteamVR_Input_Sources.Any);
-            }
-
-            // TODO: Actually account for hand, also need to know which hand actually has the stick bound (activeDevice?)
             float rotation = (bUseHMD ?
                 HellsingerVR.rig.head.rotation :
                 input.activeDevice == SteamVR_Input_Sources.LeftHand ?
@@ -217,47 +270,25 @@ namespace HellsingerVR.Components
 
         float GetLookValue()
         {
-
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
-            return SteamVR_Input.GetVector2Action("Look").axis.x;
+            return SteamVR_Input.GetVector2Action("game", "Look", true).axis.x;
         }
 
         float GetDashing()
         {
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
-            return SteamVR_Input.GetBooleanAction("Dash").state ? 1.0f : 0.0f;
+            return SteamVR_Input.GetBooleanAction("game", "Dash", true).state ? 1.0f : 0.0f;
         }
 
         float GetJumping()
         {
-            if (!IsInGame())
-            {
-                // Press a in menus
-                return SteamVR_Input.GetBooleanAction("Shoot").state || SteamVR_Input.GetBooleanAction("ShootAlt").state ? 1.0f : 0.0f;
-            }
-
-            return SteamVR_Input.GetBooleanAction("Jump").state ? 1.0f : 0.0f;
+            return SteamVR_Input.GetBooleanAction("game", "Jump", true).state ? 1.0f : 0.0f;
         }
 
         float GetShooting()
         {
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
             // Need to check the active weapon here to handle dual wielding?
 
-            SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("Shoot");
-            SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("ShootAlt");
+            SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("game", "Shoot", true);
+            SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true);
 
 
             bool Shooting = fireAction.state;
@@ -283,46 +314,25 @@ namespace HellsingerVR.Components
 
         float GetUltimate()
         {
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
-            bool Shooting = SteamVR_Input.GetBooleanAction("Shoot").state;
-            bool AltShooting = SteamVR_Input.GetBooleanAction("ShootAlt").state;
+            bool Shooting = SteamVR_Input.GetBooleanAction("game", "Shoot", true).state;
+            bool AltShooting = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true).state;
 
             return Shooting && AltShooting ? 1.0f : 0.0f;
         }
 
         float GetSlaughtering()
         {
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
-            return SteamVR_Input.GetBooleanAction("Slaughter").state ? 1.0f : 0.0f;
+            return SteamVR_Input.GetBooleanAction("game", "Slaughter", true).state ? 1.0f : 0.0f;
         }
 
         float GetReloading()
         {
-            if (!IsInGame())
-            {
-                return 0.0f;
-            }
-
-            return SteamVR_Input.GetBooleanAction("Reload").state ? 1.0f : 0.0f;
+            return SteamVR_Input.GetBooleanAction("game", "Reload", true).state ? 1.0f : 0.0f;
         }
 
         float GetPausing()
         {
-            // This one *Should* fire when paused, but not on the title
-            if (!(HellsingerVR.rig && HellsingerVR.rig.InLevel && !HellsingerVR.IsLoading))
-            {
-                return 0.0f;
-            }
-
-            return SteamVR_Input.GetBooleanAction("OpenMenu").state ? 1.0f : 0.0f;
+            return SteamVR_Input.GetBooleanAction("game", "OpenMenu", true).state ? 1.0f : 0.0f;
         }
         #endregion
     }

@@ -1,142 +1,233 @@
 {
-   "bindings":{
-      "/actions/default":{
-         "chords":[
-            
-         ],
-         "poses":[
-		    {
-               "output":"/actions/default/in/Pose",
-               "path":"/user/hand/left/pose/raw"
-            },
-            {
-               "output":"/actions/default/in/Pose",
-               "path":"/user/hand/right/pose/raw"
-            },
-            {
-               "output":"/actions/default/in/PoseTip",
-               "path":"/user/hand/left/pose/tip"
-            },
-            {
-               "output":"/actions/default/in/PoseTip",
-               "path":"/user/hand/right/pose/tip"
-            }
-         ],
-         "haptics":[
-            
-         ],
-         "sources":[
-            {
-               "inputs":{
-                  "position":{
-                     "output":"/actions/default/in/Movement"
-                  },
-                  "click":{
-                     "output":"/actions/default/in/Dash"
-                  }
-               },
-               "mode":"joystick",
-               "path":"/user/hand/left/input/joystick"
-            },
-            {
-               "inputs":{
-                  "position":{
-                     "output":"/actions/default/in/Look"
-                  },
-                  "click":{
-                     "output":"/actions/default/in/Jump"
-                  }
-               },
-               "mode":"joystick",
-               "path":"/user/hand/right/input/joystick"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/Shoot"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/right/input/trigger"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/ShootAlt"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/left/input/trigger"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/Slaughter"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/right/input/b"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/Reload"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/right/input/a"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/WeaponSwitchLeft"
-                  }
-               },
-               "mode":"button",
-               "parameters":{
-                  "click_activate_threshold":"0.8",
-                  "click_deactivate_threshold":"0.7"
-               },
-               "path":"/user/hand/left/input/grip"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/WeaponSwitchRight"
-                  }
-               },
-               "mode":"button",
-               "parameters":{
-                  "click_activate_threshold":"0.8",
-                  "click_deactivate_threshold":"0.7"
-               },
-               "path":"/user/hand/right/input/grip"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/WeaponSwitchPaz"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/left/input/x"
-            },
-            {
-               "inputs":{
-                  "click":{
-                     "output":"/actions/default/in/OpenMenu"
-                  }
-               },
-               "mode":"button",
-               "path":"/user/hand/left/input/y"
-            }
-         ],
-         "skeleton":[
-            
-         ]
-      }
-   },
-   "controller_type":"oculus_touch",
-   "description":"",
-   "name":"oculus_touch"
+	"bindings": {
+		"/actions/game": {
+			"chords": [],
+			"poses": [
+				{
+					"output": "/actions/game/in/Pose",
+					"path": "/user/hand/left/pose/raw"
+				},
+				{
+					"output": "/actions/game/in/Pose",
+					"path": "/user/hand/right/pose/raw"
+				},
+				{
+					"output": "/actions/game/in/PoseTip",
+					"path": "/user/hand/left/pose/tip"
+				},
+				{
+					"output": "/actions/game/in/PoseTip",
+					"path": "/user/hand/right/pose/tip"
+				}
+			],
+			"haptics": [],
+			"sources": [
+				{
+					"inputs": {
+						"position": {
+							"output": "/actions/game/in/Movement"
+						},
+						"click": {
+							"output": "/actions/game/in/Dash"
+						}
+					},
+					"mode": "joystick",
+					"path": "/user/hand/left/input/joystick"
+				},
+				{
+					"inputs": {
+						"position": {
+							"output": "/actions/game/in/Look"
+						},
+						"click": {
+							"output": "/actions/game/in/Jump"
+						}
+					},
+					"mode": "joystick",
+					"path": "/user/hand/right/input/joystick"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Shoot"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/right/input/trigger"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/ShootAlt"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/trigger"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Slaughter"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/right/input/b"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Reload"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/right/input/a"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchLeft"
+						}
+					},
+					"mode": "button",
+					"parameters": {
+						"click_activate_threshold": "0.8",
+						"click_deactivate_threshold": "0.7"
+					},
+					"path": "/user/hand/left/input/grip"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchRight"
+						}
+					},
+					"mode": "button",
+					"parameters": {
+						"click_activate_threshold": "0.8",
+						"click_deactivate_threshold": "0.7"
+					},
+					"path": "/user/hand/right/input/grip"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchPaz"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/x"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/OpenMenu"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/y"
+				}
+			],
+			"skeleton": []
+		},
+		"/actions/menu": {
+			"chords": [],
+			"poses": [],
+			"haptics": [],
+			"sources": [
+				{
+					"inputs": {
+						"position": {
+							"output": "/actions/menu/in/Navigate"
+						}
+					},
+					"mode": "joystick",
+					"path": "/user/hand/left/input/joystick"
+				},
+				{
+					"inputs": {
+						"position": {
+							"output": "/actions/menu/in/Navigate"
+						}
+					},
+					"mode": "joystick",
+					"path": "/user/hand/right/input/joystick"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Select"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/trigger"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Select"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/right/input/trigger"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/PrevTab"
+						}
+					},
+					"mode": "button",
+					"parameters": {
+						"click_activate_threshold": "0.8",
+						"click_deactivate_threshold": "0.7"
+					},
+					"path": "/user/hand/left/input/grip"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/NextTab"
+						}
+					},
+					"mode": "button",
+					"parameters": {
+						"click_activate_threshold": "0.8",
+						"click_deactivate_threshold": "0.7"
+					},
+					"path": "/user/hand/right/input/grip"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Back"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/right/input/a"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Back"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/x"
+				},
+				{
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/CloseMenu"
+						}
+					},
+					"mode": "button",
+					"path": "/user/hand/left/input/y"
+				}
+			],
+			"skeleton": []
+		}
+	},
+	"controller_type": "oculus_touch",
+	"description": "",
+	"name": "oculus_touch"
 }

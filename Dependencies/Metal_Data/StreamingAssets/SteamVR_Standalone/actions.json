@@ -1,101 +1,142 @@
 {
-  "actions": [
-    {
-      "name": "/actions/default/in/Movement",
-      "type": "vector2",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Look",
-      "type": "vector2",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Dash",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Jump",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Shoot",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/ShootAlt",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Slaughter",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/Reload",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-      "name": "/actions/default/in/WeaponSwitchLeft",
-      "type": "boolean",
-      "requirement": "suggested"
-    },
-	{
-      "name": "/actions/default/in/WeaponSwitchRight",
-      "type": "boolean",
-      "requirement": "suggested"
-    },
-	{
-      "name": "/actions/default/in/WeaponSwitchPaz",
-      "type": "boolean",
-      "requirement": "suggested"
-    },
-	{
-      "name": "/actions/default/in/OpenMenu",
-      "type": "boolean",
-      "requirement": "mandatory"
-    },
-	{
-	  "name": "/actions/default/in/Pose",
-	  "type": "pose"
-	},
+	"actions": [
 		{
-	  "name": "/actions/default/in/PoseTip",
-	  "type": "pose"
-	}
-  ],
-  "action_sets": [
-    {
-      "name": "/actions/default",
-      "usage": "leftright"
-    }
-  ],
-  "default_bindings": [
-    {
-      "controller_type": "oculus_touch",
-      "binding_url": "bindings_oculus_touch.json"
-    }
-  ],
-  "localization": [
-    {
-      "language_tag": "en_US",
-	  "/actions/default": "Default",
-	  "/actions/default/in/Movement": "Movement",
-	  "/actions/default/in/Look": "Look",
-	  "/actions/default/in/Dash": "Dash",
-	  "/actions/default/in/Shoot": "Shoot (primary)",
-	  "/actions/default/in/ShootAlt": "Shoot (offhand)",
-	  "/actions/default/in/Slaughter": "Slaughter",
-	  "/actions/default/in/Reload": "Reload",
-	  "/actions/default/in/WeaponSwitchLeft": "Previous Weapon",
-	  "/actions/default/in/WeaponSwitchRight": "Next Weapon",
-	  "/actions/default/in/WeaponSwitchRight": "Toggle Paz",
-	  "/actions/default/in/OpenMenu": "Menu"
-    }
-  ]
+			"name": "/actions/game/in/Movement",
+			"type": "vector2",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Look",
+			"type": "vector2",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Dash",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Jump",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Shoot",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/ShootAlt",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Slaughter",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Reload",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/WeaponSwitchLeft",
+			"type": "boolean",
+			"requirement": "suggested"
+		},
+		{
+			"name": "/actions/game/in/WeaponSwitchRight",
+			"type": "boolean",
+			"requirement": "suggested"
+		},
+		{
+			"name": "/actions/game/in/WeaponSwitchPaz",
+			"type": "boolean",
+			"requirement": "suggested"
+		},
+		{
+			"name": "/actions/game/in/OpenMenu",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/game/in/Pose",
+			"type": "pose"
+		},
+		{
+			"name": "/actions/game/in/PoseTip",
+			"type": "pose"
+		},
+		{
+			"name": "/actions/menu/in/Navigate",
+			"type": "vector2",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/menu/in/Select",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/menu/in/Back",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/menu/in/PrevTab",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/menu/in/NextTab",
+			"type": "boolean",
+			"requirement": "mandatory"
+		},
+		{
+			"name": "/actions/menu/in/CloseMenu",
+			"type": "boolean",
+			"requirement": "recommended"
+		}
+	],
+	"action_sets": [
+		{
+			"name": "/actions/game",
+			"usage": "leftright"
+		},
+		{
+			"name": "/actions/menu",
+			"usage": "leftright"
+		}
+	],
+	"default_bindings": [
+		{
+			"controller_type": "oculus_touch",
+			"binding_url": "bindings_oculus_touch.json"
+		}
+	],
+	"localization": [
+		{
+			"language_tag": "en_US",
+			"/actions/game": "Gameplay",
+			"/actions/menu": "Menus",
+			"/actions/game/in/Movement": "Movement",
+			"/actions/game/in/Look": "Look",
+			"/actions/game/in/Dash": "Dash",
+			"/actions/game/in/Shoot": "Shoot (primary)",
+			"/actions/game/in/ShootAlt": "Shoot (offhand)",
+			"/actions/game/in/Slaughter": "Slaughter",
+			"/actions/game/in/Reload": "Reload",
+			"/actions/game/in/WeaponSwitchLeft": "Previous Weapon",
+			"/actions/game/in/WeaponSwitchRight": "Next Weapon",
+			"/actions/game/in/WeaponSwitchPaz": "Toggle Paz",
+			"/actions/game/in/OpenMenu": "Menu",
+			"/actions/menu/in/Navigate": "Navigate Menus",
+			"/actions/menu/in/Select": "Select",
+			"/actions/menu/in/Back": "Back",
+			"/actions/menu/in/PrevTab": "Previous Tab",
+			"/actions/menu/in/NextTab": "Next Tab",
+			"/actions/menu/in/CloseMenu": "Menu"
+		}
+	]
 }
