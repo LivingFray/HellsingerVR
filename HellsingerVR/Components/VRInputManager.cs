@@ -99,8 +99,6 @@ namespace HellsingerVR.Components
 			Vector2 nav = GetMenuVector();
 			VRInput.leftStick.x.WriteValueIntoEvent(nav.x, ptr);
 			VRInput.leftStick.y.WriteValueIntoEvent(nav.y, ptr);
-
-			UnityEngine.Debug.Log(nav.x + ", " + nav.y);
 			// Select
 			VRInput.aButton.WriteValueIntoEvent(GetMenuSelect(), ptr);
 			// Back
@@ -212,10 +210,6 @@ namespace HellsingerVR.Components
 		Vector2 GetMenuVector()
 		{
 			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("menu", "Navigate", true);
-
-			SteamVR_Action_Vector2 input2 = SteamVR_Input.GetVector2Action("game", "Movement", true);
-
-            UnityEngine.Debug.Log(input2.GetAxis(SteamVR_Input_Sources.Any).x + "");
 
 			return input.GetAxis(SteamVR_Input_Sources.Any);
 		}
