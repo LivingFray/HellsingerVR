@@ -21,6 +21,7 @@ namespace HellsingerVR.Patches
 					__instance.transform.position = __instance.m_targetEnemy.CachedChestPosition + Offset;
 					__instance.transform.LookAt(HellsingerVR.rig.head);
 					__instance.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * __instance.transform.rotation;
+					__instance.transform.parent.localScale = new Vector3(5.0f, 5.0f, 5.0f);
 				}
 			}
 			catch (Exception ex)

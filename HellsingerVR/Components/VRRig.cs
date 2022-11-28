@@ -153,7 +153,7 @@ namespace HellsingerVR.Components
 			if (InCutscene && CameraTransform != null)
 			{
 				// Pesky DOF
-				HellsingerVR.RemoveDOF();
+				//HellsingerVR.RemoveDOF();
 				transform.position = CameraTransform.position + InitialPosition;
 				transform.rotation = Quaternion.Euler(0.0f, CameraTransform.rotation.eulerAngles.y, 0.0f) * InitialRotation;
 				HellsingerVR.MoveOverlayToWorld();
