@@ -40,7 +40,7 @@ namespace HellsingerVR.Components
             return (location, rotation);
 		}
 
-        static bool IsInGame()
+		static bool IsInGame()
         {
             return !HellsingerVR.IsPaused && !HellsingerVR.IsLoading && HellsingerVR.rig && HellsingerVR.rig.InLevel;
         }
@@ -82,6 +82,7 @@ namespace HellsingerVR.Components
                 else
                 {
                     UpdateMenuInputs(ptr);
+                    LoginHack.PressAnyKey();
                 }
             }
             catch (Exception e)
@@ -90,7 +91,6 @@ namespace HellsingerVR.Components
             }
             InputSystem.QueueEvent(ptr);
 
-            LoginHack.PressAnyKey();
         }
 
         void UpdateMenuInputs(InputEventPtr ptr)

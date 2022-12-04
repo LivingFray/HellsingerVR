@@ -68,6 +68,9 @@ namespace HellsingerVR.Components
 			transform.position = HellsingerVR.TitleScreenPosition - Vector3.up * Height;
 
 			transform.rotation = Quaternion.Euler(0.0f, -90.0f - head.transform.localRotation.eulerAngles.y, 0.0f);
+
+			PlayerTransform = null;
+			CameraTransform = null;
 		}
 
 		public void EnterLevel()
@@ -77,7 +80,7 @@ namespace HellsingerVR.Components
 
 			viewModelManager.enabled = true;
 
-			Debug.Log("Entered Level");
+			HellsingerVR._instance.Log.LogInfo("Entered Level");
 		}
 
 		public void EnterCutscene()
@@ -100,14 +103,13 @@ namespace HellsingerVR.Components
 				Camera.main.cullingMask = 0;
 			}
 
-			Debug.Log("Entered cutscene");
+			HellsingerVR._instance.Log.LogInfo("Entered cutscene");
 		}
 
 		public void ExitCutscene()
 		{
-			Debug.Log("Left cutscene");
+			HellsingerVR._instance.Log.LogInfo("Left cutscene");
 			InCutscene = false;
-			FirstPersonController fpController = FindObjectOfType<FirstPersonController>();
 
 			LastLocalHeadYaw = head.localRotation.eulerAngles.y;
 

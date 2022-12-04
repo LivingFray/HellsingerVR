@@ -160,7 +160,7 @@ namespace HellsingerVR
 
 		public static void MoveTitleToWorld()
 		{
-			Debug.Log("Moving title screen to world space");
+			HellsingerVR._instance.Log.LogInfo("Moving title screen to world space");
 			Canvas c = UnityEngine.Object.FindObjectOfType<Canvas>();
 			if (c)
 			{
@@ -172,23 +172,10 @@ namespace HellsingerVR
 			}
 			else
 			{
-				Debug.Log("No canvas!");
+				HellsingerVR._instance.Log.LogInfo("No canvas!");
 			}
 
 			RemoveDOF();
-
-			/*
-			Camera.main.orthographic = true;
-			Camera.main.orthographicSize = 1.0f;
-			Camera.main.nearClipPlane = 1.0f;
-			Camera.main.farClipPlane = 1.0f;
-			Camera.main.clearFlags = CameraClearFlags.Nothing;
-			Camera.main.cullingMask = 0;
-			Camera.main.eventMask = 0;
-			Camera.main.useOcclusionCulling = false;
-			*/
-			//Camera.main.rect = new Rect(0.0f, 0.0f, 100.0f, 100.0f);
-			//Camera.main.cullingMask = 0;
 
 			if (Camera.main)
 			{
@@ -203,8 +190,7 @@ namespace HellsingerVR
 			{
 				return;
 			}
-			Debug.Log("Moving level select to world space");
-			Debug.Log(c.name + " of " + c.gameObject.name);
+			_instance.Log.LogInfo("Moving level select to world space");
 			c.renderMode = RenderMode.WorldSpace;
 			c.transform.position = TitleScreenPosition + Vector3.back * 3.5f;
 			c.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
@@ -240,18 +226,6 @@ namespace HellsingerVR
 			overlay.transform.rotation = Quaternion.Euler(0.0f, overlay.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
 			RectTransform rect = overlay.GetComponent<RectTransform>();
 			overlay.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
-		}
-
-		// Might not go with this in the end?
-		public static void MoveOverlayToScreen()
-		{
-			if (overlay)
-			{
-				overlay.renderMode = RenderMode.ScreenSpaceOverlay;
-				overlay.transform.position = overlayTrans.position;
-				overlay.transform.rotation = overlayTrans.rotation;
-				overlay.transform.localScale = overlayTrans.localScale;
-			}
 		}
 	}
 }

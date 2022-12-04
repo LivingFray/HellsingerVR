@@ -28,6 +28,11 @@ namespace HellsingerVR.Components
 
 		ViewModel ActiveModel;
 
+		public void OnDisable()
+		{
+			ActiveModel = null;
+		}
+
 		public void HideArms()
 		{
 			GameObject arms = GameObject.Find("PlayerCharacter(Clone)/Unknown_Rig:GEO/Unknown_Rig:Mesh_1p");
@@ -50,7 +55,7 @@ namespace HellsingerVR.Components
 				}
 				catch
 				{
-					Debug.Log(smr.name + ": Couldn't set EnableFpsMode to 0");
+					HellsingerVR._instance.Log.LogInfo(smr.name + ": Couldn't set EnableFpsMode to 0");
 				}
 			}
 		}
@@ -58,7 +63,7 @@ namespace HellsingerVR.Components
 		// Find somewhere to patch into to trigger this on weapon change
 		public void OnChangeWeapon(PlayerWeaponType NewWeapon)
 		{
-			Debug.Log("OnChangeWeapon: " + NewWeapon.ToString());
+			HellsingerVR._instance.Log.LogInfo("OnChangeWeapon: " + NewWeapon.ToString());
 
 			if (ViewModels.ContainsKey(NewWeapon))
 			{
@@ -85,37 +90,37 @@ namespace HellsingerVR.Components
 			{
 				R_x += 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 			if (Input.GetKeyDown(KeyCode.J))
 			{
 				R_x -= 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 			if (Input.GetKeyDown(KeyCode.I))
 			{
 				R_y += 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 			if (Input.GetKeyDown(KeyCode.K))
 			{
 				R_y -= 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 			if (Input.GetKeyDown(KeyCode.O))
 			{
 				R_z += 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 			if (Input.GetKeyDown(KeyCode.L))
 			{
 				R_z -= 5.0f;
 				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				Debug.Log($"({R_x}, {R_y}, {R_z})");
+				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
 			}
 
 		}

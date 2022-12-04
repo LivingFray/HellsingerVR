@@ -28,11 +28,20 @@ namespace HellsingerVR
 		static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
 		[DllImport("user32.dll")]
+		static extern IntPtr GetActiveWindow();
+
+		[DllImport("user32.dll")]
 		static extern bool SetForegroundWindow(IntPtr hWnd);
+
+		static TitleScreenAnimation titleScreenAnimation;
 
 		public static void PressAnyKey()
 		{
-			TitleScreenAnimation titleScreenAnimation = UnityEngine.Object.FindObjectOfType<TitleScreenAnimation>();
+			if (titleScreenAnimation == null)
+			{
+				titleScreenAnimation = UnityEngine.Object.FindObjectOfType<TitleScreenAnimation>();
+			}
+
 			if (titleScreenAnimation)
 			{
 				HellsingerVR.IsPreLogin = titleScreenAnimation.IsOnPressAnyKeyScreen();
@@ -54,8 +63,8 @@ namespace HellsingerVR
 				if (!HasFocused)
 				{
 					HasFocused = true;
-					Process thisProcess = Process.GetCurrentProcess();
-					SetForegroundWindow(thisProcess.MainWindowHandle);
+					SetForegroundWindow(GetActiveWindow());
+					HellsingerVR._instance.Log.LogInfo("Bringing Unity into foreground");
 				}
 
 				InputEventPtr keyboardPtr;
@@ -71,7 +80,7 @@ namespace HellsingerVR
 					Process thisProcess = Process.GetCurrentProcess();
 					PostMessage(thisProcess.MainWindowHandle, Pressed ? KEYDOWN : KEYUP, VK_ESC, 0);
 					WasKeyPressed = Pressed;
-					UnityEngine.Debug.Log("Faking keypress for login");
+					HellsingerVR._instance.Log.LogInfo("Faking keypress for login");
 				}
 
 				keyboard.spaceKey.WriteValueIntoEvent(Pressed ? 1.0f : 0.0f, keyboardPtr);
@@ -85,7 +94,7 @@ namespace HellsingerVR
 				Process thisProcess = Process.GetCurrentProcess();
 				PostMessage(thisProcess.MainWindowHandle, KEYUP, VK_ESC, 0);
 				WasKeyPressed = false;
-				UnityEngine.Debug.Log("Releasing held fake keypress for login");
+				HellsingerVR._instance.Log.LogInfo("Releasing held fake keypress for login");
 			}
 		}
 	}

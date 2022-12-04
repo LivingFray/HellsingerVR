@@ -15,7 +15,7 @@ namespace HellsingerVR.Patches
 	{
 		private static void Prefix(ref BulletFireData fireData)
 		{
-			Debug.Log($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
+			HellsingerVR._instance.Log.LogInfo($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
 
 			// TODO: Account for settings
 			bool bFromLeftHand = false;

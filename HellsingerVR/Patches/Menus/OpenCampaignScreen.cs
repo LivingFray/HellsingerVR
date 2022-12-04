@@ -48,9 +48,9 @@ namespace HellsingerVR.Patches.Menus
 		{
 			// use dynamic code to handle all method calls
 			var parameters = __originalMethod.GetParameters();
-			Debug.Log($"Method {__originalMethod.FullDescription()}:");
+			HellsingerVR._instance.Log.LogInfo($"Method {__originalMethod.FullDescription()}:");
 			for (var i = 0; i < parameters.Length; i++)
-				Debug.Log($"{parameters[i].Name} of type {parameters[i].ParameterType}");
+				HellsingerVR._instance.Log.LogInfo($"{parameters[i].Name} of type {parameters[i].ParameterType}");
 		}
 	}
 	*/

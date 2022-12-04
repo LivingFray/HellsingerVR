@@ -11,7 +11,7 @@ namespace HellsingerVR.UI
 	{
 		Transform RhythmIndicatorTrans;
 
-		static int layermask = LayerMask.NameToLayer("Ignore Raycast");
+		static int layermask = ~LayerMask.GetMask("Ignore Raycast");
 
 		public enum Position {Head, Sights, Target};
 
@@ -72,12 +72,12 @@ namespace HellsingerVR.UI
 			if (Input.GetKeyDown(KeyCode.LeftBracket))
 			{
 				head_distance -= 0.2f;
-				Debug.Log(""+head_distance);
+				HellsingerVR._instance.Log.LogInfo(""+head_distance);
 			}
 			if (Input.GetKeyDown(KeyCode.RightBracket))
 			{
 				head_distance += 0.2f;
-				Debug.Log(""+head_distance);
+				HellsingerVR._instance.Log.LogInfo(""+head_distance);
 			}
 
 			if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -127,12 +127,12 @@ namespace HellsingerVR.UI
 
 			RaycastHit raycastHit;
 
-			Physics.Raycast(location, rotation * Vector3.forward, out raycastHit, target_distance, layermask);
+			bool Hit = Physics.Raycast(location, rotation * Vector3.forward, out raycastHit, target_distance, layermask, QueryTriggerInteraction.Ignore);
 
 			Vector3 OutPoint = raycastHit.point;
 			Vector3 OutNormal = raycastHit.normal;
 
-			if (raycastHit.distance < float.Epsilon)
+			if (!Hit)
 			{
 				OutPoint = location + rotation * Vector3.forward * target_distance;
 				OutNormal = rotation * Vector3.back;
