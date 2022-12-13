@@ -228,17 +228,6 @@ namespace Valve.VR
 
 				var camera = c.camera;
 
-				int cullingMask = camera.cullingMask;
-				if (eye == EVREye.Eye_Left)
-				{
-					camera.cullingMask &= ~rightMask;
-					camera.cullingMask |= leftMask;
-				}
-				else
-				{
-					camera.cullingMask &= ~leftMask;
-					camera.cullingMask |= rightMask;
-				}
 				eyePreRenderCallback?.Invoke(eye, cameraMask);
 				var tex = camera.targetTexture;
 				camera.targetTexture = SteamVR_Camera.GetSceneTexture(camera.allowHDR);
@@ -259,8 +248,6 @@ namespace Valve.VR
 				RenderTexture.ReleaseTemporary(temp);
 
 				camera.targetTexture = tex;
-
-				camera.cullingMask = cullingMask;
 			}
 			eyePostRenderCallback?.Invoke(eye);
 		}

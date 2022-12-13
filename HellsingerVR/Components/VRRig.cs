@@ -20,6 +20,7 @@ namespace HellsingerVR.Components
 		public Transform head;
 		public Transform leftHand;
 		public Transform rightHand;
+		public SteamVR_Camera vrCamera;
 
 		public Transform PlayerTransform;
 		public Transform CameraTransform;
@@ -35,6 +36,10 @@ namespace HellsingerVR.Components
 		bool InCutscene = false;
 
 		bool _InLevel = false;
+
+		int CameraMask = 0;
+
+		int uiMask = LayerMask.GetMask("UI");
 
 		public UI.RhythmIndicator rhythmIndicator;
 		public UI.Health health;
@@ -53,6 +58,7 @@ namespace HellsingerVR.Components
 
 		public void Start()
 		{
+			CameraMask = vrCamera.TrueMask;
 			EnterTitleScreen();
 		}
 
@@ -71,6 +77,7 @@ namespace HellsingerVR.Components
 
 			PlayerTransform = null;
 			CameraTransform = null;
+			HellsingerVR.MoveOverlayToWorld();
 		}
 
 		public void EnterLevel()
@@ -95,12 +102,6 @@ namespace HellsingerVR.Components
 			{
 				PlayerTransform = fpController.m_player.PlayerTransform;
 				CameraTransform = fpController.m_cameraTransform;
-			}
-
-			if (Camera.main)
-			{
-				Camera.main.enabled = true;
-				Camera.main.cullingMask = 0;
 			}
 
 			HellsingerVR._instance.Log.LogInfo("Entered cutscene");
@@ -133,17 +134,22 @@ namespace HellsingerVR.Components
 
 			viewModelManager.HideArms();
 
-			if (Camera.main)
-			{
-				Camera.main.cullingMask = 0;
-				Camera.main.enabled = false;
-			}
-
 			HellsingerVR.RemoveDOF();
 		}
 
 		public void Update()
 		{
+			// Only need to hide the world while in a level
+			// Title screen, level select, etc are supposed to render their geo
+			if ((HellsingerVR.IsPaused || HellsingerVR.IsLoading) && InLevel)
+			{
+				vrCamera.TrueMask = uiMask;
+			}
+			else
+			{
+				vrCamera.TrueMask = CameraMask;
+			}
+
 			if (InLevel)
 			{
 				UpdateLevel();
@@ -188,6 +194,11 @@ namespace HellsingerVR.Components
 
 			transform.position = PlayerTransform.position;
 			transform.rotation = Quaternion.Euler(0.0f, NewYaw - LastLocalHeadYaw, 0.0f);
+
+			if (!HellsingerVR.IsPaused && !HellsingerVR.IsLoading)
+			{
+				HellsingerVR.MoveOverlayToWorld();
+			}
 		}
 	}
 }

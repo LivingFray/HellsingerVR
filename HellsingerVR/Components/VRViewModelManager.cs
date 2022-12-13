@@ -9,11 +9,10 @@ namespace HellsingerVR.Components
 
 	public class VRViewModelManager : MonoBehaviour
 	{
-
-		float R_x = 0.0f;
-		float R_y = 0.0f;
-		float R_z = 0.0f;
-		Quaternion RotationOffset;
+		float P_x = 0.0f;
+		float P_y = 0.0f;
+		float P_z = 0.0f;
+		Vector3 PositionOffset = Vector3.zero;
 
 		// TODO: Spawned effects (like Paz's fire eyes) have offsets applied (as particle effects)
 
@@ -85,45 +84,58 @@ namespace HellsingerVR.Components
 
 			ActiveModel.Update();
 
-
 			if (Input.GetKeyDown(KeyCode.U))
 			{
-				R_x += 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_x += 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 			if (Input.GetKeyDown(KeyCode.J))
 			{
-				R_x -= 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_x -= 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 			if (Input.GetKeyDown(KeyCode.I))
 			{
-				R_y += 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_y += 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 			if (Input.GetKeyDown(KeyCode.K))
 			{
-				R_y -= 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_y -= 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 			if (Input.GetKeyDown(KeyCode.O))
 			{
-				R_z += 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_z += 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 			if (Input.GetKeyDown(KeyCode.L))
 			{
-				R_z -= 5.0f;
-				RotationOffset = Quaternion.Euler(R_x, R_y, R_z);
-				HellsingerVR._instance.Log.LogInfo($"({R_x}, {R_y}, {R_z})");
+				P_z -= 0.05f;
+				PositionOffset = new Vector3(P_x, P_y, P_z);
+				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
+				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
 
 		}
 
+		public static Vector3 GetMuzzleOffset(PlayerWeaponType weaponType)
+		{
+			if (ViewModels.ContainsKey(weaponType))
+			{
+				return ViewModels[weaponType].GetMuzzleOffset();
+			}
+			return Vector3.zero;
+		}
 	}
 }

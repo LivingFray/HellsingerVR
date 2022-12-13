@@ -10,7 +10,7 @@ namespace HellsingerVR.ViewModels
 
 		public SoulCannonViewModel()
 		{
-			OffsetVector = new Vector3(0.0f, 0.0f, 0.0f);
+			OffsetVector = new Vector3(-0.15f, -0.05f, 0.0f);
 			OffsetRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 		}
 

@@ -13,6 +13,7 @@ namespace HellsingerVR.ViewModels
 		{
 			OffsetVector = new Vector3(0.0f, 0.0f, 0.0f);
 			OffsetRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+			MuzzleOffset = new Vector3(0.0f, 0.0f, 0.0f);
 		}
 
 		public override void OnEquip()

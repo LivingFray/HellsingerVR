@@ -32,7 +32,7 @@ namespace HellsingerVR
 
 		public static Canvas overlay;
 
-		static Transform overlayTrans;
+		static RectTransform overlayRect;
 
 		public static Quaternion HandOffset = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
@@ -110,6 +110,7 @@ namespace HellsingerVR
 
 				rig = vrRig.GetComponent<VRRig>();
 				rig.head = head.transform;
+				rig.vrCamera = eyes.GetComponent<SteamVR_Camera>();
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -137,6 +138,9 @@ namespace HellsingerVR
 			switch (loadLevelMsg.Level)
 			{
 				case "TitleScreen":
+					rig.EnterTitleScreen();
+					break;
+				case "EndGameScreen":
 					rig.EnterTitleScreen();
 					break;
 				default:
@@ -179,7 +183,8 @@ namespace HellsingerVR
 
 			if (Camera.main)
 			{
-				Camera.main.enabled = false;
+				Camera.main.cullingMask = 0;
+				Camera.main.clearFlags = CameraClearFlags.Nothing;
 			}
 		}
 
@@ -200,32 +205,27 @@ namespace HellsingerVR
 
 		public static void MoveOverlayToWorld()
 		{
-			if (overlay == null)
+			if (overlay == null || overlayRect == null)
 			{
 				GameObject overlayGO = GameObject.Find("Overlay");
 				
 				if (overlayGO != null)
 				{
 					overlay = overlayGO.GetComponent<Canvas>();
+					overlayRect = overlay.GetComponent<RectTransform>();
 				}
 				
-				if (overlay == null)
+				if (overlay == null || overlayRect == null)
 				{
 					return;
 				}
-			}
-
-			if (overlay.renderMode != RenderMode.WorldSpace)
-			{
-				overlayTrans = overlay.transform;
 			}
 
 			overlay.renderMode = RenderMode.WorldSpace;
 			overlay.transform.position = rig.head.transform.position + rig.head.transform.forward * 3.5f;
 			overlay.transform.LookAt(rig.head);
 			overlay.transform.rotation = Quaternion.Euler(0.0f, overlay.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
-			RectTransform rect = overlay.GetComponent<RectTransform>();
-			overlay.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
+			overlay.transform.localScale = Vector3.one * (2.0f / overlayRect.rect.height);
 		}
 	}
 }

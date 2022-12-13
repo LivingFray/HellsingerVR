@@ -62,7 +62,6 @@ namespace HellsingerVR.Patches.Menus
 				if (HellsingerVR.rig)
 				{
 					HellsingerVR.rig.EnterTitleScreen();
-					HellsingerVR.MoveOverlayToWorld();
 				}
 			}
 		}

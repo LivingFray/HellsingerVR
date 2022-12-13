@@ -10,7 +10,7 @@ namespace HellsingerVR.ViewModels
 
 		public VulcanViewModel()
 		{
-			OffsetVector = new Vector3(0.0f, 0.0f, 0.0f);
+			OffsetVector = new Vector3(-0.2f, 0.0f, 0.0f);
 			OffsetRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 		}
 

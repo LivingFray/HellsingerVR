@@ -19,7 +19,7 @@ namespace HellsingerVR.ViewModels
 
 		public PistolsViewModel()
 		{
-			OffsetVector = new Vector3(0.0f, 0.0f, 0.0f);
+			OffsetVector = new Vector3(-0.05f, 0.0f, 0.0f);
 			OffsetRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 		}
 
@@ -76,7 +76,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = leftHandBones.transform.rotation * CerberusFrame.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + OffsetVector) - FirstBone;
+				Vector3 targetPosition = (location + leftHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				leftHandBones.transform.position = targetPosition;
 
@@ -92,7 +92,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = rightHandBones.transform.rotation * PersephoneFrame.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + OffsetVector) - FirstBone;
+				Vector3 targetPosition = (location + rightHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				rightHandBones.transform.position = targetPosition;
 			}

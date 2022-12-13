@@ -13,6 +13,7 @@ namespace HellsingerVR.ViewModels
 
 		protected Vector3 OffsetVector;
 		protected Quaternion OffsetRotation;
+		protected Vector3 MuzzleOffset;
 
 		public abstract void OnEquip();
 		public virtual void Update()
@@ -25,7 +26,17 @@ namespace HellsingerVR.ViewModels
 
 			Vector3 FirstBone = RootBone.rotation * RootMesh.bones[1].localPosition;
 
-			RootBone.position = (location + OffsetVector) - FirstBone;
+			RootBone.position = (location + RootBone.rotation * OffsetVector) - FirstBone;
+		}
+
+		public void SetMuzzleOffset(Vector3 Pos)
+		{
+			MuzzleOffset = Pos;
+		}
+
+		public Vector3 GetMuzzleOffset()
+		{
+			return MuzzleOffset;
 		}
 	}
 }

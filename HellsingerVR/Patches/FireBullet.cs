@@ -34,7 +34,7 @@ namespace HellsingerVR.Patches
 			Quaternion vrRotation = rotation;
 
 			fireData.Direction = vrRotation * Quaternion.Inverse(initialRotation) * fireData.Direction;
-			fireData.Position = location;
+			fireData.Position = location + vrRotation * VRViewModelManager.GetMuzzleOffset(fireData.WeaponConfig.WeaponType);
 		}
 	}
 }

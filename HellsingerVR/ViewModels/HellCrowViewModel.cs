@@ -19,8 +19,9 @@ namespace HellsingerVR.ViewModels
 
 		public HellCrowViewModel()
 		{
-			OffsetVector = new Vector3(0.0f, 0.0f, 0.0f);
+			OffsetVector = new Vector3(0.0f, 0.2f, 0.0f);
 			OffsetRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+			MuzzleOffset = new Vector3(0.0f, 0.0f, 0.0f);
 		}
 
 		public override void OnEquip()
@@ -77,7 +78,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = leftHandBones.transform.rotation * LeftCrow.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + OffsetVector) - FirstBone;
+				Vector3 targetPosition = (location + leftHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				leftHandBones.transform.position = targetPosition;
 
@@ -93,7 +94,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = rightHandBones.transform.rotation * RightCrow.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + OffsetVector) - FirstBone;
+				Vector3 targetPosition = (location + rightHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				rightHandBones.transform.position = targetPosition;
 			}
