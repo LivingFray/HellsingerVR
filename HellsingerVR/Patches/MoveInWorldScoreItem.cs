@@ -15,15 +15,18 @@ namespace HellsingerVR.Patches
 		{
 			try
 			{
-				if (__instance != null
+				if (__instance.m_mainCamera != null
 					&& HellsingerVR.rig != null
 					&& HellsingerVR.rig.head != null)
 				{
-					//Vector3 Offset = (HellsingerVR.rig.head.transform.position - __instance.m_worldPosition).normalized * 0.5f;
+					HellsingerVR._instance.Log.LogInfo($"Score item using camera {__instance.m_mainCamera.name}");
+					HellsingerVR._instance.Log.LogInfo($"Preupdate score item position {__instance.transform.position.ToString()}");
+					__instance.m_mainCamera = HellsingerVR.rig.camera;
 					__instance.transform.position = __instance.m_worldPosition;
 					__instance.transform.LookAt(HellsingerVR.rig.head);
 					__instance.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * __instance.transform.rotation;
 					//__instance.transform.parent.localScale = new Vector3(5.0f, 5.0f, 5.0f);
+					HellsingerVR._instance.Log.LogInfo($"Updating score item position {__instance.m_worldPosition.ToString()}");
 				}
 			}
 			catch (Exception ex)

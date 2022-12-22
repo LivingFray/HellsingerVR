@@ -21,6 +21,7 @@ namespace HellsingerVR.Components
 		public Transform leftHand;
 		public Transform rightHand;
 		public SteamVR_Camera vrCamera;
+		public Camera camera;
 
 		public Transform PlayerTransform;
 		public Transform CameraTransform;
@@ -117,8 +118,6 @@ namespace HellsingerVR.Components
 			transform.position = PlayerTransform.position;
 			transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -head.localRotation.eulerAngles.y, 0.0f);
 
-			HellsingerVR.MoveOverlayToWorld();
-
 			if (rhythmIndicator == null)
 			{
 				rhythmIndicator = new UI.RhythmIndicator();
@@ -139,6 +138,17 @@ namespace HellsingerVR.Components
 
 		public void Update()
 		{
+			if (Input.GetKeyDown(KeyCode.Tab))
+			{
+				HellsingerVR._instance.Log.LogInfo($"IsPaused: {HellsingerVR.IsPaused}");
+				HellsingerVR._instance.Log.LogInfo($"IsLoading: {HellsingerVR.IsLoading}");
+				HellsingerVR._instance.Log.LogInfo($"InCutscene: {InCutscene}");
+				HellsingerVR._instance.Log.LogInfo($"InLevel: {InLevel}");
+				HellsingerVR._instance.Log.LogInfo($"PlayerPosition: {transform.position.ToString()}");
+				HellsingerVR._instance.Log.LogInfo($"UIPosition: {GameObject.Find("Overlay").transform.position.ToString()}");
+
+			}
+
 			// Only need to hide the world while in a level
 			// Title screen, level select, etc are supposed to render their geo
 			if ((HellsingerVR.IsPaused || HellsingerVR.IsLoading) && InLevel)
@@ -156,6 +166,57 @@ namespace HellsingerVR.Components
 			}
 		}
 
+		public void LateUpdate()
+		{
+			// Do UI in LateUpdate so game state is most up to date
+			if (InLevel && !InCutscene)
+			{
+				UpdateTransform();
+
+				if (!HellsingerVR.IsPaused && !HellsingerVR.IsLoading)
+				{
+					HellsingerVR.MoveOverlayToWorld();
+				}
+
+				if (rhythmIndicator != null) rhythmIndicator.Update();
+				if (health != null) health.Update();
+
+				/*
+				// Find/cache InWorldScoreContainer
+				// THIS IS A BAD WAY TO DO IT. CACHE FROM THE HIERARCHY!!!
+				InWorldScoreContainer scoreContainer = UnityEngine.Object.FindObjectOfType<InWorldScoreContainer>();
+				ClinchIndicatorContainer clinchContainer = UnityEngine.Object.FindObjectOfType<ClinchIndicatorContainer>();
+				// TODO: Do slaughter here too
+
+				if (clinchContainer != null
+					&& clinchContainer.m_targetEnemy != null
+					&& clinchContainer.m_targetEnemy.Transform != null)
+				{
+					Vector3 Offset = (HellsingerVR.rig.head.transform.position - clinchContainer.m_targetEnemy.Transform.position).normalized * 0.5f;
+					clinchContainer.transform.position = clinchContainer.m_targetEnemy.CachedChestPosition + Offset;
+					clinchContainer.transform.LookAt(HellsingerVR.rig.head);
+					clinchContainer.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * clinchContainer.transform.rotation;
+					clinchContainer.transform.parent.localScale = new Vector3(5.0f, 5.0f, 5.0f);
+				}
+
+				if (scoreContainer != null)
+				{
+					foreach (InWorldScoreItem scoreItem in scoreContainer.m_visibleItems)
+					{
+						HellsingerVR._instance.Log.LogInfo($"lateupdate: Updating score item position from {scoreItem.transform.position.ToString()}");
+						scoreItem.transform.position = scoreItem.m_worldPosition;
+						scoreItem.transform.LookAt(HellsingerVR.rig.head);
+						scoreItem.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * scoreItem.transform.rotation;
+					}
+				}
+				*/
+			}
+			else if (InCutscene && CameraTransform != null)
+			{
+				HellsingerVR.MoveOverlayToWorld();
+			}
+		}
+
 		public void UpdateLevel()
 		{
 			if (InCutscene && CameraTransform != null)
@@ -164,15 +225,6 @@ namespace HellsingerVR.Components
 				//HellsingerVR.RemoveDOF();
 				transform.position = CameraTransform.position + InitialPosition;
 				transform.rotation = Quaternion.Euler(0.0f, CameraTransform.rotation.eulerAngles.y, 0.0f) * InitialRotation;
-				HellsingerVR.MoveOverlayToWorld();
-			}
-
-			if (!InCutscene)
-			{
-				UpdateTransform();
-
-				if (rhythmIndicator != null) rhythmIndicator.Update();
-				if (health != null) health.Update();
 			}
 		}
 
@@ -194,11 +246,6 @@ namespace HellsingerVR.Components
 
 			transform.position = PlayerTransform.position;
 			transform.rotation = Quaternion.Euler(0.0f, NewYaw - LastLocalHeadYaw, 0.0f);
-
-			if (!HellsingerVR.IsPaused && !HellsingerVR.IsLoading)
-			{
-				HellsingerVR.MoveOverlayToWorld();
-			}
 		}
 	}
 }

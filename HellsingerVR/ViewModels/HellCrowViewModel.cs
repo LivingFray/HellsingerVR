@@ -61,11 +61,9 @@ namespace HellsingerVR.ViewModels
 
 		public override void Update()
 		{
-			// Cerberus (left)
+			// Crow 1 (left)
 			{
-				// TODO: Handedness
-				bool IsRightHanded = true;
-				(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(IsRightHanded);
+				(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(true);
 
 				foreach (KeyValuePair<Transform, Transform> valuePair in LeftHandMap)
 				{
@@ -84,11 +82,9 @@ namespace HellsingerVR.ViewModels
 
 			}
 
-			// Persephone (right)
+			// Crow 2 (right)
 			{
-				// TODO: Handedness
-				bool IsRightHanded = true;
-				(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(!IsRightHanded);
+				(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(false);
 
 				rightHandBones.transform.rotation = rotation * OffsetRotation * rightHandBones.transform.localRotation;
 

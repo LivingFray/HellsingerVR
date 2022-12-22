@@ -47,6 +47,21 @@ namespace HellsingerVR.UI
 			LowAmmoIndicator = SharedHUD.Find("LowAmmoIndicator");
 			NoAmmoIndicator = SharedHUD.Find("NoAmmoIndicator");
 			BeatGradingContainer = SharedHUD.Find("BeatGradingContainer");
+
+			string locFromPos = HellsingerVR._instance.ReticleLocation.Value.ToLower();
+
+			switch (locFromPos)
+			{
+				case "sights":
+					position = Position.Sights;
+					break;
+				case "head":
+					position = Position.Head;
+					break;
+				default:
+					position = Position.Target;
+					break;
+			}
 		}
 
 		public void Update()
@@ -99,9 +114,7 @@ namespace HellsingerVR.UI
 				position = Position.Target;
 			}
 
-			// TODO: Handedness setting
-			bool bFromLeftHand = false;
-
+			bool bFromLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 
 			// TODO: Per gun offset
@@ -120,9 +133,7 @@ namespace HellsingerVR.UI
 				position = Position.Head;
 			}
 
-			// TODO: Handedness setting
-			bool bFromLeftHand = false;
-
+			bool bFromLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 
 			RaycastHit raycastHit;

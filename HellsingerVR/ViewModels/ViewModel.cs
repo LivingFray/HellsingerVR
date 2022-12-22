@@ -18,9 +18,8 @@ namespace HellsingerVR.ViewModels
 		public abstract void OnEquip();
 		public virtual void Update()
 		{
-			// TODO: Handedness
-			bool IsRightHanded = true;
-			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(!IsRightHanded);
+			bool IsLeftHanded = HellsingerVR._instance.IsLeftHanded.Value;
+			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(IsLeftHanded);
 
 			RootBone.rotation = rotation * OffsetRotation * RootBone.localRotation;
 

@@ -25,8 +25,13 @@ namespace HellsingerVR.Components
 
         FirstPersonController fpController;
 
+        PlayerWeaponType LastWeapon = PlayerWeaponType.Falx;
+
 		bool WasPrevWeaponPressed = false;
         bool WasNextWeaponPressed = false;
+
+        bool AlignToHead;
+        bool UseLeftHand;
 
         public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
         {
@@ -48,6 +53,23 @@ namespace HellsingerVR.Components
         public void Awake()
         {
             TimeOffset = Time.realtimeSinceStartup;
+            string movementType = HellsingerVR._instance.MovementType.Value.ToLower();
+            switch (movementType)
+            {
+                case "hand":
+                case "mainhand":
+                    AlignToHead = false;
+                    UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
+                    break;
+                case "offhand":
+                    AlignToHead = false;
+                    UseLeftHand = !HellsingerVR._instance.IsLeftHanded.Value;
+                    break;
+                default:
+                    AlignToHead = true;
+                    UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
+                    break;
+            }
         }
 
         // Can't do the update early, so do it at the end of the frame ready for the next frame
@@ -153,6 +175,7 @@ namespace HellsingerVR.Components
 					WeaponAbilityController weaponAbilityController = player.m_weaponAbilityController;
 					if (weaponAbilityController != null)
 					{
+						LastWeapon = weaponAbilityController.m_activeWeaponType;
 						bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchLeft", true).state;
 						bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchRight", true).state;
 
@@ -244,12 +267,10 @@ namespace HellsingerVR.Components
 		Vector2 GetMovementVector()
         {
             SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement", true);
-            // TODO: Implement options
-            bool bUseHMD = true;
 
-            float rotation = (bUseHMD ?
+            float rotation = (AlignToHead ?
                 HellsingerVR.rig.head.rotation :
-                input.activeDevice == SteamVR_Input_Sources.LeftHand ?
+                UseLeftHand ?
                     HellsingerVR.rig.leftHand.rotation :
                     HellsingerVR.rig.rightHand.rotation
                 ).eulerAngles.y;
@@ -279,8 +300,6 @@ namespace HellsingerVR.Components
 
         float GetShooting()
         {
-            // Need to check the active weapon here to handle dual wielding?
-
             SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("game", "Shoot", true);
             SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true);
 
@@ -300,6 +319,13 @@ namespace HellsingerVR.Components
                 {
                     LastHandToShootWasLeft = altFireAction.activeDevice == SteamVR_Input_Sources.LeftHand;
                 }
+            }
+
+			// Filter out shots from the wrong hand when wielding a one handed gun
+			bool CanDualWield = LastWeapon == PlayerWeaponType.Pistols || LastWeapon == PlayerWeaponType.Boomerang;
+			if (!CanDualWield)
+            {
+                DidShoot &= LastHandToShootWasLeft == HellsingerVR._instance.IsLeftHanded.Value;
             }
 
             // Return true if ONE is active, need to replace this to account for one handed weapons

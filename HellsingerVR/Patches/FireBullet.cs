@@ -18,13 +18,13 @@ namespace HellsingerVR.Patches
 			HellsingerVR._instance.Log.LogInfo($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
 
 			// TODO: Account for settings
-			bool bFromLeftHand = false;
+			bool bFromLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
 
-			if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Pistols || fireData.WeaponConfig.WeaponType == PlayerWeaponType.Boomerang)
-			{
+			//if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Pistols || fireData.WeaponConfig.WeaponType == PlayerWeaponType.Boomerang)
+			//{
 				// Somehow get which gun? Just go fuck it and let the guns share ammo and be fired by either
 				bFromLeftHand = VRInputManager.LastHandToShootWasLeft;
-			}
+			//}
 
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 

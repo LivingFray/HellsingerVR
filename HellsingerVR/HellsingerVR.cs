@@ -10,6 +10,7 @@ using System.IO;
 using HellsingerVR.Components;
 using UnityEngine.Rendering.HighDefinition;
 using Il2CppInterop.Runtime;
+using BepInEx.Configuration;
 
 namespace HellsingerVR
 {
@@ -36,11 +37,35 @@ namespace HellsingerVR
 
 		public static Quaternion HandOffset = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
+		// === Config
+		// General
+		public ConfigEntry<bool> IsVREnabled;
+		public ConfigEntry<bool> IsLeftHanded;
+		// Locomotion
+		public ConfigEntry<float> SnapTurningAngle;
+		public ConfigEntry<string> MovementType;
+		// UI
+		public ConfigEntry<string> ReticleLocation;
+		public ConfigEntry<bool> ShowHealthOnHand;
+		public ConfigEntry<bool> ShowUltimateOnHand;
+		public ConfigEntry<bool> ShowFuryOnHand;
+		public ConfigEntry<bool> ShowWeaponsOnHand;
+		public ConfigEntry<bool> ShowBossOnHand;
+
+
 		public override void Load()
 		{
 			_instance = this;
 			// Plugin startup logic
 			Log.LogInfo("HellsingerVR loaded");
+
+			SetupConfig();
+
+			if (!IsVREnabled.Value)
+			{
+				Log.LogInfo("VR has been disabled, aborted loading plugin");
+				return;
+			}
 
 			ClassInjector.RegisterTypeInIl2Cpp<VRRig>();
 			ClassInjector.RegisterTypeInIl2Cpp<VRInputManager>();
@@ -85,13 +110,11 @@ namespace HellsingerVR
 
 				_instance.Log.LogInfo($"Creating [Head]");
 				GameObject head = new GameObject("[Head]");
-				head.AddComponent<Camera>();
+				//head.AddComponent<Camera>();
 				head.AddComponent<SteamVR_TrackedObject>();
 				head.transform.parent = vrRig.transform;
 
 				head.GetComponent<SteamVR_TrackedObject>().index = SteamVR_TrackedObject.EIndex.Hmd;
-				head.GetComponent<Camera>().backgroundColor = new Color(0.0f, 0.0f, 0.0f);
-				head.GetComponent<Camera>().clearFlags = CameraClearFlags.Color;
 
 				_instance.Log.LogInfo($"Creating [Eyes]");
 				GameObject eyes = new GameObject("[Eyes]");
@@ -111,6 +134,10 @@ namespace HellsingerVR
 				rig = vrRig.GetComponent<VRRig>();
 				rig.head = head.transform;
 				rig.vrCamera = eyes.GetComponent<SteamVR_Camera>();
+				rig.camera = eyes.GetComponent<Camera>();
+
+				rig.camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f);
+				rig.camera.clearFlags = CameraClearFlags.Color;
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -118,6 +145,23 @@ namespace HellsingerVR
 				_instance.Log.LogInfo($"Finished creating VRRig");
 				Object.DontDestroyOnLoad(vrRig);
 			}
+		}
+
+		private void SetupConfig()
+		{
+			// General
+			IsVREnabled = Config.Bind("General", "Enabled", true, "Set to false to disable this mod without uninstalling");
+			IsLeftHanded = Config.Bind("General", "LeftHanded", false, "Set to true to use the left hand as the dominant hand. This does not affect controller bindings, which can be configured in SteamVR");
+			// Locomotion
+			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
+			MovementType = Config.Bind("Locomotion", "MovementType", "head", "Movement direction, valid options are \"head\", \"hand\", \"offhand\". Defaults to \"head\"");
+			// UI
+			ReticleLocation = Config.Bind("UI", "ReticleLocation", "target", "Location of the reticle/beat indicator in the world, valid options are \"target\" (location in world the dominant hand is pointing to), \"head\" (floats a fixed distance in front of the camera), \"sights\" (placed above the weapon in the dominant hand akin to ironsights");
+			ShowHealthOnHand = Config.Bind("UI", "ShowHealthOnHand", true, "Set to false to show the health bar floating in front of the camera instead of attached to the non dominant hand");
+			ShowUltimateOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the ultimate bar floating in front of the camera instead of attached to the non dominant hand");
+			ShowFuryOnHand = Config.Bind("UI", "ShowFuryOnHand", true, "Set to false to show the fury meter floating in front of the camera instead of attached to the non dominant hand");
+			ShowWeaponsOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the equipped weapons and ammo UI floating in front of the camera instead of attached to the non dominant hand");
+			ShowBossOnHand = Config.Bind("UI", "ShowBossOnHand", true, "Set to false to show the boss bar floating in front of the camera instead of attached to the non dominant hand");
 		}
 
 		public static void OnLevelLoad(CoreRequestLoadLevelMessage loadLevelMsg)
