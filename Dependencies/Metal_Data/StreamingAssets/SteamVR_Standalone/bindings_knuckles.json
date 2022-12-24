@@ -1,651 +1,207 @@
 {
-	"/actions/legacy": {
-		"poses": [
-			{
-				"output": "/actions/legacy/in/Left_Pose",
-				"path": "/user/hand/left/pose/raw"
-			},
-			{
-				"output": "/actions/legacy/in/Right_Pose",
-				"path": "/user/hand/right/pose/raw"
-			}
-		],
-		"haptics": [
-			{
-				"output": "/actions/legacy/out/left_haptic",
-				"path": "/user/hand/left/output/haptic"
-			},
-			{
-				"output": "/actions/legacy/out/right_haptic",
-				"path": "/user/hand/right/output/haptic"
-			}
-		],
-		"sources": [
-			{
-				"path": "/user/hand/left/input/system",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_system_press"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trigger",
-				"mode": "trigger",
-				"inputs": {
-					"pull": {
-						"output": "/actions/legacy/in/left_axis1_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/system",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_system_press"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_grip_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_grip_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_grip_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_grip_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_applicationmenu_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_applicationmenu_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_applicationmenu_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_applicationmenu_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "trackpad",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_axis0_press"
-					},
-					"position": {
-						"output": "/actions/legacy/in/left_axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "trackpad",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_axis0_press"
-					},
-					"position": {
-						"output": "/actions/legacy/in/right_axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trigger",
-				"mode": "trigger",
-				"inputs": {
-					"pull": {
-						"output": "/actions/legacy/in/right_axis1_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trigger",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": "0.55",
-					"click_deactivate_threshold": "0.5",
-					"haptic_amplitude": "0",
-					"touch_activate_threshold": "0.1",
-					"touch_deactivate_threshold": "0.05"
+	"bindings": {
+		"/actions/game": {
+			"poses": [{
+					"path": "/user/hand/left/pose/raw",
+					"output": "/actions/game/in/Pose"
 				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_axis1_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trigger",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": "0.55",
-					"click_deactivate_threshold": "0.5",
-					"haptic_amplitude": "0",
-					"touch_activate_threshold": "0.1",
-					"touch_deactivate_threshold": "0.05"
+				{
+					"path": "/user/hand/right/pose/raw",
+					"output": "/actions/game/in/Pose"
 				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_axis1_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_axis0_press"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_axis0_press"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_axis0_press"
-					},
-					"position": {
-						"output": "/actions/legacy/in/left_axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/left_axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_axis0_press"
-					},
-					"position": {
-						"output": "/actions/legacy/in/right_axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/thumbstick",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": 0.8,
-					"click_deactivate_threshold": 0.7,
-					"force_input": "position",
-					"haptic_amplitude": 0
+				{
+					"path": "/user/hand/left/pose/tip",
+					"output": "/actions/game/in/PoseTip"
 				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_axis0_press"
-					}
+				{
+					"path": "/user/hand/right/pose/tip",
+					"output": "/actions/game/in/PoseTip"
 				}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": 0.8,
-					"click_deactivate_threshold": 0.7,
-					"force_input": "position",
-					"haptic_amplitude": 0
-				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_axis0_press"
+			],
+			"sources": [{
+					"path": "/user/hand/left/input/trigger",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/ShootAlt"
+						}
 					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/grip",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": "0.8",
-					"force_input": "force"
 				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/left_grip_press"
+				{
+					"path": "/user/hand/right/input/trigger",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Shoot"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/trackpad",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchRight"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/trackpad",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchLeft"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/thumbstick",
+					"mode": "joystick",
+					"inputs": {
+						"position": {
+							"output": "/actions/game/in/Movement"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/thumbstick",
+					"mode": "joystick",
+					"inputs": {
+						"position": {
+							"output": "/actions/game/in/Look"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/thumbstick",
+					"mode": "dpad",
+					"parameters": {
+						"sub_mode": "touch"
 					},
-					"touch": {
-						"output": "/actions/legacy/in/left_grip_touch"
+					"inputs": {
+						"north": {
+							"output": "/actions/game/in/Dash"
+						},
+						"south": {
+							"output": "/actions/game/in/Jump"
+						}
 					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/grip",
-				"mode": "button",
-				"parameters": {
-					"click_activate_threshold": "0.8",
-					"force_input": "force"
 				},
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy/in/right_grip_press"
-					},
-					"touch": {
-						"output": "/actions/legacy/in/right_grip_touch"
+				{
+					"path": "/user/hand/left/input/b",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/OpenMenu"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/a",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/WeaponSwitchPaz"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/b",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Slaughter"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/a",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/game/in/Reload"
+						}
 					}
 				}
-			}
-		]
+			]
+		},
+		"/actions/menu": {
+			"sources": [{
+					"path": "/user/hand/left/input/trigger",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Select"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/trigger",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Select"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/trackpad",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/NextTab"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/trackpad",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/PrevTab"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/thumbstick",
+					"mode": "joystick",
+					"inputs": {
+						"position": {
+							"output": "/actions/menu/in/Navigate"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/thumbstick",
+					"mode": "joystick",
+					"inputs": {
+						"position": {
+							"output": "/actions/menu/in/Navigate"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/left/input/b",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/CloseMenu"
+						}
+					}
+				},
+				{
+					"path": "/user/hand/right/input/b",
+					"mode": "button",
+					"inputs": {
+						"click": {
+							"output": "/actions/menu/in/Back"
+						}
+					}
+				}
+			]
+		}
 	},
-	"/actions/legacy_mirrored": {
-		"poses": [
-			{
-				"output": "/actions/legacy_mirrored/in/pose",
-				"path": "/user/hand/left/pose/raw"
-			},
-			{
-				"output": "/actions/legacy_mirrored/in/pose",
-				"path": "/user/hand/right/pose/raw"
-			}
-		],
-		"haptics": [
-			{
-				"output": "/actions/legacy_mirrored/out/haptic",
-				"path": "/user/hand/left/output/haptic"
-			},
-			{
-				"output": "/actions/legacy_mirrored/out/haptic",
-				"path": "/user/hand/right/output/haptic"
-			}
-		],
-		"sources": [
-			{
-				"path": "/user/hand/left/input/trigger",
-				"mode": "trigger",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/axis1_press"
-					},
-					"pull": {
-						"output": "/actions/legacy_mirrored/in/axis1_value"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trigger",
-				"mode": "trigger",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/axis1_press"
-					},
-					"pull": {
-						"output": "/actions/legacy_mirrored/in/axis1_value"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/axis1_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "trackpad",
-				"inputs": {
-					"position": {
-						"output": "/actions/legacy_mirrored/in/axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "trackpad",
-				"inputs": {
-					"position": {
-						"output": "/actions/legacy_mirrored/in/axis0_value"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/axis0_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {}
-			},
-			{
-				"path": "/user/hand/left/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/grip_press"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/grip_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/grip_press"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/grip_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/applicationmenu_press"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/applicationmenu_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/applicationmenu_press"
-					},
-					"touch": {
-						"output": "/actions/legacy_mirrored/in/applicationmenu_touch"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/axis0_press"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/legacy_mirrored/in/axis0_press"
-					}
-				}
-			}
-		]
-	},
-	"/actions/game": {
-		"poses": [
-			{
-				"path": "/user/hand/left/pose/raw",
-				"output": "/actions/game/in/pose"
-			},
-			{
-				"path": "/user/hand/right/pose/raw",
-				"output": "/actions/game/in/pose"
-			},
-			{
-				"path": "/user/hand/left/pose/tip",
-				"output": "/actions/game/in/posetip"
-			},
-			{
-				"path": "/user/hand/right/pose/tip",
-				"output": "/actions/game/in/posetip"
-			}
-		],
-		"sources": [
-			{
-				"path": "/user/hand/left/input/trigger",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/shootalt"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trigger",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/shoot"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/weaponswitchright"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/weaponswitchleft"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"position": {
-						"output": "/actions/game/in/movement"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"position": {
-						"output": "/actions/game/in/look"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "dpad",
-				"parameters": {
-					"sub_mode": "touch"
-				},
-				"inputs": {
-					"north": {
-						"output": "/actions/game/in/dash"
-					},
-					"south": {
-						"output": "/actions/game/in/jump"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/openmenu"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/weaponswitchpaz"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/slaughter"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/a",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/game/in/reload"
-					}
-				}
-			}
-		]
-	},
-	"/actions/menu": {
-		"sources": [
-			{
-				"path": "/user/hand/left/input/trigger",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/select"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trigger",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/select"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/nexttab"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/trackpad",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/prevtab"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"position": {
-						"output": "/actions/menu/in/navigate"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/thumbstick",
-				"mode": "joystick",
-				"inputs": {
-					"position": {
-						"output": "/actions/menu/in/navigate"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/left/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/closemenu"
-					}
-				}
-			},
-			{
-				"path": "/user/hand/right/input/b",
-				"mode": "button",
-				"inputs": {
-					"click": {
-						"output": "/actions/menu/in/back"
-					}
-				}
-			}
-		]
-	}
+	"controller_type": "knuckles",
+	"description": "",
+	"name": "knuckles"
 }
