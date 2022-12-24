@@ -17,7 +17,8 @@ Oculus rift:
 ![metalhellsingercontrols_oculus](https://user-images.githubusercontent.com/5647734/209443777-53d1a8ff-bd56-4010-8c38-23935eba000b.png)
 
 Valve index:
-Coming soon
+![metalhellsingercontrols_index](https://user-images.githubusercontent.com/5647734/209446100-5b68c669-94e1-414e-be5d-22a362600866.png)
+
 
 ## Config
 Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in BepInEx/config.
