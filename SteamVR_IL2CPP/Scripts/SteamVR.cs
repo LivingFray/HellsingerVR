@@ -927,7 +927,10 @@ namespace Valve.VR
 
             private static CallbackPointer ourGetRenderEventFunc;
 
-            public static IntPtr GetRenderEventFunc() => ourGetRenderEventFunc();
+			[DllImport("openvr_api", EntryPoint = "UnityHooks_GetRenderEventFunc")]
+			public static extern IntPtr GetRenderEventFunc();
+
+			//public static IntPtr GetRenderEventFunc() => ourGetRenderEventFunc();
 
         }
     }
