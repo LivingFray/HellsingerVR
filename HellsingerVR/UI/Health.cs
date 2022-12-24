@@ -93,7 +93,6 @@ namespace HellsingerVR.UI
 				return;
 			}
 
-			// TODO: Handedness setting
 			bool bFromLeftHand = !HellsingerVR._instance.IsLeftHanded.Value;
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 

@@ -13,18 +13,11 @@ namespace HellsingerVR.Patches
     [HarmonyPatch(typeof(BulletSystem), nameof(FireBullet))]
 	internal class FireBullet
 	{
-		private static void Prefix(ref BulletFireData fireData)
+		private static void Prefix(BulletSystem __instance, ref BulletFireData fireData)
 		{
-			HellsingerVR._instance.Log.LogInfo($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
+			//HellsingerVR._instance.Log.LogInfo($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
 
-			// TODO: Account for settings
-			bool bFromLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
-
-			//if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Pistols || fireData.WeaponConfig.WeaponType == PlayerWeaponType.Boomerang)
-			//{
-				// Somehow get which gun? Just go fuck it and let the guns share ammo and be fired by either
-				bFromLeftHand = VRInputManager.LastHandToShootWasLeft;
-			//}
+			bool bFromLeftHand = VRInputManager.LastHandToShootWasLeft;
 
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
 

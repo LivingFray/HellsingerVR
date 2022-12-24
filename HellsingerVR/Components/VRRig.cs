@@ -134,6 +134,7 @@ namespace HellsingerVR.Components
 			viewModelManager.HideArms();
 
 			HellsingerVR.RemoveDOF();
+			HellsingerVR.MoveOverlayToWorld();
 		}
 
 		public void Update()
@@ -181,35 +182,6 @@ namespace HellsingerVR.Components
 				if (rhythmIndicator != null) rhythmIndicator.Update();
 				if (health != null) health.Update();
 
-				/*
-				// Find/cache InWorldScoreContainer
-				// THIS IS A BAD WAY TO DO IT. CACHE FROM THE HIERARCHY!!!
-				InWorldScoreContainer scoreContainer = UnityEngine.Object.FindObjectOfType<InWorldScoreContainer>();
-				ClinchIndicatorContainer clinchContainer = UnityEngine.Object.FindObjectOfType<ClinchIndicatorContainer>();
-				// TODO: Do slaughter here too
-
-				if (clinchContainer != null
-					&& clinchContainer.m_targetEnemy != null
-					&& clinchContainer.m_targetEnemy.Transform != null)
-				{
-					Vector3 Offset = (HellsingerVR.rig.head.transform.position - clinchContainer.m_targetEnemy.Transform.position).normalized * 0.5f;
-					clinchContainer.transform.position = clinchContainer.m_targetEnemy.CachedChestPosition + Offset;
-					clinchContainer.transform.LookAt(HellsingerVR.rig.head);
-					clinchContainer.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * clinchContainer.transform.rotation;
-					clinchContainer.transform.parent.localScale = new Vector3(5.0f, 5.0f, 5.0f);
-				}
-
-				if (scoreContainer != null)
-				{
-					foreach (InWorldScoreItem scoreItem in scoreContainer.m_visibleItems)
-					{
-						HellsingerVR._instance.Log.LogInfo($"lateupdate: Updating score item position from {scoreItem.transform.position.ToString()}");
-						scoreItem.transform.position = scoreItem.m_worldPosition;
-						scoreItem.transform.LookAt(HellsingerVR.rig.head);
-						scoreItem.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f) * scoreItem.transform.rotation;
-					}
-				}
-				*/
 			}
 			else if (InCutscene && CameraTransform != null)
 			{
