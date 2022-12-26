@@ -247,6 +247,11 @@ namespace Valve.VR
 				
 				RenderTexture.ReleaseTemporary(temp);
 
+				if (eye == EVREye.Eye_Right)
+				{
+					Graphics.Blit(camera.targetTexture, null as RenderTexture);
+				}
+
 				camera.targetTexture = tex;
 			}
 			eyePostRenderCallback?.Invoke(eye);
