@@ -42,9 +42,6 @@ Metal: Hellsinger was not designed for VR and can be quiet graphically intensive
 ### Room scale
 Currently the HMD's position only affects the camera, your hitbox will remain in the middle of the play area
 
-### Display mirroring
-The VR view is currently not mirrored to the flat display, and for performance reasons the flat display has most of its rendering disabled. For now use steamvr's vr view window.
-
 ## Uninstalling
 Delete the BepInEx folder, winhttp.dll and any other files added while installing the mod.
 Verifying the game integrity through steam/xbox may also work.
