@@ -4,7 +4,7 @@ A VR Mod for Metal: Hellsinger
 Made possible by "borrowing", and slightly modifying, DSprtn's modified SteamVR plugin: https://github.com/DSprtn/SteamVR_Standalone_IL2CPP
 
 ## Installation
-- Download the latest version of the mod from the releases page
+- Download the latest version of the mod from the [releases page](https://github.com/LivingFray/HellsingerVR/releases)
 - Locate your game's installation folder
   - For steam: Library>Metal:Hellsinger>Right Click>Manage>Browse local files
   - For xbox app: Metal:Hellsinger>3 dots>Manage>Files>Browse>Metal- Hellsinger>Content
