@@ -249,7 +249,13 @@ namespace Valve.VR
 
 				if (eye == EVREye.Eye_Right)
 				{
-					Graphics.Blit(camera.targetTexture, null as RenderTexture);
+					float Aspect = (float)Screen.width / Screen.height;
+					float VRAspect = (float)camera.targetTexture.width / camera.targetTexture.height;
+
+					Vector2 Scale = new Vector2(1.0f, VRAspect / Aspect);
+					Vector2 Offset = new Vector2(0.0f, 0.5f * (1.0f - Scale.y));
+
+					Graphics.Blit(camera.targetTexture, null, Scale, Offset);
 				}
 
 				camera.targetTexture = tex;
