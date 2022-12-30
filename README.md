@@ -4,7 +4,7 @@ A VR Mod for Metal: Hellsinger
 Made possible by "borrowing", and slightly modifying, DSprtn's modified SteamVR plugin: https://github.com/DSprtn/SteamVR_Standalone_IL2CPP
 
 ## Installation
-- Download the latest version of the mod from the releases page
+- Download the latest version of the mod from the [releases page](https://github.com/LivingFray/HellsingerVR/releases)
 - Locate your game's installation folder
   - For steam: Library>Metal:Hellsinger>Right Click>Manage>Browse local files
   - For xbox app: Metal:Hellsinger>3 dots>Manage>Files>Browse>Metal- Hellsinger>Content
@@ -41,9 +41,6 @@ Metal: Hellsinger was not designed for VR and can be quiet graphically intensive
 
 ### Room scale
 Currently the HMD's position only affects the camera, your hitbox will remain in the middle of the play area
-
-### Display mirroring
-The VR view is currently not mirrored to the flat display, and for performance reasons the flat display has most of its rendering disabled. For now use steamvr's vr view window.
 
 ## Uninstalling
 Delete the BepInEx folder, winhttp.dll and any other files added while installing the mod.
