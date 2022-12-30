@@ -78,7 +78,6 @@ namespace HellsingerVR.Components
 
 			PlayerTransform = null;
 			CameraTransform = null;
-			HellsingerVR.MoveOverlayToWorld();
 		}
 
 		public void EnterLevel()

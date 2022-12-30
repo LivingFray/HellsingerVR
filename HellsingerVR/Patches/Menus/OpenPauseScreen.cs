@@ -13,7 +13,7 @@ namespace HellsingerVR.Patches.Menus
 		{
 			HellsingerVR.IsPaused = true;
 			// Move UI to world space
-			HellsingerVR.MoveOverlayToWorld();
+			HellsingerVR.MoveOverlayToWorld(true);
 		}
 	}
 
@@ -23,8 +23,6 @@ namespace HellsingerVR.Patches.Menus
 		private static void Postfix()
 		{
 			HellsingerVR.IsPaused = false;
-			// Move UI to world space
-			HellsingerVR.MoveOverlayToWorld();
 		}
 	}
 }

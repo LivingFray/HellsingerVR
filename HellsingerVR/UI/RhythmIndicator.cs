@@ -15,10 +15,8 @@ namespace HellsingerVR.UI
 
 		public enum Position {Head, Sights, Target};
 
-		// TODO: Put into a proper config
 		public Position position = Position.Target;
 
-		// TODO: put into a proper config
 		public float head_distance = 2.5f;
 
 		public float target_distance = 10.0f;
@@ -47,6 +45,8 @@ namespace HellsingerVR.UI
 			LowAmmoIndicator = SharedHUD.Find("LowAmmoIndicator");
 			NoAmmoIndicator = SharedHUD.Find("NoAmmoIndicator");
 			BeatGradingContainer = SharedHUD.Find("BeatGradingContainer");
+
+			head_distance = HellsingerVR._instance.GameUIDistance.Value;
 
 			string locFromPos = HellsingerVR._instance.ReticleLocation.Value.ToLower();
 

@@ -14,7 +14,7 @@ using BepInEx.Configuration;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.2.0")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.3.0")]
 	public class HellsingerVR : BasePlugin
 	{
 		static GameObject vrRig;
@@ -29,7 +29,7 @@ namespace HellsingerVR
 
 		public static bool IsPreLogin = false;
 
-		public static Vector3 TitleScreenPosition = new Vector3(-227.62f, 9.64f, 48.17f + 3.0f);
+		public static Vector3 TitleScreenPosition = new Vector3(-227.62f, 9.64f, 48.17f);
 
 		public static Canvas overlay;
 
@@ -45,6 +45,8 @@ namespace HellsingerVR
 		public ConfigEntry<float> SnapTurningAngle;
 		public ConfigEntry<string> MovementType;
 		// UI
+		public ConfigEntry<float> MenuUIDistance;
+		public ConfigEntry<float> GameUIDistance;
 		public ConfigEntry<string> ReticleLocation;
 		public ConfigEntry<bool> ShowHealthOnHand;
 		public ConfigEntry<bool> ShowUltimateOnHand;
@@ -66,6 +68,8 @@ namespace HellsingerVR
 				Log.LogInfo("VR has been disabled, aborted loading plugin");
 				return;
 			}
+
+			TitleScreenPosition += new Vector3(0.0f, 0.0f, MenuUIDistance.Value);
 
 			ClassInjector.RegisterTypeInIl2Cpp<VRRig>();
 			ClassInjector.RegisterTypeInIl2Cpp<VRInputManager>();
@@ -97,9 +101,9 @@ namespace HellsingerVR
 
 			if (vrRig == null)
 			{
-				/* The slightly confusing hierarchy:
+				/* Hierarchy:
 				 * [Origin] - Playspace origin and such
-				 *      [Head] - Can contain a camera, is supposed to be used as the game view, but is currently broken
+				 *      [Head] - Can contain a camera, is supposed to be used as the game view, cheaper to just blit the right eye to the screen
 				 *          [Eyes] - Holds the steamvr camera and a camera for vr view
 				 *          [Ears] - Holds steamvr_ears 
 				 * 
@@ -122,9 +126,6 @@ namespace HellsingerVR
 				eyes.AddComponent<Camera>();
 				eyes.AddComponent<SteamVR_Camera>();
 
-				eyes.GetComponent<Camera>().enabled = false;
-				eyes.GetComponent<Camera>().nearClipPlane = 0.01f;
-
 				//TODO: Do ears
 
 				vrRig.AddComponent<VRRig>();
@@ -138,6 +139,8 @@ namespace HellsingerVR
 
 				rig.camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f);
 				rig.camera.clearFlags = CameraClearFlags.Color;
+				rig.camera.nearClipPlane = 0.03f;
+				rig.camera.enabled = false;
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -156,6 +159,8 @@ namespace HellsingerVR
 			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
 			MovementType = Config.Bind("Locomotion", "MovementType", "head", "Movement direction, valid options are \"head\", \"hand\", \"offhand\". Defaults to \"head\"");
 			// UI
+			MenuUIDistance = Config.Bind("UI", "MenuUIDistance", 2.5f, "Distance between the HMD and the menu UIs in meters");
+			GameUIDistance = Config.Bind("UI", "GameUIDistance", 2.5f, "Distance between the HMD and the game UIs in meters");
 			ReticleLocation = Config.Bind("UI", "ReticleLocation", "target", "Location of the reticle/beat indicator in the world, valid options are \"target\" (location in world the dominant hand is pointing to), \"head\" (floats a fixed distance in front of the camera), \"sights\" (placed above the weapon in the dominant hand akin to ironsights");
 			ShowHealthOnHand = Config.Bind("UI", "ShowHealthOnHand", true, "Set to false to show the health bar floating in front of the camera instead of attached to the non dominant hand");
 			ShowUltimateOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the ultimate bar floating in front of the camera instead of attached to the non dominant hand");
@@ -213,7 +218,7 @@ namespace HellsingerVR
 			if (c)
 			{
 				c.renderMode = RenderMode.WorldSpace;
-				c.transform.position = TitleScreenPosition + Vector3.back * 3.5f;
+				c.transform.position = TitleScreenPosition + Vector3.back * _instance.MenuUIDistance.Value;
 				c.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 				RectTransform rect = c.GetComponent<RectTransform>();
 				c.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
@@ -230,6 +235,11 @@ namespace HellsingerVR
 				Camera.main.cullingMask = 0;
 				Camera.main.clearFlags = CameraClearFlags.Nothing;
 			}
+
+			if (rig != null)
+			{
+				rig.EnterTitleScreen();
+			}
 		}
 
 		public static void MoveLevelSelectToWorld()
@@ -241,13 +251,13 @@ namespace HellsingerVR
 			}
 			_instance.Log.LogInfo("Moving level select to world space");
 			c.renderMode = RenderMode.WorldSpace;
-			c.transform.position = TitleScreenPosition + Vector3.back * 3.5f;
+			c.transform.position = TitleScreenPosition + Vector3.back * _instance.MenuUIDistance.Value;
 			c.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 			RectTransform rect = c.GetComponent<RectTransform>();
 			c.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
 		}
 
-		public static void MoveOverlayToWorld()
+		public static void MoveOverlayToWorld(bool bIsMenuUI = false)
 		{
 			if (overlay == null || overlayRect == null)
 			{
@@ -266,7 +276,7 @@ namespace HellsingerVR
 			}
 
 			overlay.renderMode = RenderMode.WorldSpace;
-			overlay.transform.position = rig.head.transform.position + rig.head.transform.forward * 3.5f;
+			overlay.transform.position = rig.head.transform.position + rig.head.transform.forward * (bIsMenuUI ? _instance.MenuUIDistance.Value : _instance.GameUIDistance.Value);
 			overlay.transform.LookAt(rig.head);
 			overlay.transform.rotation = Quaternion.Euler(0.0f, overlay.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
 			overlay.transform.localScale = Vector3.one * (2.0f / overlayRect.rect.height);

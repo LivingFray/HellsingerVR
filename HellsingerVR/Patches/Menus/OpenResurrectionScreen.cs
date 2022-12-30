@@ -19,7 +19,7 @@ namespace HellsingerVR.Patches.Menus
 		{
 			HellsingerVR.IsPaused = true;
 			// Move UI to world space
-			HellsingerVR.MoveOverlayToWorld();
+			HellsingerVR.MoveOverlayToWorld(true);
 		}
 	}
 
