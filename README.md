@@ -31,6 +31,8 @@ Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in Be
 - Show ultimate on hand: Display ultimate charge bar on the offhand or floating in front of your head
 - Show fury on hand: Display fury meter on the offhand or floating in front of your head
 - Show boss on hand: Display bosses' health bars on the offhand or floating in front of your head
+- Menu UI Distance: Distance from the head menu UI will be displayed in meters
+- Game UI Distance: Distance from the head game UI elements not moved into the world (e.g. health, reticle, slaughter indicators) will be displayed in meters
 
 ## Known issues
 ### Game focus
