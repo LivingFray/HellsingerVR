@@ -1,4 +1,6 @@
 # HellsingerVR
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/LivingFray/HellsingerVR?sort=semver)
+
 A VR Mod for Metal: Hellsinger
 
 Made possible by "borrowing", and slightly modifying, DSprtn's modified SteamVR plugin: https://github.com/DSprtn/SteamVR_Standalone_IL2CPP
