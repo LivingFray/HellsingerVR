@@ -1,7 +1,7 @@
 ﻿namespace Valve.VR
 {
 	public class SteamVR_Input_ActionSet_default : SteamVR_ActionSet
-    {
+	{
 		public virtual SteamVR_Action_Vector2 Movement { get { return SteamVR_Actions.default_Movement; } }
 		public virtual SteamVR_Action_Vector2 Look { get { return SteamVR_Actions.default_Look; } }
 		public virtual SteamVR_Action_Boolean Dash { get { return SteamVR_Actions.default_Dash; } }

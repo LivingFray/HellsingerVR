@@ -33,11 +33,11 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		public void BeginEstimatingVelocity()
 		{
-			if(routine != null)
-            {
+			if (routine != null)
+			{
 				FinishEstimatingVelocity();
 				return;
-            }
+			}
 
 			routine = EstimateVelocityCoroutine();
 			MelonCoroutines.Start(routine);
@@ -67,7 +67,7 @@ namespace Valve.VR.InteractionSystem
 				{
 					velocity += velocitySamples[i];
 				}
-				velocity *= (1.0f / velocitySampleCount);
+				velocity *= 1.0f / velocitySampleCount;
 			}
 
 			return velocity;
@@ -86,7 +86,7 @@ namespace Valve.VR.InteractionSystem
 				{
 					angularVelocity += angularVelocitySamples[i];
 				}
-				angularVelocity *= (1.0f / angularVelocitySampleCount);
+				angularVelocity *= 1.0f / angularVelocitySampleCount;
 			}
 
 			return angularVelocity;
@@ -109,13 +109,13 @@ namespace Valve.VR.InteractionSystem
 				Vector3 v2 = velocitySamples[second % velocitySamples.Length];
 				average += v2 - v1;
 			}
-			average *= (1.0f / Time.deltaTime);
+			average *= 1.0f / Time.deltaTime;
 			return average;
 		}
 
 
 		//-------------------------------------------------
-		void Awake()
+		private void Awake()
 		{
 			velocitySamples = new Vector3[velocityAverageFrames];
 			angularVelocitySamples = new Vector3[angularVelocityAverageFrames];

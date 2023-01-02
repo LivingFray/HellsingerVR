@@ -1,16 +1,4 @@
-﻿using Il2CppInterop.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using Unity.Collections;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 using Valve.VR;
 
 namespace HellsingerVR.Components
@@ -25,22 +13,16 @@ namespace HellsingerVR.Components
 
 		public Transform PlayerTransform;
 		public Transform CameraTransform;
-
-		float LastLocalHeadYaw;
+		private float LastLocalHeadYaw;
 
 		// Printing the character extents to log yields: (0.60, 0.80, 0.60)
-		const float Height = 1.6f;
-
-		Vector3 InitialPosition;
-		Quaternion InitialRotation;
-
-		bool InCutscene = false;
-
-		bool _InLevel = false;
-
-		int CameraMask = 0;
-
-		int uiMask = LayerMask.GetMask("UI");
+		private const float Height = 1.6f;
+		private Vector3 InitialPosition;
+		private Quaternion InitialRotation;
+		private bool InCutscene = false;
+		private bool _InLevel = false;
+		private int CameraMask = 0;
+		private int uiMask = LayerMask.GetMask("UI");
 
 		public UI.RhythmIndicator rhythmIndicator;
 		public UI.Health health;
@@ -72,9 +54,9 @@ namespace HellsingerVR.Components
 
 			_InLevel = false;
 
-			transform.position = HellsingerVR.TitleScreenPosition - Vector3.up * Height;
+			transform.position = HellsingerVR.TitleScreenPosition - (Vector3.up * Height);
 
-			transform.rotation = Quaternion.Euler(0.0f, -90.0f - head.transform.localRotation.eulerAngles.y, 0.0f);
+			transform.rotation = Quaternion.Euler(0.0f, -head.transform.localRotation.eulerAngles.y, 0.0f);
 
 			PlayerTransform = null;
 			CameraTransform = null;

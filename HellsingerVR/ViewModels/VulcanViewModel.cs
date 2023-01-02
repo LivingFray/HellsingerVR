@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace HellsingerVR.ViewModels
 {
-	class VulcanViewModel : ViewModel
+	internal class VulcanViewModel : ViewModel
 	{
 
 		public VulcanViewModel()

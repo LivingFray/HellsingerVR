@@ -1,7 +1,4 @@
 ﻿using HellsingerVR.Components;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.ViewModels
@@ -25,7 +22,7 @@ namespace HellsingerVR.ViewModels
 
 			Vector3 FirstBone = RootBone.rotation * RootMesh.bones[1].localPosition;
 
-			RootBone.position = (location + RootBone.rotation * OffsetVector) - FirstBone;
+			RootBone.position = location + (RootBone.rotation * OffsetVector) - FirstBone;
 		}
 
 		public void SetMuzzleOffset(Vector3 Pos)

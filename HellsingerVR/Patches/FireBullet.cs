@@ -1,33 +1,41 @@
 ﻿using HarmonyLib;
 using HellsingerVR.Components;
-using Outsiders.Messages;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using Valve.VR;
 
 namespace HellsingerVR.Patches
 {
 
-    [HarmonyPatch(typeof(BulletSystem), nameof(FireBullet))]
+	[HarmonyPatch(typeof(BulletSystem), nameof(FireBullet))]
 	internal class FireBullet
 	{
+		private static int layermask = ~LayerMask.GetMask("Ignore Raycast");
+
 		private static void Prefix(BulletSystem __instance, ref BulletFireData fireData)
 		{
-			//HellsingerVR._instance.Log.LogInfo($"FIRED BULLET: {fireData.Owner} {fireData.Position} {fireData.Direction}");
+			// Bullets don't actually originate at the eyes, but rather an offset that is likely the muzzle position
+			// This needs to be accounted for when adjusting the bullets to point the correct direction while maintaining spread
 
-			bool bFromLeftHand = VRInputManager.LastHandToShootWasLeft;
+			// Calculate spread-free bullet direction (vector from start to the intersection of a ray from the player camera)
+			RaycastHit raycastHit;
 
-			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(bFromLeftHand);
+			bool Hit = Physics.Raycast(HellsingerVR.rig.CameraTransform.position, HellsingerVR.rig.CameraTransform.rotation * Vector3.forward, out raycastHit, 100.0f, layermask, QueryTriggerInteraction.Ignore);
 
-			// Calculate what original spread must have been and apply to repositioned bullets
+			Vector3 TargetPosition = Hit ? raycastHit.point : HellsingerVR.rig.CameraTransform.position + (HellsingerVR.rig.CameraTransform.rotation * Vector3.forward * 100.0f);
 
-			Quaternion initialRotation = HellsingerVR.rig.CameraTransform.rotation;
-			Quaternion vrRotation = rotation;
+			Vector3 SpreadFreeDirection = TargetPosition - fireData.Position;
 
-			fireData.Direction = vrRotation * Quaternion.Inverse(initialRotation) * fireData.Direction;
-			fireData.Position = location + vrRotation * VRViewModelManager.GetMuzzleOffset(fireData.WeaponConfig.WeaponType);
+			// Get hand position
+			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(VRInputManager.LastHandToShootWasLeft);
+
+			// Set bullet start to hand position + muzzle offset * hand rotation
+			// TODO: Muzzle offset is broken, probably multiplying quaternions in the wrong order or something
+			fireData.Position = location;// + rotation * VRViewModelManager.GetMuzzleOffset(fireData.WeaponConfig.WeaponType);
+
+			// Calculate spread rotation (difference between spread-free direction and actual direction)
+			Quaternion Spread = Quaternion.FromToRotation(SpreadFreeDirection, fireData.Direction);
+
+			// Set bullet direction to hand direction * spread rotation
+			fireData.Direction = rotation * Spread * Vector3.forward;
 		}
 	}
 }

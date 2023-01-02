@@ -1,11 +1,9 @@
 ﻿using Il2CppInterop.Runtime;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using Unity.Collections;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace HellsingerVR
 {

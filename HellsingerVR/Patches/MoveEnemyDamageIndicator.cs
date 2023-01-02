@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.Patches
@@ -11,7 +9,7 @@ namespace HellsingerVR.Patches
 
 	internal class MoveEnemyDamageIndicator
 	{
-		static void Postfix(EnemyDamageIndicator __instance)
+		private static void Postfix(EnemyDamageIndicator __instance)
 		{
 			try
 			{

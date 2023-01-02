@@ -1,8 +1,5 @@
 ﻿using HarmonyLib;
 using Outsiders.Messages;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HellsingerVR.Patches
 {

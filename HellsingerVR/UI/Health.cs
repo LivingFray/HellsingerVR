@@ -1,42 +1,30 @@
 ﻿using HellsingerVR.Components;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using Valve.VR;
 
 namespace HellsingerVR.UI
 {
 	public class Health
 	{
-
-		Transform HealthBar;
-		Transform UltimateIndicator;
-		Transform WeaponsContainer;
-		Transform BonusCounter;
-		Transform BossHealthContainer;
-
-		Vector3 PositionOffset = new Vector3(0.0f, 0.0f, -0.1f);
-		Quaternion RotationOffset = Quaternion.Euler(0.0f, -90.0f, 0.0f);
-
-		bool HasCalculatedOffsets = false;
-		float HealthOffsetX = 0.0f;
-		float HealthOffsetY = 0.0f;
-
-		float WeaponsOffsetX = 0.0f;
-		float WeaponsOffsetY = 0.0f;
-
-		float BonusOffsetY = 0.0f;
-
-		float BossOffsetY = 0.0f;
-
-		Vector3 LocalScale = new Vector3(0.25f, 0.25f, 0.25f);
-
-		bool DoHealth;
-		bool DoUltimate;
-		bool DoWeapons;
-		bool DoBonus;
-		bool DoBoss;
+		private Transform HealthBar;
+		private Transform UltimateIndicator;
+		private Transform WeaponsContainer;
+		private Transform BonusCounter;
+		private Transform BossHealthContainer;
+		private Vector3 PositionOffset = new Vector3(0.0f, 0.0f, -0.1f);
+		private Quaternion RotationOffset = Quaternion.Euler(0.0f, -90.0f, 0.0f);
+		private bool HasCalculatedOffsets = false;
+		private float HealthOffsetX = 0.0f;
+		private float HealthOffsetY = 0.0f;
+		private float WeaponsOffsetX = 0.0f;
+		private float WeaponsOffsetY = 0.0f;
+		private float BonusOffsetY = 0.0f;
+		private float BossOffsetY = 0.0f;
+		private Vector3 LocalScale = new Vector3(0.25f, 0.25f, 0.25f);
+		private bool DoHealth;
+		private bool DoUltimate;
+		private bool DoWeapons;
+		private bool DoBonus;
+		private bool DoBoss;
 
 
 		public void Init()
@@ -72,7 +60,7 @@ namespace HellsingerVR.UI
 			if (DoUltimate) UltimateIndicator.localScale = LocalScale;
 			if (DoWeapons) WeaponsContainer.localScale = LocalScale;
 			if (DoBonus) BonusCounter.localScale = LocalScale;
-			
+
 			if (!HasCalculatedOffsets)
 			{
 				HealthOffsetX *= HealthBar.lossyScale.x;
@@ -111,7 +99,7 @@ namespace HellsingerVR.UI
 
 				if (DoHealth)
 				{
-					HealthBar.position = location + right * HealthOffsetX + up * HealthOffsetY;
+					HealthBar.position = location + (right * HealthOffsetX) + (up * HealthOffsetY);
 					HealthBar.rotation = rotation;
 				}
 
@@ -123,19 +111,19 @@ namespace HellsingerVR.UI
 
 				if (DoWeapons)
 				{
-					WeaponsContainer.position = location + right * WeaponsOffsetX + up * WeaponsOffsetY;
+					WeaponsContainer.position = location + (right * WeaponsOffsetX) + (up * WeaponsOffsetY);
 					WeaponsContainer.rotation = rotation;
 				}
 
 				if (DoBonus)
 				{
-					BonusCounter.position = location + up * BonusOffsetY;
+					BonusCounter.position = location + (up * BonusOffsetY);
 					BonusCounter.rotation = rotation;
 				}
 
 				if (DoBoss)
 				{
-					BossHealthContainer.position = location + up * BossOffsetY;
+					BossHealthContainer.position = location + (up * BossOffsetY);
 					BossHealthContainer.rotation = rotation;
 				}
 

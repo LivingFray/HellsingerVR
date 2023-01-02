@@ -1,7 +1,5 @@
 ﻿using HellsingerVR.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.Components
@@ -9,14 +7,14 @@ namespace HellsingerVR.Components
 
 	public class VRViewModelManager : MonoBehaviour
 	{
-		float P_x = 0.0f;
-		float P_y = 0.0f;
-		float P_z = 0.0f;
-		Vector3 PositionOffset = Vector3.zero;
+		private float P_x = 0.0f;
+		private float P_y = 0.0f;
+		private float P_z = 0.0f;
+		private Vector3 PositionOffset = Vector3.zero;
 
 		// TODO: Spawned effects (like Paz's fire eyes) have offsets applied (as particle effects)
 
-		static Dictionary<PlayerWeaponType, ViewModel> ViewModels = new Dictionary<PlayerWeaponType, ViewModel>() {
+		private static Dictionary<PlayerWeaponType, ViewModel> ViewModels = new Dictionary<PlayerWeaponType, ViewModel>() {
 			{ PlayerWeaponType.Falx, new TerminusViewModel() },
 			{ PlayerWeaponType.RhythmWeapon, new PazViewModel() },
 			{ PlayerWeaponType.Shotgun, new SoulCannonViewModel() },
@@ -24,8 +22,7 @@ namespace HellsingerVR.Components
 			{ PlayerWeaponType.Vulcan, new VulcanViewModel() },
 			{ PlayerWeaponType.Boomerang, new HellCrowViewModel() },
 		};
-
-		ViewModel ActiveModel;
+		private ViewModel ActiveModel;
 
 		public void OnDisable()
 		{

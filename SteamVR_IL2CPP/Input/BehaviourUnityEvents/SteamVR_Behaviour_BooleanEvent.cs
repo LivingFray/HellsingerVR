@@ -4,6 +4,6 @@ using UnityEngine.Events;
 
 namespace Valve.VR
 {
-    [Serializable]
-    public class SteamVR_Behaviour_BooleanEvent : UnityEvent<SteamVR_Behaviour_Boolean, SteamVR_Input_Sources, bool> { }
+	[Serializable]
+	public class SteamVR_Behaviour_BooleanEvent : UnityEvent<SteamVR_Behaviour_Boolean, SteamVR_Input_Sources, bool> { }
 }

@@ -1,11 +1,8 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HellsingerVR.Patches.Menus
 {
-	public enum ResurrectType {Resurrect, Retry, Giveup};
+	public enum ResurrectType { Resurrect, Retry, Giveup };
 
 	public class ResHolder
 	{

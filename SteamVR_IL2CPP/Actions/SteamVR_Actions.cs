@@ -262,7 +262,7 @@
 			SteamVR_Input.actionsSingle = new SteamVR_Action_Single[0];
 			SteamVR_Input.actionsVector2 = new SteamVR_Action_Vector2[] {
 					default_Movement,
-                    default_Look,
+					default_Look,
 					menu_Navigate
 			};
 			SteamVR_Input.actionsVector3 = new SteamVR_Action_Vector3[0];

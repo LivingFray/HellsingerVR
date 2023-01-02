@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace HellsingerVR.ViewModels
 {
-	class TerminusViewModel : ViewModel
+	internal class TerminusViewModel : ViewModel
 	{
 
 		public TerminusViewModel()

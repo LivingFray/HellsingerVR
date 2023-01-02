@@ -4,11 +4,11 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using Standalone;
 using Assets.SteamVR_Standalone.Standalone;
+using Standalone;
 using System;
 using System.IO;
+using UnityEngine;
 namespace Valve.VR
 {
 
@@ -135,13 +135,12 @@ namespace Valve.VR
 
 		#region Enable / Disable
 
-		void OnDisable()
+		private void OnDisable()
 		{
 			SteamVR_Render.Remove(this);
 		}
 
-
-		void OnEnable()
+		private void OnEnable()
 		{
 			// Bail if no hmd is connected
 			var vr = SteamVR.instance;
@@ -216,7 +215,7 @@ namespace Valve.VR
 				ears.GetComponent<SteamVR_Ears>().vrcam = this;
 
 			if (flip)
-				flip.enabled = (SteamVR_Render.Top() == this && SteamVR.instance.textureType == ETextureType.DirectX);
+				flip.enabled = SteamVR_Render.Top() == this && SteamVR.instance.textureType == ETextureType.DirectX;
 
 			SteamVR_Render.Add(this);
 		}
@@ -225,7 +224,7 @@ namespace Valve.VR
 
 		#region Functionality to ensure SteamVR_Camera component is always the last component on an object
 
-		void Awake()
+		private void Awake()
 		{
 			camera = GetComponent<Camera>();
 			ForceLast();
@@ -254,16 +253,17 @@ namespace Valve.VR
 				g.AddComponent<SteamVR_Camera>().ForceLast();
 			}
 		}
-		static bool isLast;
+
+		private static bool isLast;
 
 		#endregion
 
 		#region Expand / Collapse object hierarchy
 
-		const string eyeSuffix = " (eye)";
-		const string earsSuffix = " (ears)";
-		const string headSuffix = " (head)";
-		const string originSuffix = " (origin)";
+		private const string eyeSuffix = " (eye)";
+		private const string earsSuffix = " (ears)";
+		private const string headSuffix = " (head)";
+		private const string originSuffix = " (origin)";
 		public string baseName { get { return name.EndsWith(eyeSuffix) ? name.Substring(0, name.Length - eyeSuffix.Length) : name; } }
 
 		// Object hierarchy creation to make it easy to parent other objects appropriately,
@@ -389,22 +389,22 @@ namespace Valve.VR
 
 		#region Render callbacks
 
-		void OnPreRender()
+		private void OnPreRender()
 		{
 			if (flip)
-				flip.enabled = (SteamVR_Render.Top() == this && SteamVR.instance.textureType == ETextureType.DirectX);
+				flip.enabled = SteamVR_Render.Top() == this && SteamVR.instance.textureType == ETextureType.DirectX;
 
 			Debug.Log($"Flip? {flip != null} OnTop? {SteamVR_Render.Top() == this} DX? {SteamVR.instance.textureType == ETextureType.DirectX}");
 
 			var headCam = head.GetComponent<Camera>();
 			if (headCam != null)
-				headCam.enabled = (SteamVR_Render.Top() == this);
+				headCam.enabled = SteamVR_Render.Top() == this;
 
 			if (wireframe)
 				GL.wireframe = true;
 		}
 
-		void OnPostRender()
+		private void OnPostRender()
 		{
 			if (wireframe)
 				GL.wireframe = false;
@@ -423,8 +423,7 @@ namespace Valve.VR
 			File.WriteAllBytes(pngOutPath, textureBytes);
 		}
 
-
-		void OnRenderImage(RenderTexture src, RenderTexture dest)
+		private void OnRenderImage(RenderTexture src, RenderTexture dest)
 		{
 			if (SteamVR_Render.Top() == this)
 			{
@@ -462,7 +461,7 @@ namespace Valve.VR
 			RenderTexture.active = null;
 		}
 
-		void OnDestroy()
+		private void OnDestroy()
 		{
 			/// Reset Forcelast() so we get CameraFlip initialization working ---
 			isLast = false;

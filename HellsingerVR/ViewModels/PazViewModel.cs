@@ -1,12 +1,8 @@
-﻿using HellsingerVR.Components;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace HellsingerVR.ViewModels
 {
-	class PazViewModel : ViewModel
+	internal class PazViewModel : ViewModel
 	{
 
 		public PazViewModel()

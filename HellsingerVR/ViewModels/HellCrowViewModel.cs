@@ -1,21 +1,17 @@
 ﻿using HellsingerVR.Components;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.ViewModels
 {
-	class HellCrowViewModel : ViewModel
+	internal class HellCrowViewModel : ViewModel
 	{
-		GameObject leftHandBones;
-		GameObject rightHandBones;
-
-		SkinnedMeshRenderer[] LeftCrowMeshes;
-		SkinnedMeshRenderer LeftCrow;
-		SkinnedMeshRenderer RightCrow;
-
-		Dictionary<Transform, Transform> LeftHandMap = new Dictionary<Transform, Transform>();
+		private GameObject leftHandBones;
+		private GameObject rightHandBones;
+		private SkinnedMeshRenderer[] LeftCrowMeshes;
+		private SkinnedMeshRenderer LeftCrow;
+		private SkinnedMeshRenderer RightCrow;
+		private Dictionary<Transform, Transform> LeftHandMap = new Dictionary<Transform, Transform>();
 
 		public HellCrowViewModel()
 		{
@@ -76,7 +72,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = leftHandBones.transform.rotation * LeftCrow.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + leftHandBones.transform.rotation * OffsetVector) - FirstBone;
+				Vector3 targetPosition = location + (leftHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				leftHandBones.transform.position = targetPosition;
 
@@ -90,7 +86,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = rightHandBones.transform.rotation * RightCrow.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + rightHandBones.transform.rotation * OffsetVector) - FirstBone;
+				Vector3 targetPosition = location + (rightHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				rightHandBones.transform.position = targetPosition;
 			}

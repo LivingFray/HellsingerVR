@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.Patches
@@ -11,7 +9,7 @@ namespace HellsingerVR.Patches
 
 	internal class MoveInWorldScoreItem
 	{
-		static void Postfix(InWorldScoreItem __instance)
+		private static void Postfix(InWorldScoreItem __instance)
 		{
 			try
 			{

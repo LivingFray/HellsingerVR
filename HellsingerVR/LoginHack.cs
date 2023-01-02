@@ -1,10 +1,9 @@
 ﻿using System;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem;
-using Valve.VR;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using Valve.VR;
 
 namespace HellsingerVR
 {
@@ -12,28 +11,24 @@ namespace HellsingerVR
 	// I tried to do this properly but I can't for the life of me find where they actually check inputs for this screen
 	public class LoginHack
 	{
-		static bool WasKeyPressed = false;
-
-		static bool HasFocused = false;
-
-		static bool IsPrePreLogin = true;
-
-		static uint KEYDOWN = 0x0100;
-		static uint KEYUP = 0x0101;
-
-		static int VK_ESC = 0x1B;
+		private static bool WasKeyPressed = false;
+		private static bool HasFocused = false;
+		private static bool IsPrePreLogin = true;
+		private static uint KEYDOWN = 0x0100;
+		private static uint KEYUP = 0x0101;
+		private static int VK_ESC = 0x1B;
 
 
 		[DllImport("user32.dll")]
-		static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+		private static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
 		[DllImport("user32.dll")]
-		static extern IntPtr GetActiveWindow();
+		private static extern IntPtr GetActiveWindow();
 
 		[DllImport("user32.dll")]
-		static extern bool SetForegroundWindow(IntPtr hWnd);
+		private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-		static TitleScreenAnimation titleScreenAnimation;
+		private static TitleScreenAnimation titleScreenAnimation;
 
 		public static void PressAnyKey()
 		{

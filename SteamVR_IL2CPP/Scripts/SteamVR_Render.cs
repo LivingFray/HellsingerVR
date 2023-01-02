@@ -1,13 +1,9 @@
-﻿using Il2CppSystem.Diagnostics;
-using SteamVR_Standalone_IL2CPP.Util;
+﻿using SteamVR_Standalone_IL2CPP.Util;
 using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Valve.VR
 {
@@ -67,8 +63,7 @@ namespace Valve.VR
 			return null;
 		}
 
-
-		void AddInternal(SteamVR_Camera vrcam)
+		private void AddInternal(SteamVR_Camera vrcam)
 		{
 			var camera = vrcam.GetComponent<Camera>();
 			var length = cameras.Length;
@@ -89,7 +84,7 @@ namespace Valve.VR
 			enabled = true;
 		}
 
-		void RemoveInternal(SteamVR_Camera vrcam)
+		private void RemoveInternal(SteamVR_Camera vrcam)
 		{
 			var length = cameras.Length;
 			int count = 0;
@@ -114,7 +109,7 @@ namespace Valve.VR
 			cameras = sorted;
 		}
 
-		SteamVR_Camera TopInternal()
+		private SteamVR_Camera TopInternal()
 		{
 			if (cameras.Length > 0)
 				return cameras[cameras.Length - 1];
@@ -209,7 +204,7 @@ namespace Valve.VR
 			}
 		}
 
-		void RenderEye(SteamVR vr, EVREye eye)
+		private void RenderEye(SteamVR vr, EVREye eye)
 		{
 			int i = (int)eye;
 			SteamVR_Render.eye = eye;
@@ -244,7 +239,7 @@ namespace Valve.VR
 				outTex.eColorSpace = EColorSpace.Auto;
 
 				OpenVR.Compositor.Submit(eye, ref outTex, ref SteamVR.instance.textureBounds[i], EVRSubmitFlags.Submit_Default);
-				
+
 				RenderTexture.ReleaseTemporary(temp);
 
 				if (eye == EVREye.Eye_Right)
@@ -427,8 +422,8 @@ namespace Valve.VR
 		{
 			Debug.Log("Start render loop!");
 			MelonCoroutines.Start(RenderLoop());
-			SteamVR_Events.InputFocus.Listen((this.OnInputFocus));
-			SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen((this.OnRequestScreenshot));
+			SteamVR_Events.InputFocus.Listen(this.OnInputFocus);
+			SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(this.OnRequestScreenshot);
 			if (SteamVR_Settings.instance.legacyMixedRealityCamera)
 			{
 				SteamVR_ExternalCamera_LegacyManager.SubscribeToNewPoses();
@@ -457,7 +452,7 @@ namespace Valve.VR
 		private void OnDisable()
 		{
 			SteamVR_Events.InputFocus.Remove(this.OnInputFocus);
-			SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Remove((this.OnRequestScreenshot));
+			SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Remove(this.OnRequestScreenshot);
 			UnityHooks.OnBeforeRender -= OnBeforeRender;
 			UnityHooks.OnBeforeCull -= OnCameraPreCull;
 			if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
@@ -488,8 +483,7 @@ namespace Valve.VR
 			this.UpdatePoses();
 		}
 
-
-		void Update()
+		private void Update()
 		{
 			if (cameras.Length == 0)
 			{
@@ -546,13 +540,13 @@ namespace Valve.VR
 			QualitySettings.vSyncCount = 0; // this applies to the companion window
 		}
 
-		void FixedUpdate()
+		private void FixedUpdate()
 		{
 			// We want to call this as soon after Present as possible.
 			SteamVR_Utils.QueueEventOnRenderThread(SteamVR.OpenVRMagic.k_nRenderEventID_PostPresentHandoff);
 		}
 
-		void OnCameraPreCull(Camera cam)
+		private void OnCameraPreCull(Camera cam)
 		{
 			// Only update poses on the first camera per frame.
 			if (Time.frameCount != lastFrameCount)
@@ -561,10 +555,10 @@ namespace Valve.VR
 				UpdatePoses();
 			}
 		}
-		static int lastFrameCount = -1;
 
+		private static int lastFrameCount = -1;
 
-		void Awake()
+		private void Awake()
 		{
 			var go = new GameObject("cameraMask");
 			go.transform.parent = transform;

@@ -1,23 +1,21 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
-using Valve.VR;
-using UnityEngine;
 using HarmonyLib;
-using System.Reflection;
+using HellsingerVR.Components;
 using Il2CppInterop.Runtime.Injection;
 using Outsiders.Messages;
-using System.IO;
-using HellsingerVR.Components;
+using System.Reflection;
+using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-using Il2CppInterop.Runtime;
-using BepInEx.Configuration;
+using Valve.VR;
 
 namespace HellsingerVR
 {
 	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.3.0")]
 	public class HellsingerVR : BasePlugin
 	{
-		static GameObject vrRig;
+		private static GameObject vrRig;
 
 		public static VRRig rig;
 
@@ -32,8 +30,7 @@ namespace HellsingerVR
 		public static Vector3 TitleScreenPosition = new Vector3(-227.62f, 9.64f, 48.17f);
 
 		public static Canvas overlay;
-
-		static RectTransform overlayRect;
+		private static RectTransform overlayRect;
 
 		public static Quaternion HandOffset = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
@@ -88,6 +85,9 @@ namespace HellsingerVR
 			QualitySettings.vSyncCount = 0;
 
 			Application.runInBackground = true;
+
+			// Built in dynamic resolution scaler targets the monitor refresh rate
+			DynamicResolutionScaler.Enabled = false;
 
 			IsPreLogin = true;
 		}
@@ -218,7 +218,7 @@ namespace HellsingerVR
 			if (c)
 			{
 				c.renderMode = RenderMode.WorldSpace;
-				c.transform.position = TitleScreenPosition + Vector3.back * _instance.MenuUIDistance.Value;
+				c.transform.position = TitleScreenPosition + (Vector3.back * _instance.MenuUIDistance.Value);
 				c.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 				RectTransform rect = c.GetComponent<RectTransform>();
 				c.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
@@ -235,11 +235,6 @@ namespace HellsingerVR
 				Camera.main.cullingMask = 0;
 				Camera.main.clearFlags = CameraClearFlags.Nothing;
 			}
-
-			if (rig != null)
-			{
-				rig.EnterTitleScreen();
-			}
 		}
 
 		public static void MoveLevelSelectToWorld()
@@ -251,7 +246,7 @@ namespace HellsingerVR
 			}
 			_instance.Log.LogInfo("Moving level select to world space");
 			c.renderMode = RenderMode.WorldSpace;
-			c.transform.position = TitleScreenPosition + Vector3.back * _instance.MenuUIDistance.Value;
+			c.transform.position = TitleScreenPosition + (Vector3.back * _instance.MenuUIDistance.Value);
 			c.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 			RectTransform rect = c.GetComponent<RectTransform>();
 			c.transform.localScale = Vector3.one * (2.0f / rect.rect.height);
@@ -262,13 +257,13 @@ namespace HellsingerVR
 			if (overlay == null || overlayRect == null)
 			{
 				GameObject overlayGO = GameObject.Find("Overlay");
-				
+
 				if (overlayGO != null)
 				{
 					overlay = overlayGO.GetComponent<Canvas>();
 					overlayRect = overlay.GetComponent<RectTransform>();
 				}
-				
+
 				if (overlay == null || overlayRect == null)
 				{
 					return;
@@ -276,7 +271,7 @@ namespace HellsingerVR
 			}
 
 			overlay.renderMode = RenderMode.WorldSpace;
-			overlay.transform.position = rig.head.transform.position + rig.head.transform.forward * (bIsMenuUI ? _instance.MenuUIDistance.Value : _instance.GameUIDistance.Value);
+			overlay.transform.position = rig.head.transform.position + (rig.head.transform.forward * (bIsMenuUI ? _instance.MenuUIDistance.Value : _instance.GameUIDistance.Value));
 			overlay.transform.LookAt(rig.head);
 			overlay.transform.rotation = Quaternion.Euler(0.0f, overlay.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
 			overlay.transform.localScale = Vector3.one * (2.0f / overlayRect.rect.height);

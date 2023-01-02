@@ -7,14 +7,14 @@ namespace HellsingerVR.Patches
 	[HarmonyPatch(typeof(ClinchIndicatorContainer), nameof(ClinchIndicatorContainer.RefreshPosition))]
 	internal class Slaughter
 	{
-		static void Postfix(ClinchIndicatorContainer __instance)
+		private static void Postfix(ClinchIndicatorContainer __instance)
 		{
 			try
 			{
-				if (__instance != null 
-					&& __instance.m_targetEnemy != null 
-					&& __instance.m_targetEnemy.Transform != null 
-					&& HellsingerVR.rig != null 
+				if (__instance != null
+					&& __instance.m_targetEnemy != null
+					&& __instance.m_targetEnemy.Transform != null
+					&& HellsingerVR.rig != null
 					&& HellsingerVR.rig.head != null)
 				{
 					Vector3 Offset = (HellsingerVR.rig.head.transform.position - __instance.m_targetEnemy.Transform.position).normalized * 0.5f;

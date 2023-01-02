@@ -1,40 +1,26 @@
-﻿using Il2CppInterop.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using Unity.Collections;
+﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using Valve.VR;
-using System.Diagnostics;
-using Il2CppMicrosoft.Win32;
-using Outsiders.GUI;
 
 namespace HellsingerVR.Components
 {
-    public class VRInputManager : MonoBehaviour
-    {
+	public class VRInputManager : MonoBehaviour
+	{
 
-        public static bool LastHandToShootWasLeft = false;
+		public static bool LastHandToShootWasLeft = false;
+		private float TimeOffset = 0.0f;
+		private Gamepad VRInput;
+		private FirstPersonController fpController;
+		private PlayerWeaponType LastWeapon = PlayerWeaponType.Falx;
+		private bool WasPrevWeaponPressed = false;
+		private bool WasNextWeaponPressed = false;
+		private bool AlignToHead;
+		private bool UseLeftHand;
 
-        float TimeOffset = 0.0f;
-
-        Gamepad VRInput;
-
-        FirstPersonController fpController;
-
-        PlayerWeaponType LastWeapon = PlayerWeaponType.Falx;
-
-		bool WasPrevWeaponPressed = false;
-        bool WasNextWeaponPressed = false;
-
-        bool AlignToHead;
-        bool UseLeftHand;
-
-        public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
-        {
+		public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
+		{
 			Vector3 location = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose").GetLocalPosition(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 			Quaternion rotation = SteamVR_Input.GetAction<SteamVR_Action_Pose>("PoseTip").GetLocalRotation(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 
@@ -42,82 +28,82 @@ namespace HellsingerVR.Components
 
 			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;
 
-            return (location, rotation);
+			return (location, rotation);
 		}
 
-		static bool IsInGame()
-        {
-            return !HellsingerVR.IsPaused && !HellsingerVR.IsLoading && HellsingerVR.rig && HellsingerVR.rig.InLevel;
-        }
-
-        public void Awake()
-        {
-            TimeOffset = Time.realtimeSinceStartup;
-            string movementType = HellsingerVR._instance.MovementType.Value.ToLower();
-            switch (movementType)
-            {
-                case "hand":
-                case "mainhand":
-                    AlignToHead = false;
-                    UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
-                    break;
-                case "offhand":
-                    AlignToHead = false;
-                    UseLeftHand = !HellsingerVR._instance.IsLeftHanded.Value;
-                    break;
-                default:
-                    AlignToHead = true;
-                    UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
-                    break;
-            }
-        }
-
-        // Can't do the update early, so do it at the end of the frame ready for the next frame
-        public void LateUpdate()
-        {
-            // Let steam input finish loading
-            if (Time.realtimeSinceStartup < TimeOffset + 5.0f)
-            {
-                return;
-            }
-
-            if (VRInput == null)
-            {
-                VRInput = InputSystem.GetDevice<Gamepad>();
-                if (VRInput == null)
-                {
-                    VRInput = InputSystem.AddDevice<Gamepad>();
-                }
-            }
-
-            InputEventPtr ptr;
-
-            ModifiedCode.StateEvent_From(VRInput, new InputEventPtr(), out ptr);
-
-            // Currently assumes default controller binding!
-            try
-            {
-                if (IsInGame())
-                {
-                    UpdateGameInputs(ptr);
-                }
-                else
-                {
-                    UpdateMenuInputs(ptr);
-                    LoginHack.PressAnyKey();
-                }
-            }
-            catch (Exception e)
-            {
-                HellsingerVR._instance.Log.LogError(e.Message);
-            }
-            InputSystem.QueueEvent(ptr);
-
-        }
-
-        void UpdateMenuInputs(InputEventPtr ptr)
+		private static bool IsInGame()
 		{
-            // Navigation
+			return !HellsingerVR.IsPaused && !HellsingerVR.IsLoading && HellsingerVR.rig && HellsingerVR.rig.InLevel;
+		}
+
+		public void Awake()
+		{
+			TimeOffset = Time.realtimeSinceStartup;
+			string movementType = HellsingerVR._instance.MovementType.Value.ToLower();
+			switch (movementType)
+			{
+				case "hand":
+				case "mainhand":
+					AlignToHead = false;
+					UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
+					break;
+				case "offhand":
+					AlignToHead = false;
+					UseLeftHand = !HellsingerVR._instance.IsLeftHanded.Value;
+					break;
+				default:
+					AlignToHead = true;
+					UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
+					break;
+			}
+		}
+
+		// Can't do the update early, so do it at the end of the frame ready for the next frame
+		public void LateUpdate()
+		{
+			// Let steam input finish loading
+			if (Time.realtimeSinceStartup < TimeOffset + 5.0f)
+			{
+				return;
+			}
+
+			if (VRInput == null)
+			{
+				VRInput = InputSystem.GetDevice<Gamepad>();
+				if (VRInput == null)
+				{
+					VRInput = InputSystem.AddDevice<Gamepad>();
+				}
+			}
+
+			InputEventPtr ptr;
+
+			ModifiedCode.StateEvent_From(VRInput, new InputEventPtr(), out ptr);
+
+			// Currently assumes default controller binding!
+			try
+			{
+				if (IsInGame())
+				{
+					UpdateGameInputs(ptr);
+				}
+				else
+				{
+					UpdateMenuInputs(ptr);
+					LoginHack.PressAnyKey();
+				}
+			}
+			catch (Exception e)
+			{
+				HellsingerVR._instance.Log.LogError(e.Message);
+			}
+			InputSystem.QueueEvent(ptr);
+
+		}
+
+		private void UpdateMenuInputs(InputEventPtr ptr)
+		{
+			// Navigation
 			Vector2 nav = GetMenuVector();
 			VRInput.leftStick.x.WriteValueIntoEvent(nav.x, ptr);
 			VRInput.leftStick.y.WriteValueIntoEvent(nav.y, ptr);
@@ -133,8 +119,8 @@ namespace HellsingerVR.Components
 			VRInput.startButton.WriteValueIntoEvent(GetMenuClose(), ptr);
 		}
 
-        void UpdateGameInputs(InputEventPtr ptr)
-        {
+		private void UpdateGameInputs(InputEventPtr ptr)
+		{
 			// Movement
 			Vector2 movement = GetMovementVector();
 			VRInput.leftStick.x.WriteValueIntoEvent(movement.x, ptr);
@@ -230,130 +216,130 @@ namespace HellsingerVR.Components
 		}
 
 		#region Input Converter functions
-		Vector2 GetMenuVector()
+		private Vector2 GetMenuVector()
 		{
 			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("menu", "Navigate", true);
 
 			return input.GetAxis(SteamVR_Input_Sources.Any);
 		}
 
-        float GetMenuSelect()
-        {
+		private float GetMenuSelect()
+		{
 			return SteamVR_Input.GetBooleanAction("menu", "Select", true).state ? 1.0f : 0.0f;
 		}
 
-		float GetMenuBack()
+		private float GetMenuBack()
 		{
 			return SteamVR_Input.GetBooleanAction("menu", "Back", true).state ? 1.0f : 0.0f;
 		}
 
-		float GetMenuPrevTab()
+		private float GetMenuPrevTab()
 		{
 			return SteamVR_Input.GetBooleanAction("menu", "PrevTab", true).state ? 1.0f : 0.0f;
 		}
 
-		float GetMenuNextTab()
+		private float GetMenuNextTab()
 		{
 			return SteamVR_Input.GetBooleanAction("menu", "NextTab", true).state ? 1.0f : 0.0f;
 		}
 
-		float GetMenuClose()
+		private float GetMenuClose()
 		{
 			return SteamVR_Input.GetBooleanAction("menu", "CloseMenu", true).state ? 1.0f : 0.0f;
 		}
 
 
 		// Convert movement taking into account hmd/hand based movement config
-		Vector2 GetMovementVector()
-        {
-            SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement", true);
+		private Vector2 GetMovementVector()
+		{
+			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement", true);
 
-            float rotation = (AlignToHead ?
-                HellsingerVR.rig.head.rotation :
-                UseLeftHand ?
-                    HellsingerVR.rig.leftHand.rotation :
-                    HellsingerVR.rig.rightHand.rotation
-                ).eulerAngles.y;
+			float rotation = (AlignToHead ?
+				HellsingerVR.rig.head.rotation :
+				UseLeftHand ?
+					HellsingerVR.rig.leftHand.rotation :
+					HellsingerVR.rig.rightHand.rotation
+				).eulerAngles.y;
 
-            if (HellsingerVR.rig.PlayerTransform)
-            {
-                rotation -= HellsingerVR.rig.PlayerTransform.rotation.eulerAngles.y;
-            }
+			if (HellsingerVR.rig.PlayerTransform)
+			{
+				rotation -= HellsingerVR.rig.PlayerTransform.rotation.eulerAngles.y;
+			}
 
-            return Quaternion.Euler(0, 0, -rotation) * input.GetAxis(SteamVR_Input_Sources.Any);
-        }
+			return Quaternion.Euler(0, 0, -rotation) * input.GetAxis(SteamVR_Input_Sources.Any);
+		}
 
-        float GetLookValue()
-        {
-            return SteamVR_Input.GetVector2Action("game", "Look", true).axis.x;
-        }
+		private float GetLookValue()
+		{
+			return SteamVR_Input.GetVector2Action("game", "Look", true).axis.x;
+		}
 
-        float GetDashing()
-        {
-            return SteamVR_Input.GetBooleanAction("game", "Dash", true).state ? 1.0f : 0.0f;
-        }
+		private float GetDashing()
+		{
+			return SteamVR_Input.GetBooleanAction("game", "Dash", true).state ? 1.0f : 0.0f;
+		}
 
-        float GetJumping()
-        {
-            return SteamVR_Input.GetBooleanAction("game", "Jump", true).state ? 1.0f : 0.0f;
-        }
+		private float GetJumping()
+		{
+			return SteamVR_Input.GetBooleanAction("game", "Jump", true).state ? 1.0f : 0.0f;
+		}
 
-        float GetShooting()
-        {
-            SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("game", "Shoot", true);
-            SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true);
+		private float GetShooting()
+		{
+			SteamVR_Action_Boolean fireAction = SteamVR_Input.GetBooleanAction("game", "Shoot", true);
+			SteamVR_Action_Boolean altFireAction = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true);
 
 
-            bool Shooting = fireAction.state;
-            bool AltShooting = altFireAction.state;
+			bool Shooting = fireAction.state;
+			bool AltShooting = altFireAction.state;
 
-            bool DidShoot = (Shooting || AltShooting) && !(Shooting && AltShooting);
+			bool DidShoot = (Shooting || AltShooting) && !(Shooting && AltShooting);
 
-            if (DidShoot)
-            {
-                if (Shooting)
-                {
-                    LastHandToShootWasLeft = fireAction.activeDevice == SteamVR_Input_Sources.LeftHand;
-                }
-                else
-                {
-                    LastHandToShootWasLeft = altFireAction.activeDevice == SteamVR_Input_Sources.LeftHand;
-                }
-            }
+			if (DidShoot)
+			{
+				if (Shooting)
+				{
+					LastHandToShootWasLeft = fireAction.activeDevice == SteamVR_Input_Sources.LeftHand;
+				}
+				else
+				{
+					LastHandToShootWasLeft = altFireAction.activeDevice == SteamVR_Input_Sources.LeftHand;
+				}
+			}
 
 			// Filter out shots from the wrong hand when wielding a one handed gun
 			bool CanDualWield = LastWeapon == PlayerWeaponType.Pistols || LastWeapon == PlayerWeaponType.Boomerang;
 			if (!CanDualWield)
-            {
-                DidShoot &= LastHandToShootWasLeft == HellsingerVR._instance.IsLeftHanded.Value;
-            }
+			{
+				DidShoot &= LastHandToShootWasLeft == HellsingerVR._instance.IsLeftHanded.Value;
+			}
 
-            // Return true if ONE is active, need to replace this to account for one handed weapons
-            return DidShoot ? 1.0f : 0.0f;
-        }
+			// Return true if ONE is active, need to replace this to account for one handed weapons
+			return DidShoot ? 1.0f : 0.0f;
+		}
 
-        float GetUltimate()
-        {
-            bool Shooting = SteamVR_Input.GetBooleanAction("game", "Shoot", true).state;
-            bool AltShooting = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true).state;
+		private float GetUltimate()
+		{
+			bool Shooting = SteamVR_Input.GetBooleanAction("game", "Shoot", true).state;
+			bool AltShooting = SteamVR_Input.GetBooleanAction("game", "ShootAlt", true).state;
 
-            return Shooting && AltShooting ? 1.0f : 0.0f;
-        }
+			return Shooting && AltShooting ? 1.0f : 0.0f;
+		}
 
-        float GetSlaughtering()
-        {
-            return SteamVR_Input.GetBooleanAction("game", "Slaughter", true).state ? 1.0f : 0.0f;
-        }
+		private float GetSlaughtering()
+		{
+			return SteamVR_Input.GetBooleanAction("game", "Slaughter", true).state ? 1.0f : 0.0f;
+		}
 
-        float GetReloading()
-        {
-            return SteamVR_Input.GetBooleanAction("game", "Reload", true).state ? 1.0f : 0.0f;
-        }
+		private float GetReloading()
+		{
+			return SteamVR_Input.GetBooleanAction("game", "Reload", true).state ? 1.0f : 0.0f;
+		}
 
-        float GetPausing()
-        {
-            return SteamVR_Input.GetBooleanAction("game", "OpenMenu", true).state ? 1.0f : 0.0f;
-        }
-        #endregion
-    }
+		private float GetPausing()
+		{
+			return SteamVR_Input.GetBooleanAction("game", "OpenMenu", true).state ? 1.0f : 0.0f;
+		}
+		#endregion
+	}
 }

@@ -1,19 +1,14 @@
 ﻿using HellsingerVR.Components;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using Valve.VR;
 
 namespace HellsingerVR.UI
 {
 	public class RhythmIndicator
 	{
-		Transform RhythmIndicatorTrans;
+		private Transform RhythmIndicatorTrans;
+		private static int layermask = ~LayerMask.GetMask("Ignore Raycast");
 
-		static int layermask = ~LayerMask.GetMask("Ignore Raycast");
-
-		public enum Position {Head, Sights, Target};
+		public enum Position { Head, Sights, Target };
 
 		public Position position = Position.Target;
 
@@ -25,13 +20,11 @@ namespace HellsingerVR.UI
 		public float head_scale = 1.0f;
 		public float sights_scale = 0.5f;
 		public float target_scale = 2.0f;
-
-		Vector3 SightOffset = new Vector3(0.05f, 0.25f, 0.0f);
-
-		Transform LowAmmoIndicator;
-		Transform NoAmmoIndicator;
-		Transform BeatGradingContainer;
-		Transform Reticle;
+		private Vector3 SightOffset = new Vector3(0.05f, 0.25f, 0.0f);
+		private Transform LowAmmoIndicator;
+		private Transform NoAmmoIndicator;
+		private Transform BeatGradingContainer;
+		private Transform Reticle;
 
 		public void Init()
 		{
@@ -80,19 +73,19 @@ namespace HellsingerVR.UI
 			}
 		}
 
-		void Update_Head()
+		private void Update_Head()
 		{
 			Transform transform = HellsingerVR.rig.head;
 
 			if (Input.GetKeyDown(KeyCode.LeftBracket))
 			{
 				head_distance -= 0.2f;
-				HellsingerVR._instance.Log.LogInfo(""+head_distance);
+				HellsingerVR._instance.Log.LogInfo("" + head_distance);
 			}
 			if (Input.GetKeyDown(KeyCode.RightBracket))
 			{
 				head_distance += 0.2f;
-				HellsingerVR._instance.Log.LogInfo(""+head_distance);
+				HellsingerVR._instance.Log.LogInfo("" + head_distance);
 			}
 
 			if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -100,14 +93,14 @@ namespace HellsingerVR.UI
 				position = Position.Sights;
 			}
 
-			RhythmIndicatorTrans.position = transform.position + transform.forward * head_distance;
+			RhythmIndicatorTrans.position = transform.position + (transform.forward * head_distance);
 			RhythmIndicatorTrans.LookAt(transform);
 			RhythmIndicatorTrans.rotation *= Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
 			FixOtherUIElements(head_scale);
 		}
 
-		void Update_Sights()
+		private void Update_Sights()
 		{
 			if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
@@ -126,7 +119,7 @@ namespace HellsingerVR.UI
 			FixOtherUIElements(sights_scale);
 		}
 
-		void Update_Target()
+		private void Update_Target()
 		{
 			if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
@@ -145,20 +138,20 @@ namespace HellsingerVR.UI
 
 			if (!Hit)
 			{
-				OutPoint = location + rotation * Vector3.forward * target_distance;
+				OutPoint = location + (rotation * Vector3.forward * target_distance);
 				OutNormal = rotation * Vector3.back;
 			}
 
 			Vector3 direction = (OutPoint - location).normalized;
 
-			RhythmIndicatorTrans.position = OutPoint - direction * target_offset;
+			RhythmIndicatorTrans.position = OutPoint - (direction * target_offset);
 
 			RhythmIndicatorTrans.LookAt(OutPoint - OutNormal);
 
 			FixOtherUIElements(target_scale);
 		}
 
-		void FixOtherUIElements(float scale)
+		private void FixOtherUIElements(float scale)
 		{
 			RhythmIndicatorTrans.localScale = Vector3.one * scale;
 			LowAmmoIndicator.localScale = RhythmIndicatorTrans.localScale;
@@ -169,13 +162,13 @@ namespace HellsingerVR.UI
 			Reticle.position = RhythmIndicatorTrans.position;
 			Reticle.rotation = RhythmIndicatorTrans.rotation;
 
-			LowAmmoIndicator.position = RhythmIndicatorTrans.position + RhythmIndicatorTrans.up * 0.25f * scale;
+			LowAmmoIndicator.position = RhythmIndicatorTrans.position + (RhythmIndicatorTrans.up * 0.25f * scale);
 			LowAmmoIndicator.rotation = RhythmIndicatorTrans.rotation;
 
 			NoAmmoIndicator.position = LowAmmoIndicator.position;
 			NoAmmoIndicator.rotation = LowAmmoIndicator.rotation;
 
-			BeatGradingContainer.position = RhythmIndicatorTrans.position - RhythmIndicatorTrans.up * 0.25f * scale;
+			BeatGradingContainer.position = RhythmIndicatorTrans.position - (RhythmIndicatorTrans.up * 0.25f * scale);
 			BeatGradingContainer.rotation = RhythmIndicatorTrans.rotation;
 		}
 	}

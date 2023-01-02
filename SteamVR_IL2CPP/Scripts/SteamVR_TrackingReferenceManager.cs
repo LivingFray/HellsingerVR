@@ -5,67 +5,67 @@ using UnityEngine;
 namespace Valve.VR
 {
 	public class SteamVR_TrackingReferenceManager : MonoBehaviour
-    {
+	{
 
-        public SteamVR_TrackingReferenceManager(IntPtr value)
+		public SteamVR_TrackingReferenceManager(IntPtr value)
 : base(value) { }
 
-        private Dictionary<uint, TrackingReferenceObject> trackingReferences = new Dictionary<uint, TrackingReferenceObject>();
+		private Dictionary<uint, TrackingReferenceObject> trackingReferences = new Dictionary<uint, TrackingReferenceObject>();
 
-        private void OnEnable()
-        {
-            SteamVR_Events.NewPoses.Listen(OnNewPoses);
-        }
+		private void OnEnable()
+		{
+			SteamVR_Events.NewPoses.Listen(OnNewPoses);
+		}
 
-        private void OnDisable()
-        {
-            SteamVR_Events.NewPoses.Remove(OnNewPoses);
-        }
+		private void OnDisable()
+		{
+			SteamVR_Events.NewPoses.Remove(OnNewPoses);
+		}
 
-        private void OnNewPoses(TrackedDevicePose_t[] poses)
-        {
-            if (poses == null)
-                return;
+		private void OnNewPoses(TrackedDevicePose_t[] poses)
+		{
+			if (poses == null)
+				return;
 
-            for (uint deviceIndex = 0; deviceIndex < poses.Length; deviceIndex++)
-            {
-                if (trackingReferences.ContainsKey(deviceIndex) == false)
-                {
-                    ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass(deviceIndex);
+			for (uint deviceIndex = 0; deviceIndex < poses.Length; deviceIndex++)
+			{
+				if (trackingReferences.ContainsKey(deviceIndex) == false)
+				{
+					ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass(deviceIndex);
 
-                    if (deviceClass == ETrackedDeviceClass.TrackingReference)
-                    {
-                        TrackingReferenceObject trackingReference = new TrackingReferenceObject();
-                        trackingReference.trackedDeviceClass = deviceClass;
-                        trackingReference.gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString());
-                        trackingReference.gameObject.transform.parent = this.transform;
-                        trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVR_TrackedObject>();
-                        trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVR_RenderModel>();
-                        trackingReference.renderModel.createComponents = false;
-                        trackingReference.renderModel.updateDynamically = false;
+					if (deviceClass == ETrackedDeviceClass.TrackingReference)
+					{
+						TrackingReferenceObject trackingReference = new TrackingReferenceObject();
+						trackingReference.trackedDeviceClass = deviceClass;
+						trackingReference.gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString());
+						trackingReference.gameObject.transform.parent = this.transform;
+						trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVR_TrackedObject>();
+						trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVR_RenderModel>();
+						trackingReference.renderModel.createComponents = false;
+						trackingReference.renderModel.updateDynamically = false;
 
-                        trackingReferences.Add(deviceIndex, trackingReference);
+						trackingReferences.Add(deviceIndex, trackingReference);
 
-                        foreach(SteamVR_RenderModel model in GetComponentsInChildren<SteamVR_RenderModel>())
-                        {
-                            model.SetDeviceIndex((int)deviceIndex);
-                        }
-                        //trackingReference.gameObject.SendMessage("SetDeviceIndex", (int)deviceIndex, SendMessageOptions.DontRequireReceiver);
-                    }
-                    else
-                    {
-                        trackingReferences.Add(deviceIndex, new TrackingReferenceObject() { trackedDeviceClass = deviceClass });
-                    }
-                }
-            }
-        }
+						foreach (SteamVR_RenderModel model in GetComponentsInChildren<SteamVR_RenderModel>())
+						{
+							model.SetDeviceIndex((int)deviceIndex);
+						}
+						//trackingReference.gameObject.SendMessage("SetDeviceIndex", (int)deviceIndex, SendMessageOptions.DontRequireReceiver);
+					}
+					else
+					{
+						trackingReferences.Add(deviceIndex, new TrackingReferenceObject() { trackedDeviceClass = deviceClass });
+					}
+				}
+			}
+		}
 
-        private class TrackingReferenceObject
-        {
-            public ETrackedDeviceClass trackedDeviceClass;
-            public GameObject gameObject;
-            public SteamVR_RenderModel renderModel;
-            public SteamVR_TrackedObject trackedObject;
-        }
-    }
+		private class TrackingReferenceObject
+		{
+			public ETrackedDeviceClass trackedDeviceClass;
+			public GameObject gameObject;
+			public SteamVR_RenderModel renderModel;
+			public SteamVR_TrackedObject trackedObject;
+		}
+	}
 }

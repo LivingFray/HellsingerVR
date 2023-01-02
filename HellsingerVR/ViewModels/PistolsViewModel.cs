@@ -1,21 +1,17 @@
 ﻿using HellsingerVR.Components;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace HellsingerVR.ViewModels
 {
-	class PistolsViewModel : ViewModel
+	internal class PistolsViewModel : ViewModel
 	{
-		GameObject leftHandBones;
-		GameObject rightHandBones;
-
-		SkinnedMeshRenderer[] CerberusMeshes;
-		SkinnedMeshRenderer CerberusFrame;
-		SkinnedMeshRenderer PersephoneFrame;
-
-		Dictionary<Transform, Transform> LeftHandMap = new Dictionary<Transform, Transform>();
+		private GameObject leftHandBones;
+		private GameObject rightHandBones;
+		private SkinnedMeshRenderer[] CerberusMeshes;
+		private SkinnedMeshRenderer CerberusFrame;
+		private SkinnedMeshRenderer PersephoneFrame;
+		private Dictionary<Transform, Transform> LeftHandMap = new Dictionary<Transform, Transform>();
 
 		public PistolsViewModel()
 		{
@@ -68,14 +64,14 @@ namespace HellsingerVR.ViewModels
 				{
 					valuePair.Key.localPosition = valuePair.Value.localPosition;
 					valuePair.Key.localRotation = valuePair.Value.localRotation;
-					valuePair.Key.localScale    = valuePair.Value.localScale;
+					valuePair.Key.localScale = valuePair.Value.localScale;
 				}
 
 				leftHandBones.transform.rotation = rotation * OffsetRotation * rightHandBones.transform.localRotation;
 
 				Vector3 FirstBone = leftHandBones.transform.rotation * CerberusFrame.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + leftHandBones.transform.rotation * OffsetVector) - FirstBone;
+				Vector3 targetPosition = location + (leftHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				leftHandBones.transform.position = targetPosition;
 
@@ -89,7 +85,7 @@ namespace HellsingerVR.ViewModels
 
 				Vector3 FirstBone = rightHandBones.transform.rotation * PersephoneFrame.bones[1].localPosition;
 
-				Vector3 targetPosition = (location + rightHandBones.transform.rotation * OffsetVector) - FirstBone;
+				Vector3 targetPosition = location + (rightHandBones.transform.rotation * OffsetVector) - FirstBone;
 
 				rightHandBones.transform.position = targetPosition;
 			}
