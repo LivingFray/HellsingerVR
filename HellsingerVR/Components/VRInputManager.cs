@@ -8,7 +8,8 @@ namespace HellsingerVR.Components
 {
 	public class VRInputManager : MonoBehaviour
 	{
-
+		public static int PendingSnapDirection = 0;
+		public static bool HasPendingSnapMove = false;
 		public static bool LastHandToShootWasLeft = false;
 		private float TimeOffset = 0.0f;
 		private Gamepad VRInput;
@@ -18,6 +19,7 @@ namespace HellsingerVR.Components
 		private bool WasNextWeaponPressed = false;
 		private bool AlignToHead;
 		private bool UseLeftHand;
+		private bool UseSnapTurn;
 
 		public static (Vector3, Quaternion) GetHandTransform(bool LeftHand = false)
 		{
@@ -56,6 +58,7 @@ namespace HellsingerVR.Components
 					UseLeftHand = HellsingerVR._instance.IsLeftHanded.Value;
 					break;
 			}
+			UseSnapTurn = HellsingerVR._instance.SnapTurningAngle.Value > 0.0f;
 		}
 
 		// Can't do the update early, so do it at the end of the frame ready for the next frame
@@ -271,6 +274,24 @@ namespace HellsingerVR.Components
 
 		private float GetLookValue()
 		{
+			if (UseSnapTurn)
+			{
+				const float Deadzone = 0.25f;
+				float Val = SteamVR_Input.GetVector2Action("game", "Look", true).axis.x;
+				
+				HasPendingSnapMove = false;
+
+				if (Math.Abs(Val) < Deadzone)
+				{
+					PendingSnapDirection = 0;
+				}
+				else if (Math.Sign(Val) != Math.Sign(PendingSnapDirection))
+				{
+					PendingSnapDirection = Math.Sign(Val);
+					HasPendingSnapMove = true;
+				}
+				return 0.0f;
+			}
 			return SteamVR_Input.GetVector2Action("game", "Look", true).axis.x;
 		}
 

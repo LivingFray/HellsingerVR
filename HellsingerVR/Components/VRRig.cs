@@ -29,6 +29,8 @@ namespace HellsingerVR.Components
 
 		public VRViewModelManager viewModelManager;
 
+		private Vector3 RoomscaleOffset = Vector3.zero;
+
 		public bool InLevel
 		{
 			get { return _InLevel; }
@@ -96,6 +98,10 @@ namespace HellsingerVR.Components
 
 			LastLocalHeadYaw = head.localRotation.eulerAngles.y;
 
+			//RoomscaleOffset = -head.localPosition;
+			//RoomscaleOffset.y = 0;
+
+			//transform.position = PlayerTransform.position + RoomscaleOffset;
 			transform.position = PlayerTransform.position;
 			transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -head.localRotation.eulerAngles.y, 0.0f);
 
@@ -120,17 +126,6 @@ namespace HellsingerVR.Components
 
 		public void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.Tab))
-			{
-				HellsingerVR._instance.Log.LogInfo($"IsPaused: {HellsingerVR.IsPaused}");
-				HellsingerVR._instance.Log.LogInfo($"IsLoading: {HellsingerVR.IsLoading}");
-				HellsingerVR._instance.Log.LogInfo($"InCutscene: {InCutscene}");
-				HellsingerVR._instance.Log.LogInfo($"InLevel: {InLevel}");
-				HellsingerVR._instance.Log.LogInfo($"PlayerPosition: {transform.position.ToString()}");
-				HellsingerVR._instance.Log.LogInfo($"UIPosition: {GameObject.Find("Overlay").transform.position.ToString()}");
-
-			}
-
 			// Only need to hide the world while in a level
 			// Title screen, level select, etc are supposed to render their geo
 			if ((HellsingerVR.IsPaused || HellsingerVR.IsLoading) && InLevel)
@@ -195,9 +190,21 @@ namespace HellsingerVR.Components
 
 			float NewYaw = euler.y + DeltaRotation;
 
+			if (VRInputManager.HasPendingSnapMove)
+			{
+				NewYaw += VRInputManager.PendingSnapDirection * HellsingerVR._instance.SnapTurningAngle.Value;
+			}
+
 			CameraTransform.rotation = Quaternion.Euler(head.rotation.eulerAngles.x, NewYaw, 0.0f);
 
-			transform.position = PlayerTransform.position;
+			//Vector3 RoomscaleMovement = head.localPosition - RoomscaleOffset;
+			//RoomscaleMovement.y = 0;
+
+			//FindObjectOfType<FirstPersonController>().m_player.CharacterController.Move(RoomscaleMovement / Time.deltaTime);
+
+			//RoomscaleOffset = -head.localPosition;
+
+			transform.position = PlayerTransform.position + RoomscaleOffset;
 			transform.rotation = Quaternion.Euler(0.0f, NewYaw - LastLocalHeadYaw, 0.0f);
 		}
 	}
