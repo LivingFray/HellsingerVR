@@ -29,6 +29,8 @@ namespace HellsingerVR.Components
 
 		public VRViewModelManager viewModelManager;
 
+		private FirstPersonController fpController;
+
 		private Vector3 RoomscaleOffset = Vector3.zero;
 
 		public bool InLevel
@@ -81,7 +83,7 @@ namespace HellsingerVR.Components
 
 			InCutscene = true;
 
-			FirstPersonController fpController = FindObjectOfType<FirstPersonController>();
+			fpController = FindObjectOfType<FirstPersonController>();
 			if (fpController)
 			{
 				PlayerTransform = fpController.m_player.PlayerTransform;
@@ -98,11 +100,10 @@ namespace HellsingerVR.Components
 
 			LastLocalHeadYaw = head.localRotation.eulerAngles.y;
 
-			//RoomscaleOffset = -head.localPosition;
-			//RoomscaleOffset.y = 0;
+			RoomscaleOffset = head.localPosition;
+			RoomscaleOffset.y = 0;
 
-			//transform.position = PlayerTransform.position + RoomscaleOffset;
-			transform.position = PlayerTransform.position;
+			transform.position = PlayerTransform.position - RoomscaleOffset;
 			transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -head.localRotation.eulerAngles.y, 0.0f);
 
 			if (rhythmIndicator == null)
@@ -197,14 +198,25 @@ namespace HellsingerVR.Components
 
 			CameraTransform.rotation = Quaternion.Euler(head.rotation.eulerAngles.x, NewYaw, 0.0f);
 
-			//Vector3 RoomscaleMovement = head.localPosition - RoomscaleOffset;
-			//RoomscaleMovement.y = 0;
+			
+			bool IsDoingAnimatedMove = fpController.GetCurrentMovementStateType() == MovementStateType.Overkill;
 
-			//FindObjectOfType<FirstPersonController>().m_player.CharacterController.Move(RoomscaleMovement / Time.deltaTime);
+			if (!IsDoingAnimatedMove)
+			{
+				Vector3 RoomscaleMovement = head.localPosition - RoomscaleOffset;
+				RoomscaleMovement.y = 0;
 
-			//RoomscaleOffset = -head.localPosition;
+				fpController.m_player.CharacterController.Move(RoomscaleMovement);
 
-			transform.position = PlayerTransform.position + RoomscaleOffset;
+				RoomscaleOffset = head.localPosition;
+				RoomscaleOffset.y = 0;
+
+				transform.position = PlayerTransform.position - RoomscaleOffset;
+			}
+			else
+			{
+				transform.position = PlayerTransform.position;
+			}
 			transform.rotation = Quaternion.Euler(0.0f, NewYaw - LastLocalHeadYaw, 0.0f);
 		}
 	}
