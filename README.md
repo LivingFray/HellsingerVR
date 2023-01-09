@@ -26,7 +26,7 @@ Valve index:
 Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in BepInEx/config.
 - Enabled: Disable this mod without uninstalling it
 - Left handed: One handed weapons will be held in the left hand, does not flip joystick bindings
-- Snap turn amount: COMING SOON - Will control snap turning speed, currently only smooth turning is supported
+- Snap turn amount: Angle in degrees to turn per snap turn. Defaults to 0, which enables smooth turning
 - Movement type: VR device movement stick is relative to (head, hand, offhand)
 - Reticle location: Where the reticle/beat indicator is drawn (target, sights, head) defaults to target, which attaches the reticle to the world object currently being aimed at
 - Show health on hand: Display health bar on the offhand or floating in front of your head
@@ -41,10 +41,8 @@ Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in Be
 To get past the logos/login screen the game needs to be in focus. If you can't login in (by pressing either trigger) check the game is in focus
 
 ### Performance
-Metal: Hellsinger was not designed for VR and can be quiet graphically intensive. Turning down the graphics settings in game can help somewhat (going from high to mid resulted in the most noticable performance gain during testing, with going from mid to low having minimal additional impact). Using [vrperfkit](https://github.com/fholger/vrperfkit) can help considerably at the cost of some graphical fidelity.
+Metal: Hellsinger was not designed for VR and can be quiet graphically intensive. Turning down the graphics settings in game can help somewhat (going from high to mid resulted in the most noticable performance gain during testing, with going from mid to low having minimal additional impact). Using [vrperfkit](https://github.com/fholger/vrperfkit) can help considerably at the cost of some graphical fidelity. I have also heard that using an oculus headset through steamvr generally leads to worse performance which can be fixed/lessened by replacing openvr_api.dll with one from [OpenComposite](https://gitlab.com/znixian/OpenOVR), however I've not personally tested this.
 
-### Room scale
-Currently the HMD's position only affects the camera, your hitbox will remain in the middle of the play area
 
 ## Uninstalling
 Delete the BepInEx folder, winhttp.dll and any other files added while installing the mod.
