@@ -90,6 +90,8 @@ namespace HellsingerVR.Components
 				CameraTransform = fpController.m_cameraTransform;
 			}
 
+			HellsingerVR.DisableUIDepth();
+
 			HellsingerVR._instance.Log.LogInfo("Entered cutscene");
 		}
 

@@ -12,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.4.0")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.0")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
@@ -208,6 +208,18 @@ namespace HellsingerVR
 				{
 					d.active = false;
 				}
+			}
+		}
+
+		public static void DisableUIDepth()
+		{
+			Canvas canvas = Object.FindObjectOfType<Canvas>();
+
+			CanvasRenderer[] canvasRenderers = canvas.GetComponentsInChildren<CanvasRenderer>();
+
+			foreach (CanvasRenderer renderer in canvasRenderers)
+			{
+				renderer.GetMaterial().SetInt("unity_GUIZTestMode", (int)UnityEngine.Rendering.CompareFunction.Always);
 			}
 		}
 
