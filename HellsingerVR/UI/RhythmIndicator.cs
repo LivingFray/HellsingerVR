@@ -10,11 +10,17 @@ namespace HellsingerVR.UI
 
 		public enum Position { Head, Sights, Target };
 
+		public enum Scaling { None, Partial, Full };
+
 		public Position position = Position.Target;
+
+		public Scaling scaling = Scaling.Partial;
+
+		public bool FaceCamera = false;
 
 		public float head_distance = 2.5f;
 
-		public float target_distance = 10.0f;
+		public float target_distance = 25.0f;
 		public float target_offset = 0.25f;
 
 		public float head_scale = 1.0f;
@@ -55,6 +61,23 @@ namespace HellsingerVR.UI
 					position = Position.Target;
 					break;
 			}
+
+			string scalingCfg = HellsingerVR._instance.ReticleScaling.Value.ToLower();
+
+			switch (scalingCfg)
+			{
+				case "none":
+					scaling = Scaling.None;
+					break;
+				case "full":
+					scaling = Scaling.Full;
+					break;
+				default:
+					scaling = Scaling.Partial;
+					break;
+			}
+
+			FaceCamera = HellsingerVR._instance.ReticleFacesCamera.Value;
 		}
 
 		public void Update()
@@ -142,13 +165,35 @@ namespace HellsingerVR.UI
 				OutNormal = rotation * Vector3.back;
 			}
 
+			if (FaceCamera)
+			{
+				OutNormal = rotation * Vector3.back;
+			}
+
 			Vector3 direction = (OutPoint - location).normalized;
 
 			RhythmIndicatorTrans.position = OutPoint - (direction * target_offset);
 
 			RhythmIndicatorTrans.LookAt(OutPoint - OutNormal);
 
-			FixOtherUIElements(target_scale);
+			float Distance = (OutPoint - location).magnitude / head_distance;
+
+			float scaleModifier = 1.0f;
+
+			switch (scaling)
+			{
+				case Scaling.None:
+					scaleModifier = 1.0f;
+					break;
+				case Scaling.Partial:
+					scaleModifier = Mathf.Sqrt(Distance);
+					break;
+				case Scaling.Full:
+					scaleModifier = Distance;
+					break;
+			}
+
+			FixOtherUIElements(target_scale * scaleModifier);
 		}
 
 		private void FixOtherUIElements(float scale)

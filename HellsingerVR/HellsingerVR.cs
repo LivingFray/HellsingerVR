@@ -42,6 +42,8 @@ namespace HellsingerVR
 		public ConfigEntry<float> SnapTurningAngle;
 		public ConfigEntry<string> MovementType;
 		// UI
+		public ConfigEntry<bool> ReticleFacesCamera;
+		public ConfigEntry<string> ReticleScaling;
 		public ConfigEntry<float> MenuUIDistance;
 		public ConfigEntry<float> GameUIDistance;
 		public ConfigEntry<string> ReticleLocation;
@@ -162,6 +164,8 @@ namespace HellsingerVR
 			MenuUIDistance = Config.Bind("UI", "MenuUIDistance", 2.5f, "Distance between the HMD and the menu UIs in meters");
 			GameUIDistance = Config.Bind("UI", "GameUIDistance", 2.5f, "Distance between the HMD and the game UIs in meters");
 			ReticleLocation = Config.Bind("UI", "ReticleLocation", "target", "Location of the reticle/beat indicator in the world, valid options are \"target\" (location in world the dominant hand is pointing to), \"head\" (floats a fixed distance in front of the camera), \"sights\" (placed above the weapon in the dominant hand akin to ironsights");
+			ReticleFacesCamera = Config.Bind("UI", "ReticleFacesCamera", false, "When reticle location is set to target should the reticle always face the camera, or be flat against the surface it hits");
+			ReticleScaling = Config.Bind("UI", "ReticleScaling", "partial", "How should the reticle's scale change with distance. Options are \"none\" (reticle will always be the same scale) \"partial\" (reticle will grow with distance but still appear smaller at a distance) or \"full\" (reticle will grow with distance such that it always occupies the same percentage of the screen)");
 			ShowHealthOnHand = Config.Bind("UI", "ShowHealthOnHand", true, "Set to false to show the health bar floating in front of the camera instead of attached to the non dominant hand");
 			ShowUltimateOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the ultimate bar floating in front of the camera instead of attached to the non dominant hand");
 			ShowFuryOnHand = Config.Bind("UI", "ShowFuryOnHand", true, "Set to false to show the fury meter floating in front of the camera instead of attached to the non dominant hand");
