@@ -46,7 +46,7 @@ namespace HellsingerVR.Components
 		public void Start()
 		{
 			CameraMask = vrCamera.TrueMask;
-			EnterTitleScreen();
+			Invoke("EnterTitleScreen", 0.1f);
 		}
 
 		public void EnterTitleScreen()
@@ -60,10 +60,12 @@ namespace HellsingerVR.Components
 
 			transform.position = HellsingerVR.TitleScreenPosition - (Vector3.up * Height);
 
-			transform.rotation = Quaternion.Euler(0.0f, -head.transform.localRotation.eulerAngles.y, 0.0f);
+			transform.rotation = Quaternion.Euler(0.0f, 180.0f - head.transform.localRotation.eulerAngles.y, 0.0f);
 
 			PlayerTransform = null;
 			CameraTransform = null;
+
+			HellsingerVR.MoveOverlayToWorld(true);
 		}
 
 		public void EnterLevel()

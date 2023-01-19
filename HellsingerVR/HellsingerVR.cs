@@ -12,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.0")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.1")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
