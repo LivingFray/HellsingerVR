@@ -143,6 +143,7 @@ namespace HellsingerVR
 				rig.camera.clearFlags = CameraClearFlags.Color;
 				rig.camera.nearClipPlane = 0.03f;
 				rig.camera.enabled = false;
+				
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -211,6 +212,15 @@ namespace HellsingerVR
 				if (d.active)
 				{
 					d.active = false;
+				}
+			}
+
+			MotionBlur[] mb = Resources.FindObjectsOfTypeAll<MotionBlur>();
+			foreach (MotionBlur m in mb)
+			{
+				if (m.active)
+				{
+					m.active = false;
 				}
 			}
 		}
