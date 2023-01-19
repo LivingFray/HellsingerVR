@@ -12,6 +12,11 @@ namespace HellsingerVR.Patches
 
 		private static void Prefix(BulletSystem __instance, ref BulletFireData fireData)
 		{
+			if (fireData.WeaponConfig.WeaponType == PlayerWeaponType.Turret)
+			{
+				return;
+			}
+
 			// Bullets don't actually originate at the eyes, but rather an offset that is likely the muzzle position
 			// This needs to be accounted for when adjusting the bullets to point the correct direction while maintaining spread
 
