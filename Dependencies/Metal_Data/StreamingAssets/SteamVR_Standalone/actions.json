@@ -96,7 +96,7 @@
 		{
 			"name": "/actions/menu/in/CloseMenu",
 			"type": "boolean",
-			"requirement": "recommended"
+			"requirement": "suggested"
 		}
 	],
 	"action_sets": [
