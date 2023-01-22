@@ -125,12 +125,11 @@ namespace HellsingerVR.Components
 
 			viewModelManager.HideArms();
 
-			HellsingerVR.RemoveDOF();
 			HellsingerVR.MoveOverlayToWorld();
 		}
 
 		public void Update()
-		{
+		{	
 			// Only need to hide the world while in a level
 			// Title screen, level select, etc are supposed to render their geo
 			if ((HellsingerVR.IsPaused || HellsingerVR.IsLoading) && InLevel)
@@ -174,8 +173,6 @@ namespace HellsingerVR.Components
 		{
 			if (InCutscene && CameraTransform != null)
 			{
-				// Pesky DOF
-				//HellsingerVR.RemoveDOF();
 				transform.position = CameraTransform.position + InitialPosition;
 				transform.rotation = Quaternion.Euler(0.0f, CameraTransform.rotation.eulerAngles.y, 0.0f) * InitialRotation;
 			}
@@ -202,7 +199,7 @@ namespace HellsingerVR.Components
 
 			CameraTransform.rotation = Quaternion.Euler(head.rotation.eulerAngles.x, NewYaw, 0.0f);
 
-			
+
 			bool IsDoingAnimatedMove = fpController.GetCurrentMovementStateType() == MovementStateType.Overkill;
 
 			if (!IsDoingAnimatedMove)

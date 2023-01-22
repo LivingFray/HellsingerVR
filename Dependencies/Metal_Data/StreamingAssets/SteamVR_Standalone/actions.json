@@ -117,6 +117,10 @@
 		{
 			"controller_type": "knuckles",
 			"binding_url": "bindings_knuckles.json"
+		},
+		{
+			"controller_type": "vive_controller",
+			"binding_url": "bindings_vive_controller.json"
 		}
 	],
 	"localization": [

@@ -12,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.1")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.2")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
@@ -52,6 +52,8 @@ namespace HellsingerVR
 		public ConfigEntry<bool> ShowFuryOnHand;
 		public ConfigEntry<bool> ShowWeaponsOnHand;
 		public ConfigEntry<bool> ShowBossOnHand;
+		// Performance
+		public ConfigEntry<int> PostProcessingLevel;
 
 
 		public override void Load()
@@ -143,7 +145,6 @@ namespace HellsingerVR
 				rig.camera.clearFlags = CameraClearFlags.Color;
 				rig.camera.nearClipPlane = 0.03f;
 				rig.camera.enabled = false;
-				
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -172,6 +173,8 @@ namespace HellsingerVR
 			ShowFuryOnHand = Config.Bind("UI", "ShowFuryOnHand", true, "Set to false to show the fury meter floating in front of the camera instead of attached to the non dominant hand");
 			ShowWeaponsOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the equipped weapons and ammo UI floating in front of the camera instead of attached to the non dominant hand");
 			ShowBossOnHand = Config.Bind("UI", "ShowBossOnHand", true, "Set to false to show the boss bar floating in front of the camera instead of attached to the non dominant hand");
+			// Performance
+			PostProcessingLevel = Config.Bind("Performance", "PostProcessingLevel", 1, "How aggressively post processing effects are removed in the name of performance. (0 = Minimal, 1 = Moderate, 99 = Extreme). Only use extreme as a last resort, it will remove every PP effect it can, including the skybox");
 		}
 
 		public static void OnLevelLoad(CoreRequestLoadLevelMessage loadLevelMsg)
@@ -185,9 +188,11 @@ namespace HellsingerVR
 			{
 				Camera.main.cullingMask = 0;
 				Camera.main.clearFlags = CameraClearFlags.Nothing;
+				//Camera.main.allowMSAA = false;
+				//HDCamera HDMain = HDCamera.GetOrCreate(Camera.main);
+				//HDMain.antialiasing = HDAdditionalCameraData.AntialiasingMode.None;
+				//HDMain.SetPostProcessScreenSize(0, 0);
 			}
-
-			RemoveDOF();
 
 			switch (loadLevelMsg.Level)
 			{
@@ -201,27 +206,6 @@ namespace HellsingerVR
 					rig.EnterLevel();
 					IsLoading = loadLevelMsg.ShowLoadingScreen;
 					break;
-			}
-		}
-
-		public static void RemoveDOF()
-		{
-			DepthOfField[] dof = Resources.FindObjectsOfTypeAll<DepthOfField>();
-			foreach (DepthOfField d in dof)
-			{
-				if (d.active)
-				{
-					d.active = false;
-				}
-			}
-
-			MotionBlur[] mb = Resources.FindObjectsOfTypeAll<MotionBlur>();
-			foreach (MotionBlur m in mb)
-			{
-				if (m.active)
-				{
-					m.active = false;
-				}
 			}
 		}
 
@@ -253,8 +237,6 @@ namespace HellsingerVR
 			{
 				HellsingerVR._instance.Log.LogInfo("No canvas!");
 			}
-
-			RemoveDOF();
 
 			if (Camera.main)
 			{
