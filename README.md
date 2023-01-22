@@ -41,7 +41,7 @@ Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in Be
 To get past the logos/login screen the game needs to be in focus. If you can't login in (by pressing either trigger) check the game is in focus
 
 ### Performance
-Metal: Hellsinger was not designed for VR and can be quiet graphically intensive. Turning down the graphics settings in game can help somewhat (going from high to mid resulted in the most noticable performance gain during testing, with going from mid to low having minimal additional impact). Using [vrperfkit](https://github.com/fholger/vrperfkit) can help considerably at the cost of some graphical fidelity. I have also heard that using an oculus headset through steamvr generally leads to worse performance which can be fixed/lessened by replacing openvr_api.dll with one from [OpenComposite](https://gitlab.com/znixian/OpenOVR), however I've not personally tested this.
+Metal: Hellsinger was not designed for VR and can be quite graphically intensive. Turning down the graphics settings in game can help somewhat (going from high to mid resulted in the most noticable performance gain during testing, with going from mid to low having minimal additional impact). Using [vrperfkit](https://github.com/fholger/vrperfkit) can help considerably at the cost of some graphical fidelity. I have also heard that using an oculus headset through steamvr generally leads to worse performance which can be fixed/lessened by replacing openvr_api.dll with one from [OpenComposite](https://gitlab.com/znixian/OpenOVR), however I've not personally tested this.
 
 
 ## Uninstalling
