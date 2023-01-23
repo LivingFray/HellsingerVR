@@ -29,6 +29,11 @@ namespace HellsingerVR.UI
 
 		public void Init()
 		{
+			if (HellsingerVR._instance.IsLeftHanded.Value)
+			{
+				RotationOffset = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+			}
+
 			Main main = Main.GetInstance();
 			Transform SharedHUD = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/Shared");
 			Transform StageHUD = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/StageHud");
