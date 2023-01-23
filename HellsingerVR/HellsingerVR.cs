@@ -12,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.5.2")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.6.0")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
@@ -42,6 +42,7 @@ namespace HellsingerVR
 		public ConfigEntry<float> SnapTurningAngle;
 		public ConfigEntry<string> MovementType;
 		// UI
+		public ConfigEntry<bool> MoveUIVertically;
 		public ConfigEntry<bool> ReticleFacesCamera;
 		public ConfigEntry<string> ReticleScaling;
 		public ConfigEntry<float> MenuUIDistance;
@@ -163,6 +164,7 @@ namespace HellsingerVR
 			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
 			MovementType = Config.Bind("Locomotion", "MovementType", "head", "Movement direction, valid options are \"head\", \"hand\", \"offhand\". Defaults to \"head\"");
 			// UI
+			MoveUIVertically = Config.Bind("UI", "MoveUIVertically", false, "Should the game UI move up and down to be in front of the HMD");
 			MenuUIDistance = Config.Bind("UI", "MenuUIDistance", 2.5f, "Distance between the HMD and the menu UIs in meters");
 			GameUIDistance = Config.Bind("UI", "GameUIDistance", 2.5f, "Distance between the HMD and the game UIs in meters");
 			ReticleLocation = Config.Bind("UI", "ReticleLocation", "target", "Location of the reticle/beat indicator in the world, valid options are \"target\" (location in world the dominant hand is pointing to), \"head\" (floats a fixed distance in front of the camera), \"sights\" (placed above the weapon in the dominant hand akin to ironsights");
@@ -278,8 +280,16 @@ namespace HellsingerVR
 				}
 			}
 
+			Vector3 Forward = rig.head.transform.forward;
+
+			if (!_instance.MoveUIVertically.Value)
+			{
+				Forward = Forward.SetY(0.0f);
+				Forward.Normalize();
+			}
+
 			overlay.renderMode = RenderMode.WorldSpace;
-			overlay.transform.position = rig.head.transform.position + (rig.head.transform.forward * (bIsMenuUI ? _instance.MenuUIDistance.Value : _instance.GameUIDistance.Value));
+			overlay.transform.position = rig.head.transform.position + (Forward * (bIsMenuUI ? _instance.MenuUIDistance.Value : _instance.GameUIDistance.Value));
 			overlay.transform.LookAt(rig.head);
 			overlay.transform.rotation = Quaternion.Euler(0.0f, overlay.transform.rotation.eulerAngles.y + 180.0f, 0.0f);
 			overlay.transform.localScale = Vector3.one * (2.0f / overlayRect.rect.height);

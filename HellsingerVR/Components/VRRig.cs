@@ -110,6 +110,21 @@ namespace HellsingerVR.Components
 			transform.position = PlayerTransform.position - RoomscaleOffset;
 			transform.rotation = PlayerTransform.rotation * Quaternion.Euler(0.0f, -head.localRotation.eulerAngles.y, 0.0f);
 
+			OnLevelBegin();
+		}
+
+		public void OnLevelBegin()
+		{
+			if (!PlayerTransform)
+			{
+				fpController = FindObjectOfType<FirstPersonController>();
+				if (fpController)
+				{
+					PlayerTransform = fpController.m_player.PlayerTransform;
+					CameraTransform = fpController.m_cameraTransform;
+				}
+			}
+
 			if (rhythmIndicator == null)
 			{
 				rhythmIndicator = new UI.RhythmIndicator();
