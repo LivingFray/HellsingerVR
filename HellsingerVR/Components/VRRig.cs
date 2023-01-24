@@ -6,8 +6,6 @@ namespace HellsingerVR.Components
 	public class VRRig : MonoBehaviour
 	{
 		public Transform head;
-		public Transform leftHand;
-		public Transform rightHand;
 		public SteamVR_Camera vrCamera;
 		public Camera camera;
 

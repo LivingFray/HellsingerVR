@@ -68,7 +68,43 @@ namespace Valve.VR
 		{
 			if (src.unTriangleCount == 0u)
 			{
-				return null;
+				float uMin = (2f * bounds.uMin) - 1f;
+				float uMax = (2f * bounds.uMax) - 1f;
+				float vMin = (2f * bounds.vMin) - 1f;
+				float vMax = (2f * bounds.vMax) - 1f;
+
+				Vector3[] verts = new Vector3[] {
+						// Left
+						new Vector3(-1, vMin, 0),
+						new Vector3(uMin, vMin, 0),
+						new Vector3(-1, vMax, 0),
+						new Vector3(uMin, vMax, 0),
+						// Right
+						new Vector3(uMax, vMin, 0),
+						new Vector3(1, vMin, 0),
+						new Vector3(uMax, vMax, 0),
+						new Vector3(1, vMax, 0)
+				};
+
+				int[] tris = new int[12]
+				{
+					// lower left triangle
+					0, 2, 1,
+					// upper right triangle
+					2, 3, 1,
+
+					// lower left triangle
+					4, 6, 5,
+					// upper right triangle
+					6, 7, 5,
+				};
+
+				// Force the sides to not render
+				Mesh m2 = new Mesh();
+				m2.vertices = verts;
+				m2.triangles = tris;
+				m2.bounds = new Bounds(Vector3.zero, new Vector3(float.MaxValue, float.MaxValue, float.MaxValue));
+				return m2;
 			}
 			float[] array = new float[src.unTriangleCount * 3u * 2u];
 			Marshal.Copy(src.pVertexData, array, 0, array.Length);
