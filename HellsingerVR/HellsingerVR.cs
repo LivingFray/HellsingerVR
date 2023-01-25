@@ -12,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.6.0")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.6.3")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
@@ -152,6 +152,8 @@ namespace HellsingerVR
 
 				_instance.Log.LogInfo($"Finished creating VRRig");
 				Object.DontDestroyOnLoad(vrRig);
+
+				LoginHack.FocusGame();
 			}
 		}
 

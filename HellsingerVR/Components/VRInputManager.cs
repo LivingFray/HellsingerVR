@@ -93,7 +93,6 @@ namespace HellsingerVR.Components
 				else
 				{
 					UpdateMenuInputs(ptr);
-					LoginHack.PressAnyKey();
 				}
 			}
 			catch (Exception e)
@@ -165,12 +164,12 @@ namespace HellsingerVR.Components
 					if (weaponAbilityController != null)
 					{
 						LastWeapon = weaponAbilityController.m_activeWeaponType;
-						bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchLeft", true).state;
-						bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchRight", true).state;
+						bool WeaponSwitchLeft = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchLeft").state;
+						bool WeaponSwitchRight = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchRight").state;
 
 						bool SwitchToPrev = !WasPrevWeaponPressed && WeaponSwitchLeft;
 						bool SwitchToNext = !WasNextWeaponPressed && WeaponSwitchRight;
-						bool SwitchToPaz = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchPaz", true).state;
+						bool SwitchToPaz = SteamVR_Input.GetBooleanAction("game", "WeaponSwitchPaz").state;
 
 						WasPrevWeaponPressed = WeaponSwitchLeft;
 						WasNextWeaponPressed = WeaponSwitchRight;
@@ -255,7 +254,7 @@ namespace HellsingerVR.Components
 		// Convert movement taking into account hmd/hand based movement config
 		private Vector2 GetMovementVector()
 		{
-			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement", true);
+			SteamVR_Action_Vector2 input = SteamVR_Input.GetVector2Action("game", "Movement");
 
 			Quaternion rotationQuat;
 
