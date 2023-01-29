@@ -73,6 +73,8 @@ namespace Valve.VR
 			}
 		}
 
+		static bool HasRegisteredCallbacks = false;
+
 		public static void Initialize(bool forceUnityVRMode = false)
 		{
 			if (forceUnityVRMode)
@@ -92,7 +94,72 @@ namespace Valve.VR
 			if (SteamVR._enabled)
 			{
 				SteamVR_Behaviour.Initialize(forceUnityVRMode);
+
+				if (!HasRegisteredCallbacks)
+				{
+					RenderPipelineManager.add_beginContextRendering(new Action<ScriptableRenderContext, Il2CppSystem.Collections.Generic.List<Camera>>(OnBeginContextRendering));
+					RenderPipelineManager.add_beginCameraRendering(new Action<ScriptableRenderContext, Camera>(OnBeginCameraRendering));
+					HasRegisteredCallbacks = true;
+				}
 			}
+		}
+
+		static int LastFrameRendered = -1;
+
+		private static void OnBeginContextRendering(ScriptableRenderContext context, Il2CppSystem.Collections.Generic.List<Camera> cameras)
+		{
+			if (!SteamVR_Render.instance)
+			{
+				return;
+			}
+
+			// Unity has decided it should call this function twice per frame...
+			if (LastFrameRendered == Time.frameCount)
+			{
+				return;
+			}
+			LastFrameRendered = Time.frameCount;
+
+			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			sw.Start();
+
+			var compositor = OpenVR.Compositor;
+			if (compositor != null)
+			{
+				if (!compositor.CanRenderScene() || SteamVR_Render.instance.cameras[0] == null)
+					return;
+
+				compositor.SetTrackingSpace(SteamVR.settings.trackingSpace);
+				SteamVR_Utils.QueueEventOnRenderThread(SteamVR.OpenVRMagic.k_nRenderEventID_WaitGetPoses);
+
+				// Hack to flush render event that was queued in Update (this ensures WaitGetPoses has returned before we grab the new values).
+				SteamVR.OpenVRMagic.EventWriteString("[UnityMain] GetNativeTexturePtr - Begin");
+				SteamVR_Camera.GetSceneTexture(EVREye.Eye_Left, SteamVR_Render.instance.cameras[0].camera.allowHDR).GetNativeTexturePtr();
+				SteamVR.OpenVRMagic.EventWriteString("[UnityMain] GetNativeTexturePtr - End");
+
+				compositor.GetLastPoses(SteamVR_Render.instance.poses, SteamVR_Render.instance.gamePoses);
+				SteamVR_Events.NewPoses.Send(SteamVR_Render.instance.poses);
+				SteamVR_Events.NewPosesApplied.Send();
+			}
+
+			sw.Stop();
+			Debug.Log($"{Time.frameCount} Called WaitGetPoses in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
+		}
+
+		private static void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
+		{
+			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			sw.Start();
+			foreach (SteamVR_Camera vrCam in SteamVR_Render.instance.cameras)
+			{
+				if (vrCam && vrCam.camera == camera)
+				{
+					vrCam.PreRender();
+					break;
+				}
+			}
+			sw.Stop();
+			Debug.Log($"Prerendered eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
 		}
 
 		public static bool usingNativeSupport

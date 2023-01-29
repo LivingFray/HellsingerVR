@@ -66,7 +66,7 @@ namespace Standalone
 			}
 			else
 			{
-				blitMaterial.mainTexture = SteamVR_Camera.GetSceneTexture(cam.allowHDR);
+				blitMaterial.mainTexture = SteamVR_Camera.GetSceneTexture(EVREye.Eye_Right, cam.allowHDR);
 			}
 			blitMaterial.SetPass(0);
 			GL.PushMatrix();

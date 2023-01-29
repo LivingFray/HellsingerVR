@@ -128,6 +128,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private IEnumerator EstimateVelocityCoroutine()
 		{
 			sampleCount = 0;

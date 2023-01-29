@@ -130,11 +130,13 @@ namespace Valve.VR
 		/// <summary>
 
 		/// </summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public PoseBlendingBehaviour GetBlendingBehaviour(string behaviourName)
 		{
 			return FindBlendingBehaviour(behaviourName);
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected PoseBlendingBehaviour FindBlendingBehaviour(string behaviourName, bool throwErrors = true)
 		{
 			PoseBlendingBehaviour behaviour = blendingBehaviours.Find(b => b.name == behaviourName);
@@ -150,13 +152,14 @@ namespace Valve.VR
 			return behaviour;
 		}
 
-
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public SteamVR_Skeleton_Pose GetPoseByIndex(int index)
 		{
 			if (index == 0) { return skeletonMainPose; }
 			else { return skeletonAdditionalPoses[index - 1]; }
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private SteamVR_Skeleton_PoseSnapshot GetHandSnapshot(SteamVR_Input_Sources inputSource)
 		{
 			if (inputSource == SteamVR_Input_Sources.LeftHand)
@@ -170,6 +173,7 @@ namespace Valve.VR
 		/// </summary>
 		/// <param name="forAction">The skeleton action you want to blend between</param>
 		/// <param name="handType">If this is for the left or right hand</param>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public SteamVR_Skeleton_PoseSnapshot GetBlendedPose(SteamVR_Action_Skeleton skeletonAction, SteamVR_Input_Sources handType)
 		{
 			UpdatePose(skeletonAction, handType);
@@ -180,6 +184,7 @@ namespace Valve.VR
 		/// Retrieve the final animated pose, to be applied to a hand skeleton
 		/// </summary>
 		/// <param name="skeletonBehaviour">The skeleton behaviour you want to get the action/input source from to blend between</param>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public SteamVR_Skeleton_PoseSnapshot GetBlendedPose(SteamVR_Behaviour_Skeleton skeletonBehaviour)
 		{
 			return GetBlendedPose(skeletonBehaviour.skeletonAction, skeletonBehaviour.inputSource);
@@ -189,6 +194,7 @@ namespace Valve.VR
 		/// <summary>
 		/// Updates all pose animation and blending. Can be called from different places without performance concerns, as it will only let itself run once per frame.
 		/// </summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public void UpdatePose(SteamVR_Action_Skeleton skeletonAction, SteamVR_Input_Sources inputSource)
 		{
 			// only allow this function to run once per frame
@@ -215,6 +221,7 @@ namespace Valve.VR
 				blendedSnapshotL = snap;
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected void ApplyBlenderBehaviours(SteamVR_Action_Skeleton skeletonAction, SteamVR_Input_Sources inputSource, SteamVR_Skeleton_PoseSnapshot snapshot)
 		{
 
@@ -244,6 +251,7 @@ namespace Valve.VR
 		}
 
 		/// <summary>Weighted average of n vector3s</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected Vector3 BlendVectors(Vector3[] vectors, float[] weights)
 		{
 			Vector3 blendedVector = Vector3.zero;
@@ -255,6 +263,7 @@ namespace Valve.VR
 		}
 
 		/// <summary>Weighted average of n quaternions</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected Quaternion BlendQuaternions(Quaternion[] quaternions, float[] weights)
 		{
 			Quaternion outquat = Quaternion.identity;

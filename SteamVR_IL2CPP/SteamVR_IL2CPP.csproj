@@ -196,6 +196,9 @@
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>E:\XboxGames\Metal- Hellsinger\Content\BepInEx\interop\Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime">
+      <HintPath>E:\XboxGames\Metal- Hellsinger\Content\BepInEx\interop\Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>E:\XboxGames\Metal- Hellsinger\Content\BepInEx\interop\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>

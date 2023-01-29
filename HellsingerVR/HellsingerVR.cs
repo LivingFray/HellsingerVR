@@ -128,8 +128,19 @@ namespace HellsingerVR
 				_instance.Log.LogInfo($"Creating [Eyes]");
 				GameObject eyes = new GameObject("[Eyes]");
 				eyes.transform.parent = head.transform;
-				eyes.AddComponent<Camera>();
-				eyes.AddComponent<SteamVR_Camera>();
+				GameObject leftEye = new GameObject("[Left Eye]");
+				leftEye.transform.parent = eyes.transform;
+				leftEye.AddComponent<Camera>();
+				SteamVR_Camera leftCam = leftEye.AddComponent<SteamVR_Camera>();
+				leftCam.eye = EVREye.Eye_Left;
+				leftCam.Activate();
+
+				GameObject rightEye = new GameObject("[Right Eye]");
+				rightEye.transform.parent = eyes.transform;
+				rightEye.AddComponent<Camera>();
+				SteamVR_Camera rightCam = rightEye.AddComponent<SteamVR_Camera>();
+				rightCam.eye = EVREye.Eye_Right;
+				rightCam.Activate();
 
 				//TODO: Do ears
 
@@ -139,13 +150,8 @@ namespace HellsingerVR
 
 				rig = vrRig.GetComponent<VRRig>();
 				rig.head = head.transform;
-				rig.vrCamera = eyes.GetComponent<SteamVR_Camera>();
-				rig.camera = eyes.GetComponent<Camera>();
-
-				rig.camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f);
-				rig.camera.clearFlags = CameraClearFlags.Color;
-				rig.camera.nearClipPlane = 0.03f;
-				rig.camera.enabled = false;
+				rig.leftEye = leftEye.GetComponent<Camera>();
+				rig.rightEye = rightEye.GetComponent<Camera>();
 
 				rig.viewModelManager = vrRig.GetComponent<VRViewModelManager>();
 				rig.viewModelManager.enabled = false;
@@ -178,7 +184,7 @@ namespace HellsingerVR
 			ShowWeaponsOnHand = Config.Bind("UI", "ShowUltimateOnHand", true, "Set to false to show the equipped weapons and ammo UI floating in front of the camera instead of attached to the non dominant hand");
 			ShowBossOnHand = Config.Bind("UI", "ShowBossOnHand", true, "Set to false to show the boss bar floating in front of the camera instead of attached to the non dominant hand");
 			// Performance
-			PostProcessingLevel = Config.Bind("Performance", "PostProcessingLevel", 1, "How aggressively post processing effects are removed in the name of performance. (0 = Minimal, 1 = Moderate, 99 = Extreme). Only use extreme as a last resort, it will remove every PP effect it can, including the skybox");
+			PostProcessingLevel = Config.Bind("Performance", "PostProcessingLevel", 1, "How aggressively post processing effects are removed in the name of performance. (0 = Minimal, 1 = Moderate, 99 = Extreme). Other values will be rounded down to the previous valid option. Only use extreme as a last resort, it will remove every PP effect it can, including the skybox");
 		}
 
 		public static void OnLevelLoad(CoreRequestLoadLevelMessage loadLevelMsg)
@@ -196,6 +202,8 @@ namespace HellsingerVR
 				//HDCamera HDMain = HDCamera.GetOrCreate(Camera.main);
 				//HDMain.antialiasing = HDAdditionalCameraData.AntialiasingMode.None;
 				//HDMain.SetPostProcessScreenSize(0, 0);
+				rig.leftEye.allowHDR = Camera.main.allowHDR;
+				rig.rightEye.allowHDR = Camera.main.allowHDR;
 			}
 
 			switch (loadLevelMsg.Level)

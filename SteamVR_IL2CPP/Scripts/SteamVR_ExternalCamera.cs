@@ -123,6 +123,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public void SetupPose(SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource)
 		{
 			cameraPose = newCameraPose;
@@ -141,6 +142,7 @@ namespace Valve.VR
 			trackedObject.SetDeviceIndex(deviceIndex);
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void OnChanged(object source, FileSystemEventArgs e)
 		{
 			ReadConfig();

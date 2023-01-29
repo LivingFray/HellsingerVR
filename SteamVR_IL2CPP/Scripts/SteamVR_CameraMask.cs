@@ -33,6 +33,8 @@ namespace Valve.VR
 			if (SteamVR_CameraMask.occlusionMaterial == null)
 			{
 				SteamVR_CameraMask.occlusionMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.occlusion));
+				//SteamVR_CameraMask.occlusionMaterial = new Material(Shader.Find("HDRP/Unlit"));
+				//occlusionMaterial.color = Color.black;
 			}
 			meshRenderer = base.GetComponent<MeshRenderer>();
 			if (meshRenderer == null)
@@ -47,14 +49,29 @@ namespace Valve.VR
 			meshRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
 		}
 
-
-		public void Set(SteamVR vr, EVREye eye)
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
+		public void Set(SteamVR vr, EVREye eye, Camera cam)
 		{
 			if (SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] == null)
 			{
 				SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] = SteamVR_CameraMask.CreateHiddenAreaMesh(vr.hmd.GetHiddenAreaMesh(eye, EHiddenAreaMeshType.k_eHiddenAreaMesh_Standard), vr.textureBounds[(int)eye]);
 			}
 			this.meshFilter.mesh = SteamVR_CameraMask.hiddenAreaMeshes[(int)eye];
+
+			// Scale to fit the camera
+
+			//float halfFov = cam.fieldOfView * .5f * Mathf.Deg2Rad;
+			//float height = Mathf.Tan(halfFov) * cam.nearClipPlane * 2.0f;
+			//float width = height * cam.aspect;
+
+			//Vector2 Size = cam.GetFrustumPlaneSizeAt(cam.nearClipPlane);
+
+			//float s = 1.03359375f;
+
+			// Generated mesh assumes range of [-1,1] on x and y
+			//transform.localScale = new Vector3(Size.x * 0.5f * s, Size.y * 0.5f * s, 1.0f);
+			//transform.position = cam.transform.position + cam.transform.forward * (cam.nearClipPlane + 0.001f);
+			//transform.rotation = cam.transform.rotation;
 		}
 
 
@@ -66,6 +83,7 @@ namespace Valve.VR
 
 		public static Mesh CreateHiddenAreaMesh(HiddenAreaMesh_t src, VRTextureBounds_t bounds)
 		{
+			Debug.Log("Created Hidden Area Mesh");
 			if (src.unTriangleCount == 0u)
 			{
 				float uMin = (2f * bounds.uMin) - 1f;
@@ -75,15 +93,15 @@ namespace Valve.VR
 
 				Vector3[] verts = new Vector3[] {
 						// Left
-						new Vector3(-1, vMin, 0),
-						new Vector3(uMin, vMin, 0),
-						new Vector3(-1, vMax, 0),
-						new Vector3(uMin, vMax, 0),
+						new Vector3(-1, -1, 0),
+						new Vector3(uMin, -1, 0),
+						new Vector3(-1, 1, 0),
+						new Vector3(uMin, 1, 0),
 						// Right
-						new Vector3(uMax, vMin, 0),
-						new Vector3(1, vMin, 0),
-						new Vector3(uMax, vMax, 0),
-						new Vector3(1, vMax, 0)
+						new Vector3(uMax, -1, 0),
+						new Vector3(1, -1, 0),
+						new Vector3(uMax, 1, 0),
+						new Vector3(1, 1, 0)
 				};
 
 				int[] tris = new int[12]

@@ -6,8 +6,8 @@ namespace HellsingerVR.Components
 	public class VRRig : MonoBehaviour
 	{
 		public Transform head;
-		public SteamVR_Camera vrCamera;
-		public Camera camera;
+		public Camera leftEye;
+		public Camera rightEye;
 
 		public Transform PlayerTransform;
 		public Transform CameraTransform;
@@ -43,7 +43,7 @@ namespace HellsingerVR.Components
 
 		public void Start()
 		{
-			CameraMask = vrCamera.TrueMask;
+			CameraMask = SteamVR_Camera.TrueMask;
 			Invoke("EnterTitleScreen", 0.1f);
 		}
 
@@ -147,11 +147,11 @@ namespace HellsingerVR.Components
 			// Title screen, level select, etc are supposed to render their geo
 			if ((HellsingerVR.IsPaused || HellsingerVR.IsLoading) && InLevel)
 			{
-				vrCamera.TrueMask = uiMask;
+				SteamVR_Camera.TrueMask = uiMask;
 			}
 			else
 			{
-				vrCamera.TrueMask = CameraMask;
+				SteamVR_Camera.TrueMask = CameraMask;
 			}
 
 			if (InLevel)

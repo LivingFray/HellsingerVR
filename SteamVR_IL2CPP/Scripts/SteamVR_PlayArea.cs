@@ -197,6 +197,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private IEnumerator UpdateBounds()
 		{
 			GetComponent<MeshFilter>().mesh = null; // clear existing

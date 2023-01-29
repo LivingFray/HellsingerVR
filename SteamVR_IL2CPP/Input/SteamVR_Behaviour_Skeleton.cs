@@ -114,6 +114,7 @@ namespace Valve.VR
 
 
 		/// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public float[] fingerCurls
 		{
 			get
@@ -231,18 +232,23 @@ namespace Valve.VR
 		public Transform pinkyAux { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyAux]; } }
 
 		/// <summary>An array of all the finger proximal joint transforms</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public Transform[] proximals { get; protected set; }
 
 		/// <summary>An array of all the finger middle joint transforms</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public Transform[] middles { get; protected set; }
 
 		/// <summary>An array of all the finger distal joint transforms</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public Transform[] distals { get; protected set; }
 
 		/// <summary>An array of all the finger tip transforms</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public Transform[] tips { get; protected set; }
 
 		/// <summary>An array of all the finger aux transforms</summary>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public Transform[] auxs { get; protected set; }
 
 		protected IEnumerator blendRoutine;
@@ -298,6 +304,7 @@ namespace Valve.VR
             }
         }
         */
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public SteamVR_ActionSet actionSet
 		{
 			get
@@ -363,6 +370,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void OnDeviceConnectedChanged(SteamVR_Action_Skeleton fromAction, bool deviceConnected)
 		{
 			if (onConnectedChanged != null)
@@ -371,6 +379,7 @@ namespace Valve.VR
 				onConnectedChangedEvent.Invoke(this, inputSource, deviceConnected);
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void OnTrackingChanged(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState)
 		{
 			if (onTrackingChanged != null)
@@ -503,7 +512,7 @@ namespace Valve.VR
 
 		}
 
-
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected IEnumerator DoBlendRoutine(float blendToAmount, float overTime)
 		{
 			float startTime = Time.time;
@@ -575,6 +584,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected IEnumerator DoRangeOfMotionBlend(EVRSkeletalMotionRange oldRangeOfMotion, EVRSkeletalMotionRange newRangeOfMotion, float overTime)
 		{
 			float startTime = Time.time;
@@ -808,6 +818,7 @@ namespace Valve.VR
 				return bones[joint].rotation;
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected Vector3[] GetBonePositions()
 		{
 			if (skeletonAvailable)
@@ -839,6 +850,8 @@ namespace Valve.VR
 		}
 
 		protected static readonly Quaternion rightFlipAngle = Quaternion.AngleAxis(180, Vector3.right);
+
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		protected Quaternion[] GetBoneRotations()
 		{
 			if (skeletonAvailable)
