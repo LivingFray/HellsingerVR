@@ -7,7 +7,6 @@ using Il2CppInterop.Runtime.Injection;
 using Outsiders.Messages;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 using Valve.VR;
 
 namespace HellsingerVR

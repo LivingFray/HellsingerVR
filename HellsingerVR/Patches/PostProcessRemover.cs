@@ -2,42 +2,56 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Valve.VR;
 
 namespace HellsingerVR.Patches
 {
-	[HarmonyPatch(typeof(VolumeComponent), nameof(VolumeComponent.OnEnable))]
-	internal class PostProcessRemover
+	[HarmonyPatch(typeof(Volume), nameof(Volume.Update))]
+	internal class Patch_Volume_Update
 	{
-		private static void Postfix(VolumeComponent __instance)
+		private static void Postfix(Volume __instance)
 		{
+			if (__instance.sharedProfile == null)
+			{
+				return;
+			}
+
 			int RemoveLevel = HellsingerVR._instance.PostProcessingLevel.Value;
 
 			if (RemoveLevel >= 99)
 			{
-				__instance.active = false;
+				foreach (VolumeComponent comp in __instance.sharedProfile.components)
+				{
+					comp.active = false;
+				}
 			}
 			else if (RemoveLevel >= 1)
 			{
-				if (__instance.TryCast<DepthOfField>() || __instance.TryCast<MotionBlur>() || __instance.TryCast<LensDistortion>()
-				|| __instance.TryCast<ChromaticAberration>() || __instance.TryCast<Bloom>() || __instance.TryCast<PathTracing>()
-				|| __instance.TryCast<AmbientOcclusion>() || __instance.TryCast<VolumetricFog>() || __instance.TryCast<VolumetricClouds>()
-				|| __instance.TryCast<GlobalIllumination>() || __instance.TryCast<ScreenSpaceReflection>() || __instance.TryCast<ScreenSpaceRefraction>()
-				|| __instance.TryCast<SubSurfaceScattering>())
+				foreach (VolumeComponent comp in __instance.sharedProfile.components)
 				{
-					__instance.active = false;
+					if (comp.TryCast<DepthOfField>() || comp.TryCast<MotionBlur>() || comp.TryCast<LensDistortion>()
+				|| comp.TryCast<ChromaticAberration>() || comp.TryCast<Bloom>() || comp.TryCast<PathTracing>()
+				|| comp.TryCast<AmbientOcclusion>() || comp.TryCast<VolumetricFog>() || comp.TryCast<VolumetricClouds>()
+				|| comp.TryCast<GlobalIllumination>() || comp.TryCast<ScreenSpaceReflection>() || comp.TryCast<ScreenSpaceRefraction>()
+				|| comp.TryCast<SubSurfaceScattering>())
+					{
+						comp.active = false;
+					}
 				}
 			}
 			else if (RemoveLevel == 0)
 			{
-				if (__instance.TryCast<DepthOfField>() || __instance.TryCast<MotionBlur>() || __instance.TryCast<LensDistortion>())
+				foreach (VolumeComponent comp in __instance.sharedProfile.components)
 				{
-					__instance.active = false;
+					if (comp.TryCast<DepthOfField>() || comp.TryCast<MotionBlur>() || comp.TryCast<LensDistortion>())
+					{
+						comp.active = false;
+					}
 				}
 			}
-			
 		}
 	}
 }

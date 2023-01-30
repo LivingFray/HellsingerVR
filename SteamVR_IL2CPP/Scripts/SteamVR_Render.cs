@@ -209,19 +209,16 @@ namespace Valve.VR
 			int i = (int)eye;
 			SteamVR_Render.eye = eye;
 
-			if (cameraMask != null)
-				cameraMask.Set(vr, eye);
-
 			foreach (var c in cameras)
 			{
 
 				c.transform.localPosition = vr.eyes[i].pos;
 				c.transform.localRotation = vr.eyes[i].rot;
 
-				// Update position to keep from getting culled
-				cameraMask.transform.position = c.transform.position;
-
 				var camera = c.camera;
+
+				if (cameraMask != null)
+					cameraMask.Set(vr, eye, camera);
 
 				eyePreRenderCallback?.Invoke(eye, cameraMask);
 				var tex = camera.targetTexture;

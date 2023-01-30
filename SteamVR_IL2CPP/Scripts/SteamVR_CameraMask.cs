@@ -22,7 +22,7 @@ namespace Valve.VR
 
 		public MeshFilter meshFilter;
 
-
+		
 		private void Awake()
 		{
 			this.meshFilter = GetComponent<MeshFilter>();
@@ -32,7 +32,9 @@ namespace Valve.VR
 			}
 			if (SteamVR_CameraMask.occlusionMaterial == null)
 			{
-				SteamVR_CameraMask.occlusionMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.occlusion));
+				//SteamVR_CameraMask.occlusionMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.occlusion));
+				SteamVR_CameraMask.occlusionMaterial = new Material(Shader.Find("HDRP/Unlit"));
+				occlusionMaterial.color = Color.black;
 			}
 			meshRenderer = base.GetComponent<MeshRenderer>();
 			if (meshRenderer == null)
@@ -48,13 +50,25 @@ namespace Valve.VR
 		}
 
 
-		public void Set(SteamVR vr, EVREye eye)
+		public void Set(SteamVR vr, EVREye eye, Camera camera)
 		{
 			if (SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] == null)
 			{
 				SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] = SteamVR_CameraMask.CreateHiddenAreaMesh(vr.hmd.GetHiddenAreaMesh(eye, EHiddenAreaMeshType.k_eHiddenAreaMesh_Standard), vr.textureBounds[(int)eye]);
 			}
 			this.meshFilter.mesh = SteamVR_CameraMask.hiddenAreaMeshes[(int)eye];
+
+			// Scale to fit the camera
+
+			Vector2 Size = camera.GetFrustumPlaneSizeAt(camera.nearClipPlane + 0.001f);
+
+			// I don't know why, but it needs to be grown slightly to fit the screen
+			float s = 1.03359375f;
+
+			// Generated mesh assumes range of [-1,1] on x and y
+			transform.localScale = new Vector3(Size.x * 0.5f * s, Size.y * 0.5f * s, 1.0f);
+			transform.position = camera.transform.position + camera.transform.forward * (camera.nearClipPlane + 0.001f);
+			transform.rotation = camera.transform.rotation;
 		}
 
 
