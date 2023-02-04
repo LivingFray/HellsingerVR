@@ -47,6 +47,8 @@ namespace Valve.VR
 			meshRenderer.lightProbeUsage = LightProbeUsage.Off;
 			meshRenderer.lightProbeUsage = LightProbeUsage.Off;
 			meshRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+
+			gameObject.layer = LayerMask.NameToLayer("UI");
 		}
 
 		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]

@@ -238,5 +238,6 @@
 	},
 	"controller_type": "oculus_touch",
 	"description": "",
+	"app_key": "application.generated.unity.metal.exe",
 	"name": "oculus_touch"
 }

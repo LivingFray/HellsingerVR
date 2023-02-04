@@ -213,5 +213,6 @@
 	},
 	"controller_type": "knuckles",
 	"description": "",
+	"app_key": "application.generated.unity.metal.exe",
 	"name": "knuckles"
 }

@@ -101,64 +101,53 @@ namespace Valve.VR
 		public static event Action postBothEyesRenderedCallback;
 
 		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
-		private IEnumerator RenderLoop()
+		public void RenderLoop()
 		{
-			while (Application.isPlaying)
+			if (cameras[1] == null)
 			{
-				yield return waitForEndOfFrame;
+				return;
+			}
 
-				if (cameras[1] == null)
-				{
-					continue;
-				}
+			if (pauseRendering)
+				return;
 
-				if (pauseRendering)
-					continue;
-
-				var compositor = OpenVR.Compositor;
-				if (compositor != null)
-				{
-					if (!compositor.CanRenderScene())
-						continue;
-				}
+			var compositor = OpenVR.Compositor;
+			if (compositor != null)
+			{
+				if (!compositor.CanRenderScene())
+					return;
+			}
 
 
-				var overlay = SteamVR_Overlay.instance;
-				if (overlay != null)
-					overlay.UpdateOverlay();
+			var overlay = SteamVR_Overlay.instance;
+			if (overlay != null)
+				overlay.UpdateOverlay();
 
-				if (preRenderBothEyesCallback != null)
-				{
-					preRenderBothEyesCallback.Invoke();
-				}
+			if (preRenderBothEyesCallback != null)
+			{
+				preRenderBothEyesCallback.Invoke();
+			}
 
-				var vr = SteamVR.instance;
+			var vr = SteamVR.instance;
 
-				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-				sw.Start();
+			//System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			//sw.Start();
 
-				RenderEye(vr, EVREye.Eye_Left);
-				RenderEye(vr, EVREye.Eye_Right);
+			RenderEye(vr, EVREye.Eye_Left);
+			RenderEye(vr, EVREye.Eye_Right);
 
-				sw.Stop();
-				Debug.Log($"Submitted both eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
+			//sw.Stop();
+			//Debug.Log($"Submitted both eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
 
-				// Move cameras back to head position so they can be tracked reliably
-				foreach (var c in cameras)
-				{
-					c.transform.localPosition = Vector3.zero;
-					c.transform.localRotation = Quaternion.identity;
-				}
+			if (cameraMask != null)
+				cameraMask.Clear();
 
-				if (cameraMask != null)
-					cameraMask.Clear();
-
-				if (postBothEyesRenderedCallback != null)
-				{
-					postBothEyesRenderedCallback.Invoke();
-				}
+			if (postBothEyesRenderedCallback != null)
+			{
+				postBothEyesRenderedCallback.Invoke();
 			}
 		}
+
 
 		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void RenderEye(SteamVR vr, EVREye eye)
@@ -269,8 +258,6 @@ namespace Valve.VR
 
 		private void OnEnable()
 		{
-			Debug.Log("Start render loop!");
-			MelonCoroutines.Start(RenderLoop());
 			SteamVR_Events.InputFocus.Listen(this.OnInputFocus);
 			SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(this.OnRequestScreenshot);
 			if (SteamVR_Settings.instance.legacyMixedRealityCamera)

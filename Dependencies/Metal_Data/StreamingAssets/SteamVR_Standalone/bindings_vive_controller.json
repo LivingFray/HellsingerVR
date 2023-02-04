@@ -223,5 +223,6 @@
 	},
 	"controller_type": "vive_controller",
 	"description": "",
+	"app_key": "application.generated.unity.metal.exe",
 	"name": "vive_controller"
 }

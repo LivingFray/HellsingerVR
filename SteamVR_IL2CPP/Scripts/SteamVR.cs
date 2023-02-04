@@ -120,8 +120,8 @@ namespace Valve.VR
 			}
 			LastFrameRendered = Time.frameCount;
 
-			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-			sw.Start();
+			//System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			//sw.Start();
 
 			var compositor = OpenVR.Compositor;
 			if (compositor != null)
@@ -142,14 +142,14 @@ namespace Valve.VR
 				SteamVR_Events.NewPosesApplied.Send();
 			}
 
-			sw.Stop();
-			Debug.Log($"{Time.frameCount} Called WaitGetPoses in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
+			//sw.Stop();
+			//Debug.Log($"{Time.frameCount} Called WaitGetPoses in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
 		}
 
 		private static void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
 		{
-			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-			sw.Start();
+			//System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+			//sw.Start();
 			foreach (SteamVR_Camera vrCam in SteamVR_Render.instance.cameras)
 			{
 				if (vrCam && vrCam.camera == camera)
@@ -158,8 +158,8 @@ namespace Valve.VR
 					break;
 				}
 			}
-			sw.Stop();
-			Debug.Log($"Prerendered eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
+			//sw.Stop();
+			//Debug.Log($"Prerendered eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
 		}
 
 		public static bool usingNativeSupport

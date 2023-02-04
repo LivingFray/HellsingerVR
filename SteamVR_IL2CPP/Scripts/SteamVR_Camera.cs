@@ -189,17 +189,6 @@ namespace Valve.VR
 			camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f);
 			camera.clearFlags = CameraClearFlags.Color;
 
-			HDCamera hdCamera = HDCamera.GetOrCreate(camera);
-			if (hdCamera != null)
-			{
-				Debug.Log("Motion Vectors: " + hdCamera.frameSettings.IsEnabled(FrameSettingsField.MotionVectors));
-				Debug.Log("Motion Blur: " + hdCamera.frameSettings.IsEnabled(FrameSettingsField.MotionBlur));
-				hdCamera.frameSettings.SetEnabled(FrameSettingsField.MotionVectors, false);
-				hdCamera.frameSettings.SetEnabled(FrameSettingsField.MotionBlur, false);
-				Debug.Log("Motion Vectors: " + hdCamera.frameSettings.IsEnabled(FrameSettingsField.MotionVectors));
-				Debug.Log("Motion Blur: " + hdCamera.frameSettings.IsEnabled(FrameSettingsField.MotionBlur));
-			}
-
 			TrueMask = camera.cullingMask;
 			camera.cullingMask = 0;
 
@@ -259,12 +248,12 @@ namespace Valve.VR
 
 			transform.localPosition = SteamVR.instance.eyes[(int)eye].pos;
 			transform.localRotation = SteamVR.instance.eyes[(int)eye].rot;
+
 			camera.targetTexture = GetSceneTexture(eye, camera.allowHDR);
 			camera.cullingMask = TrueMask;
 
 			if (SteamVR_Render.instance.cameraMask != null)
 			{
-				SteamVR_Render.instance.cameraMask.transform.position = transform.position;
 				SteamVR_Render.instance.cameraMask.Set(SteamVR.instance, eye, camera);
 			}
 		}
