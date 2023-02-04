@@ -34,7 +34,12 @@ Aspects of the mod can be configured in LivingFray.HellsingerVR.cfg, found in Be
 - Show fury on hand: Display fury meter on the offhand or floating in front of your head
 - Show boss on hand: Display bosses' health bars on the offhand or floating in front of your head
 - Menu UI Distance: Distance from the head menu UI will be displayed in meters
+- MoveUIVertically: Should the game ui also move vertically to align with the HMD's facing direction, or just horizontally
 - Game UI Distance: Distance from the head game UI elements not moved into the world (e.g. health, reticle, slaughter indicators) will be displayed in meters
+- PostProcessingLevel: Disables some of the more costly post processing effects for performance. Options are 0 (only non-vr compatible effects such as DoF and motion blur), 1 (effects with minimal visual impact), 2 (most non essential post processing effects), 99 (everything). Any other value will be rounded down
+- BeatVibrationStrength: Strength of vibration effect played on the beat (0 will disable it entirely)
+- BeatVibrationFrequency: Frequency the motors in the controller vibrate at
+- BeatVibrationLength: Time in milliseconds to vibrate for on each beat
 
 ## Known issues
 ### Game focus
