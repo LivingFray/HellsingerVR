@@ -49,7 +49,7 @@ namespace Valve.VR
 			meshRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
 		}
 
-
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public void Set(SteamVR vr, EVREye eye, Camera camera)
 		{
 			if (SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] == null)
@@ -80,6 +80,7 @@ namespace Valve.VR
 
 		public static Mesh CreateHiddenAreaMesh(HiddenAreaMesh_t src, VRTextureBounds_t bounds)
 		{
+			Debug.Log("Created Hidden Area Mesh");
 			if (src.unTriangleCount == 0u)
 			{
 				float uMin = (2f * bounds.uMin) - 1f;
@@ -89,15 +90,15 @@ namespace Valve.VR
 
 				Vector3[] verts = new Vector3[] {
 						// Left
-						new Vector3(-1, vMin, 0),
-						new Vector3(uMin, vMin, 0),
-						new Vector3(-1, vMax, 0),
-						new Vector3(uMin, vMax, 0),
+						new Vector3(-1, -1, 0),
+						new Vector3(uMin, -1, 0),
+						new Vector3(-1, 1, 0),
+						new Vector3(uMin, 1, 0),
 						// Right
-						new Vector3(uMax, vMin, 0),
-						new Vector3(1, vMin, 0),
-						new Vector3(uMax, vMax, 0),
-						new Vector3(1, vMax, 0)
+						new Vector3(uMax, -1, 0),
+						new Vector3(1, -1, 0),
+						new Vector3(uMax, 1, 0),
+						new Vector3(1, 1, 0)
 				};
 
 				int[] tris = new int[12]

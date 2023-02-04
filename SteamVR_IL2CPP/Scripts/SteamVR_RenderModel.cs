@@ -173,6 +173,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private IEnumerator SetModelAsync(string newRenderModelName)
 		{
 			meshRenderers.Clear();
@@ -344,6 +345,7 @@ namespace Valve.VR
 			return false;
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private RenderModel LoadRenderModel(CVRRenderModels renderModels, string renderModelName, string baseName)
 		{
 			var pRenderModel = System.IntPtr.Zero;
@@ -478,6 +480,7 @@ namespace Valve.VR
 			return new RenderModel(mesh, material);
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private IEnumerator FreeRenderModel(System.IntPtr pRenderModel)
 		{
 			yield return new WaitForSeconds(1.0f);
@@ -525,6 +528,7 @@ namespace Valve.VR
 				DestroyImmediate(meshFilter);
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private bool LoadComponents(RenderModelInterfaceHolder holder, string renderModelName)
 		{
 			// Disable existing components (we will re-enable them if referenced by this new model).
@@ -732,6 +736,7 @@ namespace Valve.VR
 
 		private Dictionary<int, string> nameCache;
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public void UpdateComponents(CVRRenderModels renderModels)
 		{
 			if (renderModels == null)

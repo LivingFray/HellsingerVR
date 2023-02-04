@@ -73,6 +73,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void SteamVR_Behaviour_Vector3_OnUpdate(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
 		{
 			if (onUpdate != null)
@@ -85,6 +86,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void SteamVR_Behaviour_Vector3_OnChange(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
 		{
 			if (onChange != null)
@@ -97,6 +99,7 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void SteamVR_Behaviour_Vector3_OnAxis(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
 		{
 			if (onAxis != null)
@@ -120,6 +123,7 @@ namespace Valve.VR
 		/// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
 		/// </list>
 		/// </param>
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
 		{
 			if (vector3Action != null)

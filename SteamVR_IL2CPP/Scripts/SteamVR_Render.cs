@@ -65,56 +65,17 @@ namespace Valve.VR
 
 		private void AddInternal(SteamVR_Camera vrcam)
 		{
-			var camera = vrcam.GetComponent<Camera>();
-			var length = cameras.Length;
-			var sorted = new SteamVR_Camera[length + 1];
-			int insert = 0;
-			for (int i = 0; i < length; i++)
-			{
-				var c = cameras[i].GetComponent<Camera>();
-				if (i == insert && c.depth > camera.depth)
-					sorted[insert++] = vrcam;
-
-				sorted[insert++] = cameras[i];
-			}
-			if (insert == length)
-				sorted[insert] = vrcam;
-
-			cameras = sorted;
-			enabled = true;
+			cameras[(int)vrcam.eye] = vrcam;
 		}
 
 		private void RemoveInternal(SteamVR_Camera vrcam)
 		{
-			var length = cameras.Length;
-			int count = 0;
-			for (int i = 0; i < length; i++)
-			{
-				var c = cameras[i];
-				if (c == vrcam)
-					++count;
-			}
-			if (count == 0)
-				return;
-
-			var sorted = new SteamVR_Camera[length - count];
-			int insert = 0;
-			for (int i = 0; i < length; i++)
-			{
-				var c = cameras[i];
-				if (c != vrcam)
-					sorted[insert++] = c;
-			}
-
-			cameras = sorted;
+			cameras[(int)vrcam.eye] = null;
 		}
 
 		private SteamVR_Camera TopInternal()
 		{
-			if (cameras.Length > 0)
-				return cameras[cameras.Length - 1];
-
-			return null;
+			return cameras[0];
 		}
 
 		public static bool pauseRendering
@@ -139,13 +100,14 @@ namespace Valve.VR
 		public static event Action preRenderBothEyesCallback;
 		public static event Action postBothEyesRenderedCallback;
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private IEnumerator RenderLoop()
 		{
 			while (Application.isPlaying)
 			{
 				yield return waitForEndOfFrame;
 
-				if (cameras.Length == 0)
+				if (cameras[1] == null)
 				{
 					continue;
 				}
@@ -158,25 +120,12 @@ namespace Valve.VR
 				{
 					if (!compositor.CanRenderScene())
 						continue;
-
-					compositor.SetTrackingSpace(SteamVR.settings.trackingSpace);
-					SteamVR_Utils.QueueEventOnRenderThread(SteamVR.OpenVRMagic.k_nRenderEventID_WaitGetPoses);
-
-					// Hack to flush render event that was queued in Update (this ensures WaitGetPoses has returned before we grab the new values).
-					SteamVR.OpenVRMagic.EventWriteString("[UnityMain] GetNativeTexturePtr - Begin");
-					SteamVR_Camera.GetSceneTexture(cameras[0].GetComponent<Camera>().allowHDR).GetNativeTexturePtr();
-					SteamVR.OpenVRMagic.EventWriteString("[UnityMain] GetNativeTexturePtr - End");
-
-					compositor.GetLastPoses(poses, gamePoses);
-					SteamVR_Events.NewPoses.Send(poses);
-					SteamVR_Events.NewPosesApplied.Send();
 				}
+
 
 				var overlay = SteamVR_Overlay.instance;
 				if (overlay != null)
 					overlay.UpdateOverlay();
-
-				RenderExternalCamera();
 
 				if (preRenderBothEyesCallback != null)
 				{
@@ -184,8 +133,15 @@ namespace Valve.VR
 				}
 
 				var vr = SteamVR.instance;
+
+				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+				sw.Start();
+
 				RenderEye(vr, EVREye.Eye_Left);
 				RenderEye(vr, EVREye.Eye_Right);
+
+				sw.Stop();
+				Debug.Log($"Submitted both eyes in {(1000.0f * sw.ElapsedTicks) / System.Diagnostics.Stopwatch.Frequency}ms");
 
 				// Move cameras back to head position so they can be tracked reliably
 				foreach (var c in cameras)
@@ -204,142 +160,38 @@ namespace Valve.VR
 			}
 		}
 
+		[Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp()]
 		private void RenderEye(SteamVR vr, EVREye eye)
 		{
 			int i = (int)eye;
 			SteamVR_Render.eye = eye;
 
-			foreach (var c in cameras)
+			SteamVR_Camera c = cameras[i];
+
+			Camera camera = c.camera;
+
+			var temp = RenderTexture.GetTemporary(camera.targetTexture.descriptor);
+			Graphics.Blit(camera.targetTexture, temp, new Vector2(1, -1), new Vector2(0, 1));
+
+			var outTex = new Texture_t();
+			outTex.handle = temp.GetNativeTexturePtr();
+			outTex.eType = SteamVR.instance.textureType;
+			outTex.eColorSpace = EColorSpace.Auto;
+
+			OpenVR.Compositor.Submit(eye, ref outTex, ref SteamVR.instance.textureBounds[i], EVRSubmitFlags.Submit_Default);
+
+			RenderTexture.ReleaseTemporary(temp);
+
+			if (eye == EVREye.Eye_Right)
 			{
+				float Aspect = (float)Screen.width / Screen.height;
+				float VRAspect = (float)camera.targetTexture.width / camera.targetTexture.height;
 
-				c.transform.localPosition = vr.eyes[i].pos;
-				c.transform.localRotation = vr.eyes[i].rot;
+				Vector2 Scale = new Vector2(1.0f, VRAspect / Aspect);
+				Vector2 Offset = new Vector2(0.0f, 0.5f * (1.0f - Scale.y));
 
-				var camera = c.camera;
-
-				if (cameraMask != null)
-					cameraMask.Set(vr, eye, camera);
-
-				eyePreRenderCallback?.Invoke(eye, cameraMask);
-				var tex = camera.targetTexture;
-				camera.targetTexture = SteamVR_Camera.GetSceneTexture(camera.allowHDR);
-				camera.cullingMask = c.TrueMask;
-				camera.Render();
-				camera.cullingMask = 0;
-
-				var temp = RenderTexture.GetTemporary(camera.targetTexture.descriptor);
-				Graphics.Blit(camera.targetTexture, temp, new Vector2(1, -1), new Vector2(0, 1));
-
-				var outTex = new Texture_t();
-				outTex.handle = temp.GetNativeTexturePtr();
-				outTex.eType = SteamVR.instance.textureType;
-				outTex.eColorSpace = EColorSpace.Auto;
-
-				OpenVR.Compositor.Submit(eye, ref outTex, ref SteamVR.instance.textureBounds[i], EVRSubmitFlags.Submit_Default);
-
-				RenderTexture.ReleaseTemporary(temp);
-
-				if (eye == EVREye.Eye_Right)
-				{
-					float Aspect = (float)Screen.width / Screen.height;
-					float VRAspect = (float)camera.targetTexture.width / camera.targetTexture.height;
-
-					Vector2 Scale = new Vector2(1.0f, VRAspect / Aspect);
-					Vector2 Offset = new Vector2(0.0f, 0.5f * (1.0f - Scale.y));
-
-					Graphics.Blit(camera.targetTexture, null, Scale, Offset);
-				}
-
-				camera.targetTexture = tex;
+				Graphics.Blit(camera.targetTexture, null, Scale, Offset);
 			}
-			eyePostRenderCallback?.Invoke(eye);
-		}
-
-
-		private bool CheckExternalCamera()
-		{
-			bool? flag = this.doesPathExist;
-			bool flag2 = false;
-			if (flag.GetValueOrDefault() == flag2 & flag != null)
-			{
-				return false;
-			}
-			if (this.doesPathExist == null)
-			{
-				this.doesPathExist = new bool?(File.Exists(this.externalCameraConfigPath));
-			}
-			if (this.externalCamera == null)
-			{
-				flag = this.doesPathExist;
-				flag2 = true;
-				if (flag.GetValueOrDefault() == flag2 & flag != null)
-				{
-					GameObject gameObject = Resources.Load<GameObject>("SteamVR_ExternalCamera");
-					if (gameObject == null)
-					{
-						this.doesPathExist = new bool?(false);
-						return false;
-					}
-					if (SteamVR_Settings.instance.legacyMixedRealityCamera)
-					{
-						if (!SteamVR_ExternalCamera_LegacyManager.hasCamera)
-						{
-							return false;
-						}
-						GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(gameObject);
-						gameObject2.gameObject.name = "External Camera";
-						this.externalCamera = gameObject2.transform.GetChild(0).GetComponent<SteamVR_ExternalCamera>();
-						this.externalCamera.configPath = this.externalCameraConfigPath;
-						this.externalCamera.ReadConfig();
-						this.externalCamera.SetupDeviceIndex(SteamVR_ExternalCamera_LegacyManager.cameraIndex);
-					}
-					else
-					{
-						SteamVR_Action_Pose mixedRealityCameraPose = SteamVR_Settings.instance.mixedRealityCameraPose;
-						SteamVR_Input_Sources mixedRealityCameraInputSource = SteamVR_Settings.instance.mixedRealityCameraInputSource;
-						if (mixedRealityCameraPose != null && SteamVR_Settings.instance.mixedRealityActionSetAutoEnable && mixedRealityCameraPose.actionSet != null && !mixedRealityCameraPose.actionSet.IsActive(mixedRealityCameraInputSource))
-						{
-							mixedRealityCameraPose.actionSet.Activate(mixedRealityCameraInputSource, 0, false);
-						}
-						if (mixedRealityCameraPose == null)
-						{
-							this.doesPathExist = new bool?(false);
-							return false;
-						}
-						if (mixedRealityCameraPose != null && mixedRealityCameraPose[mixedRealityCameraInputSource].active && mixedRealityCameraPose[mixedRealityCameraInputSource].deviceIsConnected)
-						{
-							GameObject gameObject3 = UnityEngine.Object.Instantiate<GameObject>(gameObject);
-							gameObject3.gameObject.name = "External Camera";
-							this.externalCamera = gameObject3.transform.GetChild(0).GetComponent<SteamVR_ExternalCamera>();
-							this.externalCamera.configPath = this.externalCameraConfigPath;
-							this.externalCamera.ReadConfig();
-							this.externalCamera.SetupPose(mixedRealityCameraPose, mixedRealityCameraInputSource);
-						}
-					}
-				}
-			}
-			return this.externalCamera != null;
-		}
-
-
-		private void RenderExternalCamera()
-		{
-			if (this.externalCamera == null)
-			{
-				return;
-			}
-			if (!this.externalCamera.gameObject.activeInHierarchy)
-			{
-				return;
-			}
-			int num = (int)SteamVR_Standalone_IL2CPP.Util.Mathf.Max(this.externalCamera.config.frameSkip, 0f);
-			if (Time.frameCount % (num + 1) != 0)
-			{
-				return;
-			}
-			this.externalCamera.AttachToCamera(this.TopInternal());
-			this.externalCamera.RenderNear();
-			this.externalCamera.RenderFar();
 		}
 
 
@@ -482,7 +334,7 @@ namespace Valve.VR
 
 		private void Update()
 		{
-			if (cameras.Length == 0)
+			if (cameras[1] == null)
 			{
 				return;
 			}
@@ -583,7 +435,7 @@ namespace Valve.VR
 		private static bool isQuitting;
 
 
-		public SteamVR_Camera[] cameras = new SteamVR_Camera[0];
+		public SteamVR_Camera[] cameras = new SteamVR_Camera[2];
 
 
 		public TrackedDevicePose_t[] poses = new TrackedDevicePose_t[64];
@@ -618,6 +470,6 @@ namespace Valve.VR
 		public LayerMask rightMask;
 
 
-		private SteamVR_CameraMask cameraMask;
+		public SteamVR_CameraMask cameraMask;
 	}
 }

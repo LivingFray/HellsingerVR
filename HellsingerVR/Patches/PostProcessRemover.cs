@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.Rendering.HighDefinition.Compositor;
 using Valve.VR;
 
 namespace HellsingerVR.Patches
