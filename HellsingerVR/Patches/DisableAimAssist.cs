@@ -11,7 +11,7 @@ namespace HellsingerVR.Patches
 	{
 		private static void Postfix(InputReader __instance, ref bool __result)
 		{
-			//__result = false;
+			__result = false;
 		}
 	}
 

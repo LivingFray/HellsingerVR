@@ -7,11 +7,11 @@ using Il2CppInterop.Runtime.Injection;
 using Outsiders.Messages;
 using System.Reflection;
 using UnityEngine;
-using Valve.VR;
+using Valve.VR; 
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.6.3")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.7.0")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;

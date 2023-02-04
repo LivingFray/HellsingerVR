@@ -8,7 +8,7 @@ namespace HellsingerVR.Patches
 	[HarmonyPatch(typeof(BulletSystem), nameof(FireBullet))]
 	internal class FireBullet
 	{
-		private static int layermask = ~LayerMask.GetMask("Ignore Raycast");
+		private static int layermask = Helper.RangedTargetPositionLayerMask;// ~LayerMask.GetMask("Ignore Raycast");
 
 		private static void Prefix(BulletSystem __instance, ref BulletFireData fireData)
 		{
