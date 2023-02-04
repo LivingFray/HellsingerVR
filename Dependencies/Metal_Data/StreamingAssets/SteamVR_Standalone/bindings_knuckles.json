@@ -1,6 +1,16 @@
 {
 	"bindings": {
 		"/actions/game": {
+			"haptics" : [
+				{
+				   "output" : "/actions/game/out/Vibration",
+				   "path" : "/user/hand/right/output/haptic"
+				},
+				{
+				   "output" : "/actions/game/out/Vibration",
+				   "path" : "/user/hand/left/output/haptic"
+				}
+			],
 			"poses": [{
 					"path": "/user/hand/left/pose/raw",
 					"output": "/actions/game/in/Pose"

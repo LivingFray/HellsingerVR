@@ -23,6 +23,7 @@
 		private static SteamVR_Action_Boolean p_default_OpenMenu;
 		private static SteamVR_Action_Pose p_default_Pose;
 		private static SteamVR_Action_Pose p_default_PoseTip;
+		private static SteamVR_Action_Vibration p_default_Vibration;
 
 		// Menu
 		private static SteamVR_Action_Vector2 p_menu_Navigate;
@@ -146,6 +147,14 @@
 			}
 		}
 
+		public static SteamVR_Action_Vibration default_Vibration
+		{
+			get
+			{
+				return p_default_Vibration.GetCopy<SteamVR_Action_Vibration>();
+			}
+		}
+
 		public static SteamVR_Action_Vector2 menu_Navigate
 		{
 			get
@@ -207,6 +216,7 @@
 					default_OpenMenu,
 					default_Pose,
 					default_PoseTip,
+					default_Vibration,
 					menu_Navigate,
 					menu_Select,
 					menu_Back,
@@ -236,8 +246,12 @@
 					menu_NextTab,
 					menu_CloseMenu
 			};
-			SteamVR_Input.actionsOut = new ISteamVR_Action_Out[0];
-			SteamVR_Input.actionsVibration = new SteamVR_Action_Vibration[0];
+			SteamVR_Input.actionsOut = new ISteamVR_Action_Out[] {
+				default_Vibration
+			};
+			SteamVR_Input.actionsVibration = new SteamVR_Action_Vibration[] {
+					default_Vibration
+			};
 			SteamVR_Input.actionsPose = new SteamVR_Action_Pose[] {
 					default_Pose,
 					default_PoseTip
@@ -305,6 +319,7 @@
 			p_default_OpenMenu = SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/game/in/OpenMenu");
 			p_default_Pose = SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/game/in/Pose");
 			p_default_PoseTip = SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/game/in/PoseTip");
+			p_default_Vibration = SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/game/out/Vibration");
 
 			p_menu_Navigate = SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/menu/in/Navigate");
 			p_menu_Select = SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/menu/in/Select");

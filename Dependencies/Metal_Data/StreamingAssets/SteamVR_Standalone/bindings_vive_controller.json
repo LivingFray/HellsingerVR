@@ -20,7 +20,16 @@
 					"path": "/user/hand/right/pose/tip"
 				}
 			],
-			"haptics": [],
+			"haptics" : [
+				{
+				   "output" : "/actions/game/out/Vibration",
+				   "path" : "/user/hand/right/output/haptic"
+				},
+				{
+				   "output" : "/actions/game/out/Vibration",
+				   "path" : "/user/hand/left/output/haptic"
+				}
+			],
 			"sources": [
 				{
 					"path": "/user/hand/right/input/trigger",

@@ -16,5 +16,6 @@
 		public virtual SteamVR_Action_Boolean OpenMenu { get { return SteamVR_Actions.default_OpenMenu; } }
 		public virtual SteamVR_Action_Pose Pose { get { return SteamVR_Actions.default_Pose; } }
 		public virtual SteamVR_Action_Pose PoseTip { get { return SteamVR_Actions.default_PoseTip; } }
+		public virtual SteamVR_Action_Vibration Vibration { get { return SteamVR_Actions.default_Vibration; } }
 	}
 }

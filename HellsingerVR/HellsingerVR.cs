@@ -37,6 +37,9 @@ namespace HellsingerVR
 		// General
 		public ConfigEntry<bool> IsVREnabled;
 		public ConfigEntry<bool> IsLeftHanded;
+		public ConfigEntry<float> BeatVibrationStrength;
+		public ConfigEntry<float> BeatVibrationFrequency;
+		public ConfigEntry<float> BeatVibrationLength;
 		// Locomotion
 		public ConfigEntry<float> SnapTurningAngle;
 		public ConfigEntry<string> MovementType;
@@ -161,6 +164,9 @@ namespace HellsingerVR
 			// General
 			IsVREnabled = Config.Bind("General", "Enabled", true, "Set to false to disable this mod without uninstalling");
 			IsLeftHanded = Config.Bind("General", "LeftHanded", false, "Set to true to use the left hand as the dominant hand. This does not affect controller bindings, which can be configured in SteamVR");
+			BeatVibrationStrength = Config.Bind("General", "BeatVibrationStrength", 0.25f, "Strength of the vibration force (0-1) played on the beat");
+			BeatVibrationFrequency = Config.Bind("General", "BeatVibrationFrequency", 100.0f, "Frequency (0-320hz) to vibrate the motors at on the beat");
+			BeatVibrationLength = Config.Bind("General", "BeatVibrationLength", 50.0f, "Time in milliseconds to vibrate for on the beat");
 			// Locomotion
 			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
 			MovementType = Config.Bind("Locomotion", "MovementType", "head", "Movement direction, valid options are \"head\", \"hand\", \"offhand\". Defaults to \"head\"");

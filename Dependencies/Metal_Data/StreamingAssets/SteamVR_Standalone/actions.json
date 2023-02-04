@@ -69,6 +69,10 @@
 			"type": "pose"
 		},
 		{
+		  "name": "/actions/game/out/Vibration",
+		  "type": "vibration"
+		},
+		{
 			"name": "/actions/menu/in/Navigate",
 			"type": "vector2",
 			"requirement": "mandatory"

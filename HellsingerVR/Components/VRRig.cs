@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Outsiders.Messages;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using UnityEngine;
 using Valve.VR;
 
 namespace HellsingerVR.Components
@@ -45,6 +48,11 @@ namespace HellsingerVR.Components
 		{
 			CameraMask = vrCamera.TrueMask;
 			Invoke("EnterTitleScreen", 0.1f);
+		}
+
+		public void OnBeat(OnBeatThisFrameMessage message)
+		{
+
 		}
 
 		public void EnterTitleScreen()
@@ -188,6 +196,18 @@ namespace HellsingerVR.Components
 			{
 				transform.position = CameraTransform.position + InitialPosition;
 				transform.rotation = Quaternion.Euler(0.0f, CameraTransform.rotation.eulerAngles.y, 0.0f) * InitialRotation;
+			}
+
+			if (HellsingerVR._instance.BeatVibrationStrength.Value > 0)
+			{
+				if (fpController?.m_player?.m_audioGameplayController != null && fpController.m_player.m_audioGameplayController.IsOnBeatThisFrame())
+				{
+					Debug.Log("Beat");
+
+					float frequency = HellsingerVR._instance.BeatVibrationFrequency.Value;
+
+					SteamVR_Input.GetVibrationAction("game", "Vibration", false).Execute(0, HellsingerVR._instance.BeatVibrationStrength.Value / 1000.0f, frequency, HellsingerVR._instance.BeatVibrationStrength.Value, SteamVR_Input_Sources.Any);
+				}
 			}
 		}
 
