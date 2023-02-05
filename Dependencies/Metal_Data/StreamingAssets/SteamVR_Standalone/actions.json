@@ -125,6 +125,10 @@
 		{
 			"controller_type": "vive_controller",
 			"binding_url": "bindings_vive_controller.json"
+		},
+		{
+			"controller_type": "hpmotioncontroller",
+			"binding_url": "hpmotioncontroller.json"
 		}
 	],
 	"localization": [
