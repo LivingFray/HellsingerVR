@@ -188,6 +188,7 @@ namespace Valve.VR
 			camera.enabled = true;
 			camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f);
 			camera.clearFlags = CameraClearFlags.Color;
+			camera.nearClipPlane = 0.01f;
 
 			TrueMask = camera.cullingMask;
 			camera.cullingMask = 0;
