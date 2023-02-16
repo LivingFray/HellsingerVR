@@ -147,7 +147,7 @@ namespace HellsingerVR.Components
 			viewModelManager.HideArms();
 
 			Main main = Main.GetInstance();
-			BeatChainContainer = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/Shared/BeatChainContainer");
+			BeatChainContainer = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/Shared/BeatChainContainer/LabelContainer/BeatChainNumText");
 
 			HellsingerVR.MoveOverlayToWorld();
 		}
