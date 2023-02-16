@@ -81,6 +81,7 @@ namespace HellsingerVR.Components
 
 			ActiveModel.Update();
 
+			/*
 			if (Input.GetKeyDown(KeyCode.U))
 			{
 				P_x += 0.05f;
@@ -123,6 +124,7 @@ namespace HellsingerVR.Components
 				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
 				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
+			*/
 		}
 
 		public static Vector3 GetMuzzleOffset(PlayerWeaponType weaponType)

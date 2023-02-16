@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using HellsingerVR.Components;
+using HellsingerVR.UI;
 using Il2CppInterop.Runtime.Injection;
 using Outsiders.Messages;
 using System.Reflection;
@@ -11,7 +12,7 @@ using Valve.VR;
 
 namespace HellsingerVR
 {
-	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.7.2")]
+	[BepInPlugin("LivingFray.HellsingerVR", "HellsingerVR", "0.8.0")]
 	public class HellsingerVR : BasePlugin
 	{
 		private static GameObject vrRig;
@@ -40,6 +41,7 @@ namespace HellsingerVR
 		public ConfigEntry<float> BeatVibrationStrength;
 		public ConfigEntry<float> BeatVibrationFrequency;
 		public ConfigEntry<float> BeatVibrationLength;
+		public ConfigEntry<bool> DisableMotionControls;
 		// Locomotion
 		public ConfigEntry<float> SnapTurningAngle;
 		public ConfigEntry<string> MovementType;
@@ -78,6 +80,7 @@ namespace HellsingerVR
 			ClassInjector.RegisterTypeInIl2Cpp<VRRig>();
 			ClassInjector.RegisterTypeInIl2Cpp<VRInputManager>();
 			ClassInjector.RegisterTypeInIl2Cpp<VRViewModelManager>();
+			ClassInjector.RegisterTypeInIl2Cpp<CalibrationRotationFixer>();
 
 			SteamVR.Log = Log;
 
@@ -147,7 +150,10 @@ namespace HellsingerVR
 				//TODO: Do ears
 
 				vrRig.AddComponent<VRRig>();
-				vrRig.AddComponent<VRInputManager>();
+				if (!_instance.DisableMotionControls.Value)
+				{
+					vrRig.AddComponent<VRInputManager>();
+				}
 				vrRig.AddComponent<VRViewModelManager>();
 
 				rig = vrRig.GetComponent<VRRig>();
@@ -173,6 +179,7 @@ namespace HellsingerVR
 			BeatVibrationStrength = Config.Bind("General", "BeatVibrationStrength", 0.25f, "Strength of the vibration force (0-1) played on the beat");
 			BeatVibrationFrequency = Config.Bind("General", "BeatVibrationFrequency", 100.0f, "Frequency (0-320hz) to vibrate the motors at on the beat");
 			BeatVibrationLength = Config.Bind("General", "BeatVibrationLength", 50.0f, "Time in milliseconds to vibrate for on the beat");
+			DisableMotionControls = Config.Bind("General", "DisableMotionControls", false, "Disable motion controls and play using a gamepad (or KB+M) instead");
 			// Locomotion
 			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
 			MovementType = Config.Bind("Locomotion", "MovementType", "head", "Movement direction, valid options are \"head\", \"hand\", \"offhand\". Defaults to \"head\"");

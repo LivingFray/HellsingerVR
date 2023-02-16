@@ -34,6 +34,8 @@ namespace HellsingerVR.Components
 
 		private Vector3 RoomscaleOffset = Vector3.zero;
 
+		private Transform BeatChainContainer;
+
 		public bool InLevel
 		{
 			get { return _InLevel; }
@@ -48,11 +50,6 @@ namespace HellsingerVR.Components
 		{
 			CameraMask = SteamVR_Camera.TrueMask;
 			Invoke("EnterTitleScreen", 0.1f);
-		}
-
-		public void OnBeat(OnBeatThisFrameMessage message)
-		{
-
 		}
 
 		public void EnterTitleScreen()
@@ -141,10 +138,16 @@ namespace HellsingerVR.Components
 				health = new UI.Health();
 			}
 
-			rhythmIndicator.Init();
-			health.Init();
+			if (!HellsingerVR._instance.DisableMotionControls.Value)
+			{
+				health.Init();
+			}
 
+			rhythmIndicator.Init();
 			viewModelManager.HideArms();
+
+			Main main = Main.GetInstance();
+			BeatChainContainer = main.transform.Find("UIRoot/Overlay/Layer-HUD/HUD(Clone)/Shared/BeatChainContainer");
 
 			HellsingerVR.MoveOverlayToWorld();
 		}
@@ -181,7 +184,16 @@ namespace HellsingerVR.Components
 				}
 
 				if (rhythmIndicator != null) rhythmIndicator.Update();
-				if (health != null) health.Update();
+
+				if (!HellsingerVR._instance.DisableMotionControls.Value)
+				{
+					if (health != null) health.Update();
+				}
+
+				if (BeatChainContainer)
+				{
+					BeatChainContainer.localRotation = Quaternion.identity;
+				}
 
 			}
 			else if (InCutscene && CameraTransform != null)

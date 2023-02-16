@@ -32,6 +32,11 @@ namespace HellsingerVR.Patches
 			// Get hand position
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(VRInputManager.LastHandToShootWasLeft);
 
+			if (HellsingerVR._instance.DisableMotionControls.Value)
+			{
+				rotation = Quaternion.LookRotation(TargetPosition - location, Vector3.up);
+			}
+
 			// Set bullet start to hand position + muzzle offset * hand rotation
 			// TODO: Muzzle offset is broken, probably multiplying quaternions in the wrong order or something
 			fireData.Position = location;// + rotation * VRViewModelManager.GetMuzzleOffset(fireData.WeaponConfig.WeaponType);

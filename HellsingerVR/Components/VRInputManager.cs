@@ -58,6 +58,22 @@ namespace HellsingerVR.Components
 			Vector3 location = pose.GetLocalPosition(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 			Quaternion rotation = poseTip.GetLocalRotation(LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand);
 
+			if (HellsingerVR._instance.DisableMotionControls.Value)
+			{
+				// Fake hand positions in gamepad mode
+				rotation = HellsingerVR.rig.head.localRotation;
+				location = HellsingerVR.rig.head.localPosition;
+				if (LeftHand)
+				{
+					location += rotation * new Vector3(-0.3f, -0.25f, 0.75f);
+				}
+				else
+				{
+					location += rotation * new Vector3(0.3f, -0.25f, 0.75f);
+				}
+
+			}
+
 			location = HellsingerVR.rig.transform.TransformPoint(location);
 
 			rotation = HellsingerVR.rig.transform.rotation * rotation * HellsingerVR.HandOffset;

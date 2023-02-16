@@ -10,6 +10,7 @@ namespace HellsingerVR.UI
 		private Transform WeaponsContainer;
 		private Transform BonusCounter;
 		private Transform BossHealthContainer;
+		private Transform EmptyUltimateBgContainer;
 		private Vector3 PositionOffset = new Vector3(0.0f, 0.0f, -0.1f);
 		private Quaternion RotationOffset = Quaternion.Euler(0.0f, -90.0f, 0.0f);
 		private bool HasCalculatedOffsets = false;
@@ -40,9 +41,10 @@ namespace HellsingerVR.UI
 
 			HealthBar = SharedHUD.Find("HealthBar");
 			UltimateIndicator = SharedHUD.Find("UltimateIndicator");
-			WeaponsContainer = SharedHUD.Find("WeaponsContainer"); // Has offset of (83, -489.2, 0)
+			WeaponsContainer = SharedHUD.Find("WeaponsContainer");
 			BonusCounter = StageHUD.Find("BonusCounter");
 			BossHealthContainer = StageHUD.Find("BossHealthContainer");
+			EmptyUltimateBgContainer = SharedHUD.Find("EmptyUltimateBgContainer");
 
 			DoHealth = HellsingerVR._instance.ShowHealthOnHand.Value;
 			DoUltimate = HellsingerVR._instance.ShowUltimateOnHand.Value;
@@ -112,6 +114,13 @@ namespace HellsingerVR.UI
 				{
 					UltimateIndicator.position = location;
 					UltimateIndicator.rotation = rotation;
+
+
+					if (EmptyUltimateBgContainer != null)
+					{
+						EmptyUltimateBgContainer.position = location;
+						EmptyUltimateBgContainer.rotation = rotation;
+					}
 				}
 
 				if (DoWeapons)
@@ -134,6 +143,7 @@ namespace HellsingerVR.UI
 
 				if (DoHealth) HealthBar.localScale = LocalScale;
 				if (DoUltimate) UltimateIndicator.localScale = LocalScale;
+				if (DoUltimate && EmptyUltimateBgContainer != null) EmptyUltimateBgContainer.localScale = LocalScale;
 				if (DoWeapons) WeaponsContainer.localScale = LocalScale;
 				if (DoBonus) BonusCounter.localScale = LocalScale;
 				if (DoBoss) BossHealthContainer.localScale = LocalScale;
@@ -142,6 +152,7 @@ namespace HellsingerVR.UI
 
 			if (DoHealth) HealthBar.gameObject.active = IsVisible;
 			if (DoUltimate) UltimateIndicator.gameObject.active = IsVisible;
+			if (DoUltimate && EmptyUltimateBgContainer != null) EmptyUltimateBgContainer.gameObject.active = IsVisible;
 			if (DoWeapons) WeaponsContainer.gameObject.active = IsVisible;
 			if (DoBonus) BonusCounter.gameObject.active = IsVisible;
 			if (DoBoss) BossHealthContainer.gameObject.active = IsVisible;

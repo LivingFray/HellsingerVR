@@ -78,6 +78,11 @@ namespace HellsingerVR.UI
 			}
 
 			FaceCamera = HellsingerVR._instance.ReticleFacesCamera.Value;
+
+			if (HellsingerVR._instance.DisableMotionControls.Value)
+			{
+				position = Position.Head;
+			}
 		}
 
 		public void Update()
