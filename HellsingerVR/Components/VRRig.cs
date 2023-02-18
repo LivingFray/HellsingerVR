@@ -215,10 +215,11 @@ namespace HellsingerVR.Components
 				if (fpController?.m_player?.m_audioGameplayController != null && fpController.m_player.m_audioGameplayController.IsOnBeatThisFrame())
 				{
 					float duration = HellsingerVR._instance.BeatVibrationLength.Value / 1000.0f;
+					float offset = HellsingerVR._instance.BeatVibrationOffset.Value / 1000.0f;
 					float frequency = HellsingerVR._instance.BeatVibrationFrequency.Value;
 					float amplitude = HellsingerVR._instance.BeatVibrationStrength.Value;
 
-					SteamVR_Input.GetVibrationAction("game", "Vibration", false).Execute(0, duration, frequency, amplitude, SteamVR_Input_Sources.Any);
+					SteamVR_Input.GetVibrationAction("game", "Vibration", false).Execute(offset, duration, frequency, amplitude, SteamVR_Input_Sources.Any);
 				}
 			}
 		}
