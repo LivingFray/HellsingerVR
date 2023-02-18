@@ -425,7 +425,10 @@ namespace HellsingerVR.Components
 			bool FireUlt = Shooting && AltShooting;
 
 			// Since ult uses both hands, force it to be the dominant hand
-			LastHandToShootWasLeft = HellsingerVR._instance.IsLeftHanded.Value;
+			if (FireUlt)
+			{
+				LastHandToShootWasLeft = HellsingerVR._instance.IsLeftHanded.Value;
+			}
 
 			return FireUlt ? 1.0f : 0.0f;
 		}
