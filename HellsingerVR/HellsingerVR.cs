@@ -180,7 +180,7 @@ namespace HellsingerVR
 			BeatVibrationStrength = Config.Bind("General", "BeatVibrationStrength", 0.25f, "Strength of the vibration force (0-1) played on the beat");
 			BeatVibrationFrequency = Config.Bind("General", "BeatVibrationFrequency", 100.0f, "Frequency (0-320hz) to vibrate the motors at on the beat");
 			BeatVibrationLength = Config.Bind("General", "BeatVibrationLength", 50.0f, "Time in milliseconds to vibrate for on the beat");
-			BeatVibrationLength = Config.Bind("General", "BeatVibrationOffset", 0.0f, "Time in milliseconds to offset the vibration by");
+			BeatVibrationOffset = Config.Bind("General", "BeatVibrationOffset", 0.0f, "Time in milliseconds to offset the vibration by");
 			DisableMotionControls = Config.Bind("General", "DisableMotionControls", false, "Disable motion controls and play using a gamepad (or KB+M) instead");
 			// Locomotion
 			SnapTurningAngle = Config.Bind("Locomotion", "SnapTurnAmount", 0.0f, "Snap turning angle. Set to 0 or less to use smooth turning");
