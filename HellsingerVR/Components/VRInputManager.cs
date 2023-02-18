@@ -265,10 +265,24 @@ namespace HellsingerVR.Components
 								if (NewIndex < 0) NewIndex += weaponAbilityController.m_carriedWeapons.Count;
 								NewIndex %= weaponAbilityController.m_carriedWeapons.Count;
 
-								dpadUp = NewIndex == 0 ? 1.0f : 0.0f;
-								dpadDown = NewIndex == 1 ? 1.0f : 0.0f;
-								dpadLeft = NewIndex == 2 ? 1.0f : 0.0f;
-								dpadRight = NewIndex == 3 ? 1.0f : 0.0f;
+								PlayerWeaponType NewWeapon = weaponAbilityController.m_carriedWeapons[NewIndex];
+								
+								if (NewWeapon == PlayerWeaponType.Falx)
+								{
+									dpadUp = 1.0f;
+								}
+								else if (NewWeapon == PlayerWeaponType.RhythmWeapon)
+								{
+									dpadDown = 1.0f;
+								}
+								else if (NewWeapon == weaponAbilityController.m_favoriteWeapon1)
+								{
+									dpadLeft = 1.0f;
+								}
+								else
+								{
+									dpadRight = 1.0f;
+								}
 							}
 						}
 					}
