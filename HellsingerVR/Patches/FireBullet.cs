@@ -8,7 +8,7 @@ namespace HellsingerVR.Patches
 	[HarmonyPatch(typeof(BulletSystem), nameof(FireBullet))]
 	internal class FireBullet
 	{
-		private static int layermask = Helper.RangedTargetPositionLayerMask;// ~LayerMask.GetMask("Ignore Raycast");
+		private static int layermask = Helper.RangedTargetPositionLayerMask;
 
 		private static void Prefix(BulletSystem __instance, ref BulletFireData fireData)
 		{
@@ -32,14 +32,18 @@ namespace HellsingerVR.Patches
 			// Get hand position
 			(Vector3 location, Quaternion rotation) = VRInputManager.GetHandTransform(VRInputManager.LastHandToShootWasLeft);
 
+			if (fireData.WeaponConfig.WeaponType != PlayerWeaponType.Pistols && fireData.WeaponConfig.WeaponType != PlayerWeaponType.Boomerang)
+			{
+				// We can use the existing fire position, so long as it's not from one of the dual wielded weapons
+				location = fireData.Position;
+			}
+
 			if (HellsingerVR._instance.DisableMotionControls.Value)
 			{
 				rotation = Quaternion.LookRotation(TargetPosition - location, Vector3.up);
 			}
 
-			// Set bullet start to hand position + muzzle offset * hand rotation
-			// TODO: Muzzle offset is broken, probably multiplying quaternions in the wrong order or something
-			fireData.Position = location;// + rotation * VRViewModelManager.GetMuzzleOffset(fireData.WeaponConfig.WeaponType);
+			fireData.Position = location;
 
 			// Calculate spread rotation (difference between spread-free direction and actual direction)
 			Quaternion Spread = Quaternion.FromToRotation(SpreadFreeDirection, fireData.Direction);

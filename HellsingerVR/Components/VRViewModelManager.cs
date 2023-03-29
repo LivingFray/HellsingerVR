@@ -7,10 +7,10 @@ namespace HellsingerVR.Components
 
 	public class VRViewModelManager : MonoBehaviour
 	{
-		private float P_x = 0.0f;
-		private float P_y = 0.0f;
-		private float P_z = 0.0f;
-		private Vector3 PositionOffset = Vector3.zero;
+		//private float P_x = 0.0f;
+		//private float P_y = 0.0f;
+		//private float P_z = 0.0f;
+		//private Vector3 PositionOffset = Vector3.zero;
 
 		// TODO: Spawned effects (like Paz's fire eyes) have offsets applied (as particle effects)
 
@@ -21,6 +21,7 @@ namespace HellsingerVR.Components
 			{ PlayerWeaponType.Pistols, new PistolsViewModel() },
 			{ PlayerWeaponType.Vulcan, new VulcanViewModel() },
 			{ PlayerWeaponType.Boomerang, new HellCrowViewModel() },
+			{ PlayerWeaponType.AssaultRifle, new AssaultRifleModel() }
 		};
 		private ViewModel ActiveModel;
 
@@ -124,16 +125,7 @@ namespace HellsingerVR.Components
 				HellsingerVR._instance.Log.LogInfo($"Pos: ({P_x}, {P_y}, {P_z})");
 				ActiveModel.SetMuzzleOffset(PositionOffset);
 			}
-			*/
-		}
-
-		public static Vector3 GetMuzzleOffset(PlayerWeaponType weaponType)
-		{
-			if (ViewModels.ContainsKey(weaponType))
-			{
-				return ViewModels[weaponType].GetMuzzleOffset();
-			}
-			return Vector3.zero;
+			/*/
 		}
 	}
 }
