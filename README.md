@@ -1,3 +1,6 @@
+# Following the announcement of an official VR port for Metal:Hellsinger this mod will no longer be supported
+
+
 # HellsingerVR
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/LivingFray/HellsingerVR?sort=semver)
 
