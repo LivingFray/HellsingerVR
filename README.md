@@ -1,4 +1,4 @@
-# Following the announcement of an official VR port for Metal:Hellsinger this mod will no longer be supported
+# Following the announcement of an official VR port for Metal:Hellsinger this mod is no longer being maintained
 
 
 # HellsingerVR
